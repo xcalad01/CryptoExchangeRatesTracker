@@ -1,5 +1,11 @@
 <?php
 
+require './app/Stats.php';
+
+use Stats\Stats;
+
+$statsd = new Stats();
+
 $config = array(
     array('kraken', 'btc', 'usd'),
     array('gemini', 'btc', 'usd'),
@@ -43,6 +49,7 @@ foreach ($config as $item){
     $data = json_decode(curl_exec($ch), true);
 
     if ($data['result']['300']) {
+        $statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $exchange_id_crypto_watch, 'from' => $item[1], 'to' => $item[2]));
         array_push($results, array(
             "Exchange_id" => $exchange_id_db,
             "From" => $item[1],
