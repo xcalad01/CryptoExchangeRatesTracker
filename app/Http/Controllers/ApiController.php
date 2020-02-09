@@ -35,11 +35,11 @@ class ApiController extends Controller
         $historical = new Historical_five_min;
         $historical->id = $data['id'];
         $historical->Timestamp = $data['timestamp'];
-        $historical->Open = $data['historical'][0];
-        $historical->High = $data['historical'][1];
-        $historical->Low = $data['historical'][2];
-        $historical->Close = $data['historical'][3];
-        $historical->Volume = $data['historical'][4];
+        $historical->Open = $data['historical'][1];
+        $historical->High = $data['historical'][2];
+        $historical->Low = $data['historical'][3];
+        $historical->Close = $data['historical'][4];
+        $historical->Volume = $data['historical'][5];
 
         return $historical->save();
     }
