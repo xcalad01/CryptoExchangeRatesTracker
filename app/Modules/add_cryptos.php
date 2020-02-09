@@ -20,7 +20,8 @@ $config = array(
     array("Dogecoin","doge"),
     array("Qtum","qtum"),
     array("Bitcoin Gold","btg"),
-    array("0x","zrx")
+    array("0x","zrx"),
+    array("Tether", "usdt")
 );
 
 $ch = curl_init('http://127.0.0.1:8000/api/crypto');

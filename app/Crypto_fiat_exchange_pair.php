@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Crypto_exchange_pair extends Model
+class Crypto_fiat_exchange_pair extends Model
 {
-    protected $table = 'crypto_exchange_pairs';
+    protected $table = 'crypto_fiat_exchange_pairs';
     public $timestamps = false;
     public $incrementing = false;
 
@@ -20,6 +20,6 @@ class Crypto_exchange_pair extends Model
 
     public function cryptocurrency()
     {
-        return $this->hasOne('App\Cryptocurrencies', 'Crypto_id', 'Crypto_id');
+        return $this->hasOne('App\Fiat', 'Fiat_id', 'Fiat_id');
     }
 }

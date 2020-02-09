@@ -24,3 +24,5 @@ Route::post('crypto_historical_five', 'ApiController@crypto_add_historical_five'
 Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value');
 
 Route::post('crypto', 'ApiController@create_crypto');
+
+Route::post('fiat', 'ApiController@create_fiat');

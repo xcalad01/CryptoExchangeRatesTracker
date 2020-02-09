@@ -48,7 +48,7 @@ foreach ($config as $item){
 
     if ($data['result']['300']) {
         $statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $exchange_id_crypto_watch, 'from' => $item[1], 'to' => $item[2]));
-	$statsd->statsd->gauge('cryptowatch_remaining', $data['allowance']['remaining'], 1);
+	    $statsd->statsd->gauge('cryptowatch_remaining', $data['allowance']['remaining'], 1);
 	array_push($results, array(
             "Exchange_id" => $exchange_id_db,
             "From" => $item[1],

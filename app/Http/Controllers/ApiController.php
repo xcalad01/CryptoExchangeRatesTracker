@@ -8,6 +8,8 @@ use App\Historical_available;
 use App\Historical_five_min;
 use App\Cryptocurrencies;
 use App\Crypto_exchange_pair;
+use App\Crypto_fiat_exchange_pair;
+use App\Fiat;
 
 class ApiController extends Controller
 {
@@ -82,32 +84,44 @@ class ApiController extends Controller
     }
 
     public function update_crypto_pair_value(Request $request){
+        $is_fiat = $request['Fwiat'];
+        echo $is_fiat;
         foreach ($request['items'] as $item){
-            if (!Exchange::where('Exchange_id', $item['Exchange_id'])->one_or_none()){
+            if (!Exchange::where('Exchange_id', $item['Exchange'])->first()){
                 return response()->json([
                     "message"=>"Exchange does not exits"
                 ], 404);
             }
-            elseif (!Cryptocurrencies::where('Crypto_id', $item['From'])->one_or_none() and !Cryptocurrencies::where('Crypto_id', $item['To'])->one_or_none()){
+            elseif (!Cryptocurrencies::where('Crypto_id', $item['From'])->first() and !Cryptocurrencies::where('Crypto_id', $item['To'])->first()){
                 return response()->json([
                     "message"=>"Crypto does not exits"
                 ], 404);
             }
 
-            $crypto_pair = Crypto_exchange_pair::where('Exchange_id', $item['Exchange_id']
-                ->where('From', $item['From'])
-                ->where('To', $item['To'])->one_or_none());
+            if ($is_fiat=="0") {
+                $pair = Crypto_exchange_pair::where(['Exchange_id' => $item['Exchange'], 'From' => $item['From'], 'To' => $item['To']])->first();
+            }
+            else {
+                $pair = Crypto_fiat_exchange_pair::where(['Exchange_id' => $item['Exchange'], 'From' => $item['From'], 'To' => $item['To']])->first();
 
-            if($crypto_pair){
-                $crypto_pair->update(['Value'=>$item['Value']]);
+            }
+            if($pair){
+                echo $pair;
+                $pair->update(['Value'=>$item['Value']]);
                 return response()->json([
                     "message"=>"Crypto pair updated"
                 ], 200);
             }
 
-            $to_save = new Crypto_exchange_pair;
+            if ($is_fiat == "0") {
+                $to_save = new Crypto_exchange_pair;
+            }
+            else {
+                $to_save = new Crypto_fiat_exchange_pair;
+            }
+
             $to_save->Value = $item['Value'];
-            $to_save->Exchange_id = $item['Exchange_id'];
+            $to_save->Exchange_id = $item['Exchange'];
             $to_save->From = $item['From'];
             $to_save->To = $item['To'];
 
@@ -136,6 +150,23 @@ class ApiController extends Controller
 
         return response()->json([
             "message" => "Crypto added"
+        ], 200);
+    }
+
+    public function create_fiat(Request $request){
+        $fiat = new Fiat;
+        $fiat->Fiat_id = $request["Id"];
+        $fiat->Name = $request["Name"];
+        $fiat->Value_USD = $request["Value"];
+
+        if (!$fiat->save()){
+            return response()->json([
+                "message" => "Could not add fiat"
+            ], 501);
+        }
+
+        return response()->json([
+            "message" => "Fiat added"
         ], 200);
     }
 }
