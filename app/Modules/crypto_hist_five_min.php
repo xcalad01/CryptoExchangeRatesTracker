@@ -30,9 +30,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     'Accept: application/json'
 ));
 
-$now = new DateTime();
-$now = $now->format('Y-m-d H:i');
-$timestamp = $now->getTimestamp();
+$timestamp = strtotime(date('Y-m-d H:i'));
 
 $results = array();
 foreach ($config as $item){
