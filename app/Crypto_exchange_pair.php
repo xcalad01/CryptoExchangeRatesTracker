@@ -10,8 +10,8 @@ class Crypto_exchange_pair extends Model
     public $timestamps = false;
     public $incrementing = false;
 
-    protected $primaryKey = ["Crypto_id", "Exchange_id", "From", "To"];
-    protected $fillable = ['Crypto_id', 'Exchange_id', "From", "To", "Value"];
+    protected $primaryKey = ["From", "Exchange_id", "To"];
+    protected $fillable = ['From', 'Exchange_id', "To", "Value"];
 
     public function exchange()
     {

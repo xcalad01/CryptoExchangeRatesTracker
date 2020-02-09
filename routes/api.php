@@ -20,3 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('exchange', 'ApiController@create_exchange');
 
 Route::post('crypto_historical_five', 'ApiController@crypto_add_historical_five');
+
+Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value');
+
+Route::post('crypto', 'ApiController@create_crypto');
