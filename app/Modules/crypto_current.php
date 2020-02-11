@@ -1,5 +1,11 @@
 <?php
 
+require './app/Stats.php';
+
+use Stats\Stats;
+
+$statsd = new Stats();
+
 $config_crypto_crypto = array(
     array('poloniex', 'btc', 'usdt'),
     array('binance', 'btc', 'usdt'),
@@ -58,17 +64,17 @@ foreach ($config_crypto_crypto as $item){
         "From"=>$item[1],
         "To"=>$item[2],
         "Value"=>$value,
-        "Fiat"=>"0"
+        "Type"=>"crypto"
     ));
 }
 
-print_r($to_send);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($to_send));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json'
     )
 );
 $result = curl_exec($ch);
+echo $result;
 curl_close($ch);
 
 
@@ -92,7 +98,7 @@ foreach ($config_crypto_fiat as $item){
         "From"=>$item[1],
         "To"=>$item[2],
         "Value"=>$value,
-        'Fiat'=>"1"
+        "Type"=>"fiat"
     ));
 }
 
@@ -104,4 +110,5 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 );
 
 $result = curl_exec($ch);
+echo $result;
 curl_close($ch);

@@ -84,9 +84,8 @@ class ApiController extends Controller
     }
 
     public function update_crypto_pair_value(Request $request){
-        $is_fiat = $request['Fwiat'];
-        echo $is_fiat;
-        foreach ($request['items'] as $item){
+	    foreach ($request['items'] as $item){
+	    $type = $item['Type'];
             if (!Exchange::where('Exchange_id', $item['Exchange'])->first()){
                 return response()->json([
                     "message"=>"Exchange does not exits"
@@ -98,7 +97,7 @@ class ApiController extends Controller
                 ], 404);
             }
 
-            if ($is_fiat=="0") {
+	    if ($type == "crypto") {
                 $pair = Crypto_exchange_pair::where(['Exchange_id' => $item['Exchange'], 'From' => $item['From'], 'To' => $item['To']])->first();
             }
             else {
@@ -106,14 +105,13 @@ class ApiController extends Controller
 
             }
             if($pair){
-                echo $pair;
-                $pair->update(['Value'=>$item['Value']]);
-                return response()->json([
-                    "message"=>"Crypto pair updated"
-                ], 200);
+		    echo $pair, "\n";
+
+		    echo gettype($item['Value']), "\n";
+		$pair->update(["Value"=>$item['Value']]);
             }
 
-            if ($is_fiat == "0") {
+            if ($type == "crypto") {
                 $to_save = new Crypto_exchange_pair;
             }
             else {

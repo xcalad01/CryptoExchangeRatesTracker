@@ -23,7 +23,7 @@ foreach ($config as $item){
         )
     );
     $result = curl_exec($ch);
-
+    echo "added";
 }
 
 curl_close($ch);

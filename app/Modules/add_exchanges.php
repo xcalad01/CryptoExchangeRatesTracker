@@ -42,6 +42,7 @@ foreach ($results as $item){
             'Content-Length: ' . strlen($payload))
     );
     $result = curl_exec($ch);
+    echo $result, "\n";
 }
 
 curl_close($ch);

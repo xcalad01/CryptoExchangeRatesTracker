@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Crypto_exchange_pair extends Model
 {
@@ -15,11 +16,11 @@ class Crypto_exchange_pair extends Model
 
     public function exchange()
     {
-        return $this->hasOne('App\Exchange', 'Exchange_id', 'Exchange_id');
+        return $this->hasOne('App\Exchange', 'Exchange_id');
     }
 
     public function cryptocurrency()
     {
-        return $this->hasOne('App\Cryptocurrencies', 'Crypto_id', 'Crypto_id');
+        return $this->hasOne('App\Cryptocurrencies', 'Crypto_id');
     }
 }
