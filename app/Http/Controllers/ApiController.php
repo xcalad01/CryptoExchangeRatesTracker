@@ -55,15 +55,7 @@ class ApiController extends Controller
 
         $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_available"));
 
-        try {
-            $available->save();
-            return true;
-        }
-        catch (QueryException $e){
-            return response()->json([
-                "message" => $e->getMessage()
-            ], 501);
-        }
+        $available->save();
     }
 
     private function add_crypto_historical_five($data){
@@ -78,15 +70,7 @@ class ApiController extends Controller
 
         $this->statsd->statsd->increment("db.connections", 1, array("function"=>"add_crypto_historical_five"));
 
-        try {
-            $historical->save();
-            return true;
-        }
-        catch (QueryException $e){
-            return response()->json([
-                "message" => $e->getMessage()
-            ], 501);
-        }
+        $historical->save();
     }
 
     public function crypto_add_historical_five(Request $request) {
@@ -98,8 +82,15 @@ class ApiController extends Controller
                 "to" => $request['To'],
                 "exchange_id" => $request['Exchange_id']
             );
+            try {
+                self::create_available($data);
+            }
+            catch (QueryException $e){
+                return response()->json([
+                    "message" => $e->getMessage()
+                ], 501);
+            }
 
-            self::create_available($data);
         }
 
         $available = Historical_available::where('Exchange_id', $exchange_id)->first();
@@ -109,7 +100,15 @@ class ApiController extends Controller
             "historical"=>$request['Historical']
         );
 
-        self::add_crypto_historical_five($data);
+        try {
+            self::add_crypto_historical_five($data);
+        }
+        catch (QueryException $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 501);
+        }
+
 
 
         return response()->json([
