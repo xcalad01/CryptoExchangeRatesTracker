@@ -31,6 +31,7 @@ class ApiController extends Controller
         $exchange->Url = $request['Url'];
         $exchange->Image = $request['Image'];
 
+
         $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_exchange"));
         try {
             $exchange->save();
@@ -43,6 +44,7 @@ class ApiController extends Controller
                 "message" => $e->getMessage()
             ], 501);
         }
+
     }
 
     private function create_available($data){
@@ -108,6 +110,7 @@ class ApiController extends Controller
         );
 
         self::add_crypto_historical_five($data);
+
 
         return response()->json([
             "message" => "Historical five min saved"
@@ -206,6 +209,7 @@ class ApiController extends Controller
             $fiat->save();
         }
         catch (QueryException $e){
+
             return response()->json([
                 "message" => $e->getMessage()
             ], 501);
