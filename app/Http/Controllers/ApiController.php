@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+require __DIR__ . "/../../Stats.php";
 
 use Illuminate\Http\Request;
 use App\Exchange;
@@ -10,19 +11,34 @@ use App\Cryptocurrencies;
 use App\Crypto_exchange_pair;
 use App\Crypto_fiat_exchange_pair;
 use App\Fiat;
+use Stats\Stats;
+
 
 class ApiController extends Controller
 {
+    private $statsd;
+
+    public function __construct()
+    {
+        $this->statsd = new Stats();
+    }
+
     public function create_exchange(Request $request) {
         $exchange = new Exchange;
         $exchange->Exchange_id = $request['Exchange_id'];
         $exchange->Name = $request['Name'];
         $exchange->Url = $request['Url'];
         $exchange->Image = $request['Image'];
-        $exchange->save();
+
+        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_exchange"));
+        if (!$exchange->save()){
+            return response()->json([
+                "message" => "Could not create exchange $request[Name]"
+            ], 501);
+        }
 
         return response()->json([
-            "message" => "exchange record created"
+            "message" => "Exchange record created"
         ], 200);
     }
 
@@ -31,6 +47,8 @@ class ApiController extends Controller
         $available->From = $data['from'];
         $available->To = $data['to'];
         $available->Exchange_id = $data['exchange_id'];
+
+        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_available"));
 
         return $available->save();
     }
@@ -44,6 +62,8 @@ class ApiController extends Controller
         $historical->Low = $data['historical'][3];
         $historical->Close = $data['historical'][4];
         $historical->Volume = $data['historical'][5];
+
+        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"add_crypto_historical_five"));
 
         return $historical->save();
     }
@@ -60,7 +80,7 @@ class ApiController extends Controller
 
             if(!self::create_available($data)) {
                 return response()->json([
-                    "message"=>"Could not add to historical available table!!"
+                    "message"=>"Historical available failed"
                 ], 501);
             }
         endif;
@@ -74,12 +94,12 @@ class ApiController extends Controller
 
         if(!self::add_crypto_historical_five($data)) {
             return response()->json([
-                "message" => "Could not add to historical five min. table!!"
+                "message" => "Historical five min failed"
             ], 501);
         }
 
         return response()->json([
-            "message" => "Historical available saved"
+            "message" => "Historical five min saved"
         ], 200);
     }
 
@@ -88,12 +108,12 @@ class ApiController extends Controller
 	    $type = $item['Type'];
             if (!Exchange::where('Exchange_id', $item['Exchange'])->first()){
                 return response()->json([
-                    "message"=>"Exchange does not exits"
+                    "message"=>"Exchange $item[Exchange] does not exits"
                 ], 404);
             }
             elseif (!Cryptocurrencies::where('Crypto_id', $item['From'])->first() and !Cryptocurrencies::where('Crypto_id', $item['To'])->first()){
                 return response()->json([
-                    "message"=>"Crypto does not exits"
+                    "message"=>"Crypto $item[From] or $item[To] does not exits"
                 ], 404);
             }
 
@@ -125,15 +145,17 @@ class ApiController extends Controller
             $to_save->From = $item['From'];
             $to_save->To = $item['To'];
 
+            $this->statsd->statsd->increment("db.connections", 1, array("function"=>"update_crypto_pair_value"));
+
             if(!$to_save->save()){
                 return response()->json([
-                    "message" => "Could not update"
+                    "message" => "Could not update crypto pair"
                 ], 501);
             }
         }
 
         return response()->json([
-            "message" => "Crypto pair created"
+            "message" => "Crypto pair updated/created"
         ], 200);
     }
 
@@ -141,6 +163,8 @@ class ApiController extends Controller
         $crypto = new Cryptocurrencies;
         $crypto->Crypto_id = $request['Id'];
         $crypto->Name = $request['Name'];
+
+        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_crypto"));
 
         if (!$crypto->save()){
             return response()->json([
@@ -158,6 +182,8 @@ class ApiController extends Controller
         $fiat->Fiat_id = $request["Id"];
         $fiat->Name = $request["Name"];
         $fiat->Value_USD = $request["Value"];
+
+        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_fiat"));
 
         if (!$fiat->save()){
             return response()->json([

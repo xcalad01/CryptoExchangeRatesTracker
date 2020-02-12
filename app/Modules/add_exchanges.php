@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Modules;
+require __DIR__ . "/../Stats.php";
+
+use Stats\Stats;
 
 $configs = include('config.php');
+$statsd = new Stats();
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -42,7 +46,10 @@ foreach ($results as $item){
             'Content-Length: ' . strlen($payload))
     );
     $result = curl_exec($ch);
-    echo $result, "\n";
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if($httpcode != 200){
+        $statsd->statsd->increment("api.error", 1, array('message'=>$result['message']));
+    }
 }
 
 curl_close($ch);

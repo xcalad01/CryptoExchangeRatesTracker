@@ -2,7 +2,7 @@
 
 namespace Stats;
 
-require './app/php-datadogstatsd/src/DogStatsd.php';
+require __DIR__ . "/php-datadogstatsd/src/DogStatsd.php";
 
 use DataDog\DogStatsd;
 
