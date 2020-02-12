@@ -59,7 +59,6 @@ foreach ($config as $item){
     }
 }
 
-print_r($results);
 curl_close($ch);
 
 
@@ -68,13 +67,14 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 curl_setopt($ch, CURLOPT_POST, true);
 foreach ($results as $item){
-    $payload = json_encode($item);
+	$payload = json_encode($item);
+
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'Content-Length: ' . strlen($payload))
-    );
+    ));
     $result = curl_exec($ch);
+    echo "added";
 }
 
 curl_close($ch);

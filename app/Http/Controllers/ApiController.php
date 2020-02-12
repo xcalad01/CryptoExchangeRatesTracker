@@ -110,9 +110,7 @@ class ApiController extends Controller
 		    echo $pair, "\n";
 		    $pair->update(array("Value"=>$item['Value']));
 
-                return response()->json([
-                    "message" => "Crypto pair updated"
-                ], 200);
+                continue;
             }
 
             if ($type == "crypto") {

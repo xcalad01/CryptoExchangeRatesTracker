@@ -68,6 +68,7 @@ foreach ($config_crypto_crypto as $item){
     ));
 }
 
+print_r($to_send);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($to_send));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json'
