@@ -141,10 +141,9 @@ class ApiController extends Controller
 
             }
             if($pair){
-		    echo $pair, "\n";
-		    $pair->update(array("Value"=>$item['Value']));
-
-                continue;
+                $this->statsd->statsd->increment("db.connections", 1, array("function"=>"update_crypto_pair_value"));
+		        $pair->update(array("Value"=>$item['Value']));
+		        continue;
             }
 
             if ($type == "crypto") {
