@@ -1,6 +1,6 @@
 <?php
 
-require './app/Stats.php';
+require __DIR__ . "/../Stats.php";
 
 use Stats\Stats;
 
@@ -68,13 +68,16 @@ curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 curl_setopt($ch, CURLOPT_POST, true);
 foreach ($results as $item){
 	$payload = json_encode($item);
-
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
     ));
     $result = curl_exec($ch);
-    echo "added";
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if($httpcode != 200){
+        $statsd->statsd->increment("api.error", 1, array('message'=> $result['message']));
+    }
 }
 
 curl_close($ch);

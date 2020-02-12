@@ -1,4 +1,9 @@
 <?php
+require __DIR__ . "/../Stats.php";
+
+
+use Stats\Stats;
+$statsd = new Stats();
 
 $config = array(
     array("Bitcoin","btc"),
@@ -39,7 +44,10 @@ foreach ($config as $item){
            )
     );
     $result = curl_exec($ch);
-
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if($httpcode != 200){
+        $statsd->statsd->increment("api.error", 1, array('message'=>$result['message']));
+    }
 }
 
 curl_close($ch);

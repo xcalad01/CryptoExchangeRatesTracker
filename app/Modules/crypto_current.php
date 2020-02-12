@@ -1,6 +1,6 @@
 <?php
 
-require './app/Stats.php';
+require __DIR__ . "/../Stats.php";
 
 use Stats\Stats;
 
@@ -68,14 +68,18 @@ foreach ($config_crypto_crypto as $item){
     ));
 }
 
-print_r($to_send);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($to_send));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json'
     )
 );
 $result = curl_exec($ch);
-echo $result;
+$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+if($httpcode != 200){
+    $statsd->statsd->increment("api.error", 1, array('message'=>$result['message']));
+}
+
 curl_close($ch);
 
 
@@ -103,7 +107,6 @@ foreach ($config_crypto_fiat as $item){
     ));
 }
 
-print_r($to_send);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($to_send));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json'
@@ -111,5 +114,8 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 );
 
 $result = curl_exec($ch);
-echo $result;
+$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+if($httpcode != 200){
+    $statsd->statsd->increment("api.error", 1, array('message'=>$result['message']));
+}
 curl_close($ch);

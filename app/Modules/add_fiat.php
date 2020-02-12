@@ -1,11 +1,16 @@
 <?php
 
+require __DIR__ . "/../Stats.php";
+
+use Stats\Stats;
 
 # Just USD for now
 
 $config = array(
     array("usd", "American dollar", "1")
 );
+
+$statsd = new Stats();
 
 $ch = curl_init('http://127.0.0.1:8000/api/fiat');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -23,7 +28,10 @@ foreach ($config as $item){
         )
     );
     $result = curl_exec($ch);
-    echo "added";
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if($httpcode != 200){
+        $statsd->statsd->increment("api.error", 1, array('message'=>$result['message']));
+    }
 }
 
 curl_close($ch);
