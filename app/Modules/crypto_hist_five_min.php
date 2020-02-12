@@ -34,6 +34,7 @@ $timestamp = strtotime(date('Y-m-d H:i'));
 
 $results = array();
 foreach ($config as $item){
+    echo "1";
     if (strpos($item[0], '/') !== false){
         $exchange_id_crypto_watch = substr($item[0],0,strpos($item[0], '/'));
         $exchange_id_db = substr($item[0],strpos($item[0], '/') + 1);
@@ -58,7 +59,7 @@ foreach ($config as $item){
         ));
     }
 }
-
+print_r($results);
 curl_close($ch);
 
 
@@ -74,9 +75,8 @@ foreach ($results as $item){
     ));
     $result = curl_exec($ch);
     $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
     if($httpcode != 200){
-        $statsd->statsd->increment("api.error", 1, array('message'=>$result['message']));
+        $statsd->statsd->increment("api.error", 1, array('message'=>$result));
     }
 }
 

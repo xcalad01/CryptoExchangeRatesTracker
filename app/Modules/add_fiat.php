@@ -30,7 +30,7 @@ foreach ($config as $item){
     $result = curl_exec($ch);
     $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     if($httpcode != 200){
-        $statsd->statsd->increment("api.error", 1, array('message'=>$result['message']));
+        $statsd->statsd->increment("api.error", 1, array('message'=>$result));
     }
 }
 
