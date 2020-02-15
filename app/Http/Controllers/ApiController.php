@@ -131,11 +131,9 @@ class ApiController extends Controller
             }
 
 	    if ($type == "crypto") {
-	            echo "crypto", "\n";
                 $pair = Crypto_exchange_pair::where(['Exchange_id' => $item['Exchange'], 'From' => $item['From'], 'To' => $item['To']])->first();
             }
             else {
-                echo "fiat", "\n";
                 $pair = Crypto_fiat_exchange_pair::where(['Exchange_id' => $item['Exchange'], 'From' => $item['From'], 'To' => $item['To']])->first();
 
             }
