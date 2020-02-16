@@ -10,13 +10,11 @@ class ModuleBase
 {
     protected $statsd;
     private $ch;
-    protected $url;
     protected $url_base;
 
     public function __construct(){
         $this->statsd = new Stats();
         $this->ch = curl_init();
-        $this->url = "";
     }
 
     protected function set_url_base($url){

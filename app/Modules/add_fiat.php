@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . "./AddExchange.php";
+require __DIR__ . "/AddExchange.php";
 
 use App\Modules\AddFiat\AddFiat;
 

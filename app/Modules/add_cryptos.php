@@ -1,54 +1,10 @@
 <?php
-require __DIR__ . "/../Stats.php";
 
+require __DIR__ . "/AddCrypto.php";
 
-use Stats\Stats;
-$statsd = new Stats();
+use App\Modules\AddCrypto\AddCrypto;
 
-$config = array(
-    array("Bitcoin","btc"),
-    array("Tron","trx"),
-    array("Monero","xmr"),
-    array("Bitcoin Cash","bch"),
-    array("LiteCoin","ltc"),
-    array("EOS","eos"),
-    array("Ethereum","eth"),
-    array("XRP","xrp"),
-    array("Cardano","ada"),
-    array("Stellar","xlm"),
-    array("Tezos","xtz"),
-    array("Neo","neo"),
-    array("Dash","dash"),
-    array("Ethereum Classis","etc"),
-    array("ZCash","zec"),
-    array("Nem","xem"),
-    array("Dogecoin","doge"),
-    array("Qtum","qtum"),
-    array("Bitcoin Gold","btg"),
-    array("0x","zrx"),
-    array("Tether", "usdt")
-);
+$add_crypto = new AddCrypto();
+$add_crypto->run_task();
 
-$ch = curl_init('http://127.0.0.1:8000/api/crypto');
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-curl_setopt($ch, CURLOPT_POST, true);
-foreach ($config as $item){
-    $payload = json_encode(array(
-        "Name"=>$item[0],
-        "Id"=>$item[1]
-    ));
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-           )
-    );
-    $result = curl_exec($ch);
-    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    if($httpcode != 200){
-        $statsd->statsd->increment("api.error", 1, array('message'=>$result));
-    }
-}
-
-curl_close($ch);
 

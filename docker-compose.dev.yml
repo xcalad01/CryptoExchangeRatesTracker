@@ -11,17 +11,16 @@ services:
     volumes:
     - /tmp/postgres/data:/var/lib/postgres
     environment:
-      - SERVICE_NAME=postgres
-      - POSTGRES_DB=bakalarka
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=canorfuj9u
+      - SERVICE_NAME
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
 
   php:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: php
-    command: "php /var/bakalarka/artisan serve --host=0.0.0.0 --port=5432"
     volumes:
       - .:/var/bakalarka
     ports:

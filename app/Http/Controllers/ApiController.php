@@ -24,6 +24,12 @@ class ApiController extends Controller
         $this->statsd = new Stats();
     }
 
+    public function ping(){
+        return response()->json([
+            "message" => "pong"
+        ], 200);
+    }
+
     public function create_exchange(Request $request) {
         $exchange = new Exchange;
         $exchange->Exchange_id = $request['Exchange_id'];
