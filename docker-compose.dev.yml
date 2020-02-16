@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: postgres
+    restart: unless-stopped
+    tty: true
+    ports:
+    - 5433:5432
+    volumes:
+    - /tmp/postgres/data:/var/lib/postgres
+    environment:
+      - SERVICE_NAME=postgres
+      - POSTGRES_DB=bakalarka
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=canorfuj9u
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php
+    command: "php /var/bakalarka/artisan serve --host=0.0.0.0 --port=5432"
+    volumes:
+      - .:/var/bakalarka
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgresql
+

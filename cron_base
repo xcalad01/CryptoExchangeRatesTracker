@@ -1,0 +1,3 @@
+*/5 * * * * root cd ~/bakalarka && php ~/bakalarka/app/Modules/crypto_hist_five_min.php
+
+*/1 * * * * root cd ~/bakalarka && php ~/bakalarka/app/Modules/crypto_current.php
