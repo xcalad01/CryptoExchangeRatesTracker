@@ -223,7 +223,7 @@ class ApiController extends Controller
         }
 
 
-        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_fiat"));
+        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat"));
 
         try {
             $fiat->save();
