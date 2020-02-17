@@ -10,12 +10,49 @@ use App\Modules\ModuleBase\ModuleBase;
 class AddFiat extends ModuleBase
 {
     protected $config = array(
-        array("usd", "American dollar", "1")
+        array("usd", "American dollar"),
+        array("jpy","Japanese yen"),
+        array("bgn","Bulgarian lev"),
+        array("czk","Czech koruna "),
+        array("dkk","Danish krone  "),
+        array("gbp","Pound sterling"),
+        array("huf","Hungarian forint"),
+        array("pln","Polish zloty"),
+        array("ron","Romanian leu"),
+        array("sek","Swedish krona"),
+        array("chf","Swiss franc"),
+        array("isk","Icelandic krona"),
+        array("nok","Norwegian krone"),
+        array("hrk","Croatian kuna"),
+        array("rub","Russian rouble"),
+        array("try","Turkish lira"),
+        array("aud","Australian dollar"),
+        array("brl","Brazilian real"),
+        array("cad","Canadian dollar"),
+        array("cny","Chinese yuan renminbi"),
+        array("hkd","Hong Kong dollar"),
+        array("idr","Indonesian rupiah"),
+        array("ils","Israeli shekel"),
+        array("inr","Indian rupee"),
+        array("krw","South Korean won"),
+        array("mxn","Mexican peso"),
+        array("myr","Malaysian ringgit"),
+        array("nzd","New Zealand dollar"),
+        array("php","Philippine peso"),
+        array("sgd","Singapore dollar"),
+        array("thb","Thai baht"),
+        array("zar","South African ran"),
     );
 
     protected $url = 'http://127.0.0.1:8000/api/fiat';
 
-    private function send_post(){
+    private function send_get(){
+        $this->set_curl_url("https://api.exchangeratesapi.io/latest?base=USD");
+        return $this->do_send_get();
+
+    }
+
+    private function send_post($rates){
         $this->set_curl_post();
         $this->set_curl_url($this->url);
 
@@ -23,7 +60,7 @@ class AddFiat extends ModuleBase
             $payload = json_encode(array(
                 "Id"=>$item[0],
                 "Name"=>$item[1],
-                "Value"=>$item[2]
+                "Value"=>$rates['rates'][strtoupper($item[0])]
             ));
             $this->do_send_post($payload);
         }
@@ -32,6 +69,9 @@ class AddFiat extends ModuleBase
     }
 
     public function run_task(){
-        $this->send_post();
+        $data = $this->send_get();
+        if ($data){
+            $this->send_post($data);
+        }
     }
 }

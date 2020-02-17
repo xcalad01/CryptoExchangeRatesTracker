@@ -12,6 +12,7 @@ use App\Cryptocurrencies;
 use App\Crypto_exchange_pair;
 use App\Crypto_fiat_exchange_pair;
 use App\Fiat;
+use App\Fiat_historical;
 use Stats\Stats;
 
 
@@ -199,11 +200,28 @@ class ApiController extends Controller
         ], 200);
     }
 
+    private function get_yesterday_timestamp(){
+        $hour = 12;
+        $today = strtotime($hour . ':00:00');
+        return strtotime('-1 day', $today);
+    }
     public function create_fiat(Request $request){
-        $fiat = new Fiat;
-        $fiat->Fiat_id = $request["Id"];
-        $fiat->Name = $request["Name"];
-        $fiat->Value_USD = $request["Value"];
+        $fiat = Fiat::where("Fiat_id", $request['Id'])->first();
+        if ($fiat){
+            $fiat_hist = new Fiat_historical();
+            $fiat_hist->Fiat_id = $fiat->Fiat_id;
+            $fiat_hist->Value_USD = $fiat->Value_USD;
+            $fiat_hist->Date = $this->get_yesterday_timestamp();
+            $fiat_hist->save();
+            $fiat->update(array("Value_USD"=>$request['Value']));
+        }
+        else{
+            $fiat = new Fiat;
+            $fiat->Fiat_id = $request["Id"];
+            $fiat->Name = $request["Name"];
+            $fiat->Value_USD = $request["Value"];
+        }
+
 
         $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_fiat"));
 
