@@ -1,21 +1,6 @@
 version: '3'
 
 services:
-  postgresql:
-    image: postgres:latest
-    container_name: postgres
-    restart: unless-stopped
-    tty: true
-    ports:
-    - 5433:5432
-    volumes:
-    - /tmp/postgres/data:/var/lib/postgres
-    environment:
-      - SERVICE_NAME
-      - POSTGRES_DB
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-
   php:
     build:
       context: .
