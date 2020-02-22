@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-require __DIR__ . "/../../Modules/AddFiat.php";
-
-use App\Modules\AddFiat\AddFiat;
+use App\Modules\AddFiat;
 use Illuminate\Console\Command;
 
 class FiatCommand extends Command

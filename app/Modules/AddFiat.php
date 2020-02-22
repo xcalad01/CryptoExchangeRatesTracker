@@ -1,9 +1,7 @@
 <?php
 
 
-namespace App\Modules\AddFiat;
-
-use App\Modules\Base;
+namespace App\Modules;
 
 class AddFiat extends Base
 {

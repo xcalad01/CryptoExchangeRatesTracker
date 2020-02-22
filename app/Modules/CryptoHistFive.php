@@ -1,9 +1,7 @@
 <?php
 
 
-namespace App\Modules\CryptoHistFive;
-
-use App\Modules\Base;
+namespace App\Modules;
 
 class CryptoHistFive extends Base
 {

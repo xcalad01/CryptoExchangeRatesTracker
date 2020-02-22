@@ -1,10 +1,6 @@
 <?php
 
-namespace App\Modules\AddCrypto;
-
-require __DIR__ . "/Base.php";
-
-use App\Modules\Base;
+namespace App\Modules;
 
 class AddCrypto extends Base
 {

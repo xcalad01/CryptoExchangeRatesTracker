@@ -1,9 +1,7 @@
 <?php
 
 
-namespace App\Modules\CryptoCurrent;
-
-use App\Modules\Base;
+namespace App\Modules;
 
 class CryptoCurrent extends Base
 {

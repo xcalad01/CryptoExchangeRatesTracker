@@ -1,11 +1,7 @@
 <?php
 
 
-namespace App\Modules\AddExchange;
-
-require __DIR__ . "/Base.php";
-
-use App\Modules\Base;
+namespace App\Modules;
 
 class AddExchange extends Base
 {
