@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 require __DIR__ . "/../../Modules/CryptoCurrent.php";
 
-use App\Modules\CryptoCurrent\CryptoCurrent;
+use App\Modules\CryptoCurrent;
 use Illuminate\Console\Command;
 
 class CryptoCurrentCommand extends Command

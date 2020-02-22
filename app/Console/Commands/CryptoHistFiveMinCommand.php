@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 require __DIR__ . "/../../Modules/CryptoHistFive.php";
 
 use Illuminate\Console\Command;
-use App\Modules\CryptoHistFive\CryptoHistFive;
+use App\Modules\CryptoHistFive;
 
 class CryptoHistFiveMinCommand extends Command
 {
