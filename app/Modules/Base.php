@@ -1,12 +1,8 @@
 <?php
 
-namespace App\Modules\ModuleBase;
+namespace App\Modules;
 
-require __DIR__ . "/../Stats.php";
-
-use Stats\Stats;
-
-class ModuleBase
+class Base
 {
     protected $statsd;
     private $ch;

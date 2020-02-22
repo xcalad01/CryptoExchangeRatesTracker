@@ -3,11 +3,9 @@
 
 namespace App\Modules\AddFiat;
 
-require __DIR__ . "/ModuleBase.php";
+use App\Modules\Base;
 
-use App\Modules\ModuleBase\ModuleBase;
-
-class AddFiat extends ModuleBase
+class AddFiat extends Base
 {
     protected $config = array(
         array("usd", "American dollar"),

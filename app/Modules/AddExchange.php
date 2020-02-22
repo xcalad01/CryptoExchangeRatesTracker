@@ -3,11 +3,11 @@
 
 namespace App\Modules\AddExchange;
 
-require __DIR__ . "/ModuleBase.php";
+require __DIR__ . "/Base.php";
 
-use App\Modules\ModuleBase\ModuleBase;
+use App\Modules\Base;
 
-class AddExchange extends ModuleBase
+class AddExchange extends Base
 {
     protected $config = array(
         "exchanges" => ['gemini', 'gdax', 'kraken', 'bitstamp', 'bitfinex', 'cex', 'poloniex', 'binance', 'bittrex', 'hitbtc', 'binance', 'bitbay', 'okcoin', 'okex']

@@ -3,11 +3,9 @@
 
 namespace App\Modules\CryptoCurrent;
 
-require __DIR__ . "/ModuleBase.php";
+use App\Modules\Base;
 
-use App\Modules\ModuleBase\ModuleBase;
-
-class CryptoCurrent extends ModuleBase
+class CryptoCurrent extends Base
 {
     protected $config_crypto_crypto = array(
         array('poloniex', 'btc', 'usdt'),

@@ -2,11 +2,11 @@
 
 namespace App\Modules\AddCrypto;
 
-require __DIR__ . "/ModuleBase.php";
+require __DIR__ . "/Base.php";
 
-use App\Modules\ModuleBase\ModuleBase;
+use App\Modules\Base;
 
-class AddCrypto extends ModuleBase
+class AddCrypto extends Base
 {
     protected $config = array(
         array("Bitcoin","btc"),
