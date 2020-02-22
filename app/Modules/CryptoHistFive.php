@@ -3,11 +3,9 @@
 
 namespace App\Modules\CryptoHistFive;
 
-require __DIR__ . "/ModuleBase.php";
+use App\Modules\Base;
 
-use App\Modules\ModuleBase\ModuleBase;
-
-class CryptoHistFive extends ModuleBase
+class CryptoHistFive extends Base
 {
     protected $config = array(
         array('kraken', 'btc', 'usd'),

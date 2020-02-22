@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-require __DIR__ . "/../../Stats.php";
+require __DIR__ . "/../../Modules/Stats.php";
 
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ use App\Crypto_exchange_pair;
 use App\Crypto_fiat_exchange_pair;
 use App\Fiat;
 use App\Fiat_historical;
-use Stats\Stats;
+use App\Modules\Stats;
 
 
 class ApiController extends Controller
@@ -210,7 +210,7 @@ class ApiController extends Controller
         if ($fiat){
             $fiat_hist = new Fiat_historical();
             $fiat_hist->Fiat_id = $fiat->Fiat_id;
-            $fiat_hist->Value_USD = $fiat->Value_USD;
+            $fiat_hist->Value_USD = $request['Value'];
             $fiat_hist->Date = $this->get_yesterday_timestamp();
             $fiat_hist->save();
             $fiat->update(array("Value_USD"=>$request['Value']));

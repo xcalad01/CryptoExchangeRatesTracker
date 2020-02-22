@@ -1,6 +1,6 @@
 <?php
 
-namespace Stats;
+namespace App\Modules;
 
 require __DIR__ . "/php-datadogstatsd/src/DogStatsd.php";
 
