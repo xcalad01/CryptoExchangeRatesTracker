@@ -42,6 +42,5 @@ class CryptoHistFiveMinCommand extends Command
     {
         $crypto_hist_five = new CryptoHistFive();
         $crypto_hist_five->run_task();
-        echo "HistFIveMin";
     }
 }

@@ -21,15 +21,14 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('crypto:hist_five')->everyFiveMinutes()->appendOutputTo('~/tasks_output');
-        $schedule->command('crypto:current')->everyMinute()->appendOutputTo('~/tasks_output');
-        $schedule->command('fiat:current')->daily()->at('16:05')->appendOutputTo('~/tasks_output');
-
+        $schedule->command('crypto:hist_five')->everyFiveMinutes();
+        $schedule->command('crypto:current')->everyMinute();
+        $schedule->command('fiat:current')->dailyAt('16:05');
     }
 
     /**
@@ -40,7 +39,6 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
-
         require base_path('routes/console.php');
     }
 }

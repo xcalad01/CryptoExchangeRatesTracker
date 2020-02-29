@@ -42,6 +42,5 @@ class CryptoCurrentCommand extends Command
     {
         $crypto_current = new CryptoCurrent();
         $crypto_current->run_task();
-        echo "Current";
     }
 }
