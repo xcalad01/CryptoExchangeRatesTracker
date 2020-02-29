@@ -89,6 +89,7 @@
       <path value="$PROJECT_DIR$/vendor/league/commonmark-ext-table" />
       <path value="$PROJECT_DIR$/vendor/league/flysystem" />
       <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
+      <path value="" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

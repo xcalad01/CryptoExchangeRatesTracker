@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="334bcfdc-ab3d-416f-8bc7-94b0522c9510" name="Default Changelist" comment="" />
+    <list default="true" id="334bcfdc-ab3d-416f-8bc7-94b0522c9510" name="Default Changelist" comment="Classes added">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Historical_five_min.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/CryptoHistorical.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Modules/AddExchange.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/AddExchange.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Modules/CryptoHist.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/CryptoHist.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Modules/add_cryptos.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/add_cryptos.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Modules/add_exchanges.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/add_exchanges.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_04_200515_create_historical_five_mins_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_09_113603_create_crypto_exchange_pairs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_09_113603_create_crypto_exchange_pairs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_09_150435_create_fiats_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_09_150435_create_fiats_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_09_150837_create_crypto_fiat_exchange_pairs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_09_150837_create_crypto_fiat_exchange_pairs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_17_200130_create_fiat_historicals_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_17_200130_create_fiat_historicals_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +29,60 @@
       <executable />
     </execution>
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="bakalarka: database" type="162271b6:PgImplModel$Database" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="bakalarka: database" type="162271b6:PgImplModel$Database" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="bakalarka: database" type="162271b6:PgImplModel$Database" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="bakalarka: database" type="162271b6:PgImplModel$Database" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="public: schema" type="983ebcf7:PgImplModel$Schema" />
+        <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -20,7 +90,10 @@
       </list>
     </option>
   </component>
-  <component name="PhpWorkspaceProjectConfiguration">
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.4">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/dragonmantank/cron-expression" />
@@ -109,32 +182,81 @@
       <path value="$PROJECT_DIR$/vendor/league/commonmark-ext-table" />
       <path value="$PROJECT_DIR$/vendor/league/flysystem" />
       <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
+      <path value="" />
     </include_path>
   </component>
   <component name="ProjectId" id="1XJH6UMzAWOq3BgKAHgzT0VhODw" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="postgresql" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="debugger.dataViews" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/Modules" />
+    </key>
+  </component>
+  <component name="RunManager" selected="PHP Script.debug">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <TestRunner scope="XML" />
       <method v="2" />
     </configuration>
+    <configuration name="Unnamed" type="PhpLocalRunConfigurationType" factoryName="PHP Console" nameIsGenerated="true" path="$PROJECT_DIR$/app/Modules/crypto_current.php">
+      <CommandLine>
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="PHP 7.1" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <method v="2" />
+    </configuration>
+    <configuration name="debug" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/artisan" scriptParameters="crypto:hist">
+      <CommandLine>
+        <PhpTestInterpreterSettings>
+          <option name="interpreterName" value="PHP 7.4" />
+        </PhpTestInterpreterSettings>
+      </CommandLine>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.dev.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.dev.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Docker.docker-compose.dev.yml: Compose Deployment" />
+      <item itemvalue="PHP Script.debug" />
+      <item itemvalue="PHP Script.Unnamed" />
+      <item itemvalue="PHPUnit.phpunit.xml" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.docker-compose.dev.yml: Compose Deployment" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
       <list>
         <serviceView>
           <treeState>
-            <expand />
+            <expand>
+              <path>
+                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+                <item name="root:bakalarka@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              </path>
+            </expand>
             <select />
           </treeState>
         </serviceView>
@@ -155,21 +277,162 @@
       <workItem from="1580844778212" duration="3068000" />
       <workItem from="1581079740461" duration="14240000" />
       <workItem from="1581156694667" duration="761000" />
+      <workItem from="1581537984665" duration="5843000" />
+      <workItem from="1581544720884" duration="1674000" />
+      <workItem from="1581759225823" duration="11265000" />
+      <workItem from="1581846257615" duration="13979000" />
+      <workItem from="1581964941754" duration="8053000" />
+      <workItem from="1582378405855" duration="12032000" />
+      <workItem from="1582968780976" duration="8428000" />
     </task>
+    <task id="LOCAL-00001" summary="Classes added">
+      <created>1581796447766</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1581796447766</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Classes added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Classes added" />
+  </component>
   <component name="WindowStateProjectService">
+    <state x="309" y="112" key="#CLI_Interpreters" timestamp="1581794200337">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="309" y="112" key="#CLI_Interpreters/0.0.1440.900@0.0.1440.900" timestamp="1581794200337" />
+    <state x="320" y="115" key="#Inspections" timestamp="1582403999978">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="115" key="#Inspections/0.0.1440.900@0.0.1440.900" timestamp="1582403999978" />
+    <state x="396" y="35" key="#PHP" timestamp="1581794202792">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="396" y="35" key="#PHP/0.0.1440.900@0.0.1440.900" timestamp="1581794202792" />
+    <state x="429" y="145" key="#Unnamed" timestamp="1581794145869">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="429" y="145" key="#Unnamed/0.0.1440.900@0.0.1440.900" timestamp="1581794145869" />
+    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582981298594">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1582981298594" />
+    <state x="444" y="260" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582383046276">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="444" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1582383046276" />
+    <state x="216" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1582981504283">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="216" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.900@0.0.1440.900" timestamp="1582981504283" />
+    <state x="458" y="212" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1581766139568">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="458" y="212" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1440.900@0.0.1440.900" timestamp="1581766139568" />
+    <state x="429" y="145" key="#debug" timestamp="1581794205509">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="429" y="145" key="#debug/0.0.1440.900@0.0.1440.900" timestamp="1581794205509" />
+    <state x="429" y="178" key="#docker-compose.dev.yml:_Compose_Deployment" timestamp="1581863280318">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="429" y="178" key="#docker-compose.dev.yml:_Compose_Deployment/0.0.1440.900@0.0.1440.900" timestamp="1581863280318" />
+    <state x="314" y="52" key="CommitChangelistDialog2" timestamp="1582981604669">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="314" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1582981604669" />
+    <state x="144" y="78" key="DiffContextDialog" timestamp="1581796413551">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="144" y="78" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1581796413551" />
+    <state width="1398" height="303" key="GridCell.Tab.0.bottom" timestamp="1582981310896">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="303" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582981310896" />
+    <state width="1398" height="303" key="GridCell.Tab.0.bottom/0.23.1440.823@0.23.1440.823" timestamp="1582410768080" />
+    <state width="1398" height="303" key="GridCell.Tab.0.center" timestamp="1582981310895">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="303" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1582981310895" />
+    <state width="1398" height="303" key="GridCell.Tab.0.center/0.23.1440.823@0.23.1440.823" timestamp="1582410768079" />
+    <state width="1398" height="303" key="GridCell.Tab.0.left" timestamp="1582981310894">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="303" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1582981310894" />
+    <state width="1398" height="303" key="GridCell.Tab.0.left/0.23.1440.823@0.23.1440.823" timestamp="1582410768079" />
+    <state width="1398" height="303" key="GridCell.Tab.0.right" timestamp="1582981310896">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="303" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1582981310896" />
+    <state width="1398" height="303" key="GridCell.Tab.0.right/0.23.1440.823@0.23.1440.823" timestamp="1582410768079" />
+    <state width="1398" height="303" key="GridCell.Tab.1.bottom" timestamp="1582981311138">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="303" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582981311138" />
+    <state width="1398" height="303" key="GridCell.Tab.1.bottom/0.23.1440.823@0.23.1440.823" timestamp="1582410768080" />
+    <state width="1398" height="303" key="GridCell.Tab.1.center" timestamp="1582981311137">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="303" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1582981311137" />
+    <state width="1398" height="303" key="GridCell.Tab.1.center/0.23.1440.823@0.23.1440.823" timestamp="1582410768080" />
+    <state width="1398" height="303" key="GridCell.Tab.1.left" timestamp="1582981311136">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="303" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1582981311136" />
+    <state width="1398" height="303" key="GridCell.Tab.1.left/0.23.1440.823@0.23.1440.823" timestamp="1582410768080" />
+    <state width="1398" height="303" key="GridCell.Tab.1.right" timestamp="1582981311137">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="303" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1582981311137" />
+    <state width="1398" height="303" key="GridCell.Tab.1.right/0.23.1440.823@0.23.1440.823" timestamp="1582410768080" />
+    <state width="234" height="457" key="HiddenNamespacesPopup" timestamp="1582970512135">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="234" height="457" key="HiddenNamespacesPopup/0.0.1440.900@0.0.1440.900" timestamp="1582970512135" />
+    <state x="472" y="273" key="NewPhpClassDialog" timestamp="1581767779215">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="472" y="273" key="NewPhpClassDialog/0.0.1440.900@0.0.1440.900" timestamp="1581767779215" />
     <state x="541" y="380" key="NewPhpFileDialog" timestamp="1581083708664">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="541" y="380" key="NewPhpFileDialog/0.0.1440.900@0.0.1440.900" timestamp="1581083708664" />
-    <state x="399" y="282" key="com.intellij.ide.util.TipDialog" timestamp="1581156698594">
+    <state x="229" y="89" key="SettingsEditor" timestamp="1581794627014">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="399" y="282" key="com.intellij.ide.util.TipDialog/0.0.1440.900@0.0.1440.900" timestamp="1581156698594" />
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1581794627014" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1582981611710">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1582981611710" />
+    <state width="720" height="493" key="XDebugger.FullValuePopup" timestamp="1582981360767">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="720" height="493" key="XDebugger.FullValuePopup/0.0.1440.900@0.0.1440.900" timestamp="1582981360767" />
+    <state width="720" height="493" key="XDebugger.FullValuePopup/0.23.1440.823@0.23.1440.823" timestamp="1581975724655" />
+    <state x="399" y="281" key="com.intellij.ide.util.TipDialog" timestamp="1582968781911">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state x="399" y="282" key="com.intellij.ide.util.TipDialog/0.0.1440.900@0.0.1440.900" timestamp="1582378405572" />
+    <state x="399" y="281" key="com.intellij.ide.util.TipDialog/0.23.1440.823@0.23.1440.823" timestamp="1582968781911" />
+    <state x="0" y="0" key="com.jetbrains.php.config.phpInfo.PhpInfo.PhpInfoDialog" timestamp="1581794247409">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="0" y="0" key="com.jetbrains.php.config.phpInfo.PhpInfo.PhpInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1581794247409" />
+    <state x="386" y="85" width="667" height="729" key="find.popup" timestamp="1582405447783">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="386" y="85" width="667" height="729" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1582405447783" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1581862161185">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1581862161185" />
     <state x="520" y="353" key="svn.passwordDialog" timestamp="1581159055125">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -178,5 +441,56 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="503" y="146" key="svn.repositoryBrowser/0.0.1440.900@0.0.1440.900" timestamp="1581158882247" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Modules/Base.php</url>
+          <line>52</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Modules/AddFiat.php</url>
+          <line>67</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Console/Commands/CryptoCurrentCommand.php</url>
+          <line>42</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Console/Scheduling/Event.php</url>
+          <line>219</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Modules/CryptoHist.php</url>
+          <line>72</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Console/Commands/CryptoHistFiveMinCommand.php</url>
+          <line>42</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Modules/add_exchanges.php</url>
+          <line>4</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Modules/AddExchange.php</url>
+          <line>43</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/ApiController.php</url>
+          <line>35</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
