@@ -7,7 +7,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Exchange;
 use App\Historical_available;
-use App\Historical_five_min;
+use App\CryptoHistorical;
 use App\Cryptocurrencies;
 use App\Crypto_exchange_pair;
 use App\Crypto_fiat_exchange_pair;
@@ -66,7 +66,7 @@ class ApiController extends Controller
     }
 
     private function add_crypto_historical_five($data){
-        $historical = new Historical_five_min;
+        $historical = new CryptoHistorical;
         $historical->id = $data['id'];
         $historical->Timestamp = $data['timestamp'];
         $historical->Open = $data['historical'][1];
@@ -80,7 +80,7 @@ class ApiController extends Controller
         $historical->save();
     }
 
-    public function crypto_add_historical_five(Request $request) {
+    public function crypto_add_historical(Request $request) {
         $exchange_id = $request['Exchange_id'];
         $available = Historical_available::where('Exchange_id', $exchange_id)->first();
         if (!$available) {

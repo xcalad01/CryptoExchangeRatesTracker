@@ -1,8 +1,6 @@
 <?php
 
-require __DIR__ . "/AddExchange.php";
-
-use App\Modules\AddExchange\AddExchange;
+use App\Modules\AddExchange;
 
 $add_exchange = new AddExchange();
 $add_exchange->run_task();

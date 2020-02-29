@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Historical_five_min extends Model
+class CryptoHistorical extends Model
 {
-    protected $table = 'historical_five_min';
+    protected $table = 'crypto_historical';
 
     public $timestamps = false;
     public $incrementing = false;

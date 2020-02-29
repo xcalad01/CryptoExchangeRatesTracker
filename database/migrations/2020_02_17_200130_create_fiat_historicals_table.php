@@ -16,7 +16,7 @@ class CreateFiatHistoricalsTable extends Migration
         Schema::create('fiat_historicals', function (Blueprint $table) {
             $table->string('Date');
             $table->string('Fiat_id');
-            $table->string('Value_USD');
+            $table->float('Value_USD');
 
             $table->foreign("Fiat_id")->references("Fiat_id")->on("fiats");
             $table->primary(["Fiat_id", "Date"]);

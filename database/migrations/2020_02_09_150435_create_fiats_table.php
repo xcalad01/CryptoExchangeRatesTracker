@@ -16,7 +16,7 @@ class CreateFiatsTable extends Migration
         Schema::create('fiats', function (Blueprint $table) {
             $table->string("Fiat_id");
             $table->string("Name");
-            $table->string("Value_USD");
+            $table->float("Value_USD");
 
             $table->primary("Fiat_id");
         });

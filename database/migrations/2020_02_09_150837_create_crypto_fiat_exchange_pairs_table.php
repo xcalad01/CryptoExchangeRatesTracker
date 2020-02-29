@@ -14,7 +14,7 @@ class CreateCryptoFiatExchangePairsTable extends Migration
     public function up()
     {
         Schema::create('crypto_fiat_exchange_pairs', function (Blueprint $table) {
-            $table->string("Value");
+            $table->float("Value");
 
             $table->string("From");
             $table->string("To");

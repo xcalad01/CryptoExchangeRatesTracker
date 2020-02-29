@@ -23,7 +23,7 @@ class CryptoHist extends Base
 
     private function send_post($payload){
         $this->set_curl_post();
-        $this->set_curl_url('http://127.0.0.1:8000/api/crypto_historical_five');
+        $this->set_curl_url('http://127.0.0.1:8000/api/crypto_historical');
 
         foreach ($payload as $item) {
             $payload = json_encode($item);

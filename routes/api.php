@@ -21,7 +21,7 @@ Route::get('ping', 'ApiController@ping');
 
 Route::post('exchange', 'ApiController@create_exchange');
 
-Route::post('crypto_historical_five', 'ApiController@crypto_add_historical_five');
+Route::post('crypto_historical', 'ApiController@crypto_add_historical');
 
 Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value');
 

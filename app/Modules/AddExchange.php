@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Modules;
 
 class AddExchange extends Base
@@ -11,24 +10,32 @@ class AddExchange extends Base
 
     private function send_get(){
         $this->set_url_base("https://api.coingecko.com/api/v3/exchanges/%s");
+        $result = array();
         foreach ($this->config['exchanges'] as $exchange){
             $url = sprintf($this->url_base, $exchange);
             $this->set_curl_url($url);
 
             $data = $this->do_send_get();
-            return json_encode($data, true);
+            array_push($result, $data);
         }
 
-        return 0;
+        return $result;
     }
 
     private function send_post($payload){
         $this->set_curl_post();
         $this->set_curl_url('http://127.0.0.1:8000/api/exchange');
 
+        $counter = 0;
         foreach ($payload as $item) {
-            $payload = json_encode($item);
-            $this->do_send_post($payload);
+            $item_payload = json_encode(array(
+                'Exchange_id' => $this->config['exchanges'][$counter],
+                'Name' => $item['name'],
+                'Image' => $item['image'],
+                'Url' => $item['url']
+            ));
+            $this->do_send_post($item_payload);
+            $counter += 1;
         }
         $this->close_curl_conn();
     }
