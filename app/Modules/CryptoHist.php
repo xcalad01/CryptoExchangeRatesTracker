@@ -3,7 +3,7 @@
 
 namespace App\Modules;
 
-class CryptoHistFive extends Base
+class CryptoHist extends Base
 {
     protected $config = array(
         array('kraken', 'btc', 'usd'),
@@ -42,14 +42,14 @@ class CryptoHistFive extends Base
             $url = sprintf($this->url_base, $exchange_id_crypto_watch, $item[1], $item[2], $timestamp, $timestamp);
             $this->set_curl_url($url);
             $data = $this->do_send_get();
-            if ($data['result']['300']){
+            if ($data['result']['60']){
                 $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $exchange_id_crypto_watch, 'from' => $item[1], 'to' => $item[2]));
                 array_push($results, array(
                     "Exchange_id" => $exchange_id_db,
                     "From" => $item[1],
                     "To" => $item[2],
                     "Timestamp" => $timestamp,
-                    "Historical" => $data['result']['300'][0]
+                    "Historical" => $data['result']['60'][0]
                 ));
             }
 
@@ -62,9 +62,8 @@ class CryptoHistFive extends Base
 
     private function run(){
         $timestamp = strtotime(date('Y-m-d H:i'));
-        $this->set_url_base("https://api.cryptowat.ch/markets/%s/%s%s/ohlc?periods=300&after=%s&before=%s");
+        $this->set_url_base("https://api.cryptowat.ch/markets/%s/%s%s/ohlc?periods=60&after=%s&before=%s");
         $exchange_rates_results = $this->send_get($timestamp);
-
         if (!empty($exchange_rates_results)){
             $this->send_post($exchange_rates_results);
         }

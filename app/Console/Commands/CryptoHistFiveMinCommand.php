@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-require __DIR__ . "/../../Modules/CryptoHistFive.php";
+require __DIR__ . "/../../Modules/CryptoHist.php";
 
 use Illuminate\Console\Command;
-use App\Modules\CryptoHistFive;
+use App\Modules\CryptoHist;
 
 class CryptoHistFiveMinCommand extends Command
 {
@@ -40,7 +40,7 @@ class CryptoHistFiveMinCommand extends Command
      */
     public function handle()
     {
-        $crypto_hist_five = new CryptoHistFive();
+        $crypto_hist_five = new CryptoHist();
         $crypto_hist_five->run_task();
     }
 }
