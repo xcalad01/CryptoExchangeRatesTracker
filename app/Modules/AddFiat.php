@@ -7,6 +7,7 @@ class AddFiat extends Base
 {
     protected $config = array(
         array("usd", "American dollar"),
+        array("eur", "Euro"),
         array("jpy","Japanese yen"),
         array("bgn","Bulgarian lev"),
         array("czk","Czech koruna "),
