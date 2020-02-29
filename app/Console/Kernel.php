@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('crypto:hist_five')->everyFiveMinutes();
+        $schedule->command('crypto:hist_five')->everyMinute();
         $schedule->command('crypto:current')->everyMinute();
         $schedule->command('fiat:current')->dailyAt('16:05');
     }
