@@ -5,6 +5,8 @@ require __DIR__ . "/../../Modules/Stats.php";
 
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Exchange;
 use App\Historical_available;
 use App\CryptoHistorical;
@@ -207,26 +209,22 @@ class ApiController extends Controller
     }
     public function create_fiat(Request $request){
         $fiat = Fiat::where("Fiat_id", $request['Id'])->first();
-        if ($fiat){
-            $fiat_hist = new Fiat_historical();
-            $fiat_hist->Fiat_id = $fiat->Fiat_id;
-            $fiat_hist->Value_USD = $request['Value'];
-            $fiat_hist->Date = $this->get_yesterday_timestamp();
-            $fiat_hist->save();
-            $fiat->update(array("Value_USD"=>$request['Value']));
-        }
-        else{
+        if (!$fiat){
             $fiat = new Fiat;
             $fiat->Fiat_id = $request["Id"];
             $fiat->Name = $request["Name"];
-            $fiat->Value_USD = $request["Value"];
         }
+        $fiat_hist = new Fiat_historical();
+        $fiat_hist->Fiat_id = $fiat->Fiat_id;
+        $fiat_hist->Value_USD = $request['Value'];
+        $fiat_hist->Date = $this->get_yesterday_timestamp();
 
 
         $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat"));
 
         try {
             $fiat->save();
+            $fiat_hist->save();
         }
         catch (QueryException $e){
 
@@ -238,5 +236,43 @@ class ApiController extends Controller
         return response()->json([
             "message" => "FiatCommand added"
         ], 200);
+    }
+
+    private function check_exchange($exchange){
+        $exchange = DB::table('exchanges')->where('Exchange_id', $exchange)->first();
+        if (!$exchange){
+            throw new \Exception('Exchange is not supported');
+        }
+
+        return $exchange;
+    }
+
+    private function check_fiat($fiat){
+        $fiat = DB::table('fiats')->where('Fiat_id', $fiat)->first();
+        if (!$fiat){
+            throw new \Exception('Fiat is not supported');
+        }
+
+        return $fiat;
+    }
+
+    function crypto_get_historical_value(Request $request, $start, $end, $exchange, $convert_to = null){
+
+        try {
+            $this->check_exchange($exchange);
+            if ($convert_to){
+                $this->check_fiat($convert_to);
+            }
+            else{
+                $convert_to = "usd";
+            }
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+
     }
 }
