@@ -23,6 +23,8 @@ Route::post('exchange', 'ApiController@create_exchange');
 
 Route::post('crypto_historical', 'ApiController@crypto_add_historical');
 
+Route::get('crypto_historical/value/{start}/{end}/{exchange}/{convert_to?}', 'ApiController@crypto_get_historical_value');
+
 Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value');
 
 Route::post('crypto', 'ApiController@create_crypto');
