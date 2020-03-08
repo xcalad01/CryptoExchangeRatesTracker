@@ -3,7 +3,8 @@
 
 namespace App\Modules;
 
-class AddFiat extends Base
+
+class FiatHistorical extends Base
 {
     protected $config = array(
         array("usd", "American dollar"),
@@ -44,12 +45,11 @@ class AddFiat extends Base
     protected $url = 'http://127.0.0.1:8000/api/fiat';
 
     private function send_get(){
-        $this->set_curl_url("https://api.exchangeratesapi.io/latest?base=USD");
+        $this->set_curl_url("https://api.exchangeratesapi.io/history?start_at=2020-02-01&end_at=2020-03-08&base=USD");
         return $this->do_send_get();
-
     }
 
-    private function send_post($rates, $date){
+    private function send_post($key, $rates){
         $this->set_curl_post();
         $this->set_curl_url($this->url);
 
@@ -57,19 +57,22 @@ class AddFiat extends Base
             $payload = json_encode(array(
                 "Id"=>$item[0],
                 "Name"=>$item[1],
-                "Value"=>$rates['rates'][strtoupper($item[0])],
-                "Key"=>$date
+                "Value"=>$rates[strtoupper($item[0])],
+                "Key"=>$key
             ));
             $this->do_send_post($payload);
         }
-
-        $this->close_curl_conn();
     }
 
     public function run_task(){
         $data = $this->send_get();
         if ($data){
-            $this->send_post($data, $data["date"]);
+            foreach ($data["rates"] as $key => $rate){
+                $this->send_post($key, $rate);
+                echo $key, "\n";
+            }
+            $this->close_curl_conn();
+
         }
     }
 }

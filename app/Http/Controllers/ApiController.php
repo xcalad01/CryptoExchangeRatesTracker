@@ -202,29 +202,32 @@ class ApiController extends Controller
         ], 200);
     }
 
-    private function get_yesterday_timestamp(){
-        $hour = 12;
-        $today = strtotime($hour . ':00:00');
-        return strtotime('-1 day', $today);
+    private function get_timestamp($date){
+        return strtotime($date . '16:05:00');
     }
-    public function create_fiat(Request $request){
-        $fiat = Fiat::where("Fiat_id", $request['Id'])->first();
+
+    private function insert_fiat($item){
+        $fiat = Fiat::where("Fiat_id", $item['Id'])->first();
         if (!$fiat){
             $fiat = new Fiat;
-            $fiat->Fiat_id = $request["Id"];
-            $fiat->Name = $request["Name"];
+            $fiat->Fiat_id = $item["Id"];
+            $fiat->Name = $item["Name"];
         }
         $fiat_hist = new Fiat_historical();
         $fiat_hist->Fiat_id = $fiat->Fiat_id;
-        $fiat_hist->Value_USD = $request['Value'];
-        $fiat_hist->Date = $this->get_yesterday_timestamp();
+        $fiat_hist->Value_USD = $item['Value'];
+        $fiat_hist->Date = $this->get_timestamp($item["Key"]);
 
+
+        $fiat->save();
+        $fiat_hist->save();
 
         $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat"));
+    }
 
+    public function create_fiat(Request $request){
         try {
-            $fiat->save();
-            $fiat_hist->save();
+            $this->insert_fiat($request);
         }
         catch (QueryException $e){
 
