@@ -68,9 +68,7 @@ class FiatHistorical extends Base
         $data = $this->send_get();
         if ($data){
             foreach ($data["rates"] as $key => $rate){
-                echo $key, "\n";
-
-                //$this->send_post($key, $rate);
+                $this->send_post($key, $rate);
             }
             $this->close_curl_conn();
 
