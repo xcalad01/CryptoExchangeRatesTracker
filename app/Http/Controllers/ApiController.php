@@ -259,8 +259,7 @@ class ApiController extends Controller
         return $fiat;
     }
 
-    function crypto_get_historical_value(Request $request, $start, $end, $exchange, $convert_to = null){
-
+    public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $convert_to = null){
         try {
             $this->check_exchange($exchange);
             if ($convert_to){
@@ -276,6 +275,56 @@ class ApiController extends Controller
             ], 404);
         }
 
+        $result = DB::table('historical_available')
+            ->select('Exchange_id', DB::raw('AVG(("Open"+"Close")/2*"Value_USD")'), DB::raw('"Fiat_id" as "Converted to"'))
+            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+            ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
+            ->where([
+                ['Exchange_id', '=', DB::raw("'{$exchange}'")]
+            ])
+            ->whereBetween('Timestamp', [$start, $end])
+            ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
+            ->groupBy(['Exchange_id', 'Fiat_id'])->get();
+
+
+        return response()->json([
+            "message" => $result
+        ], 200);
+
 
     }
+
+    public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $convert_to = null){
+        try {
+            $this->check_exchange($exchange);
+            if ($convert_to){
+                $this->check_fiat($convert_to);
+            }
+            else{
+                $convert_to = "usd";
+            }
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        $result = DB::table('historical_available')
+            ->select('Exchange_id', DB::raw('"Open"*"Value_USD" as "Open"'), DB::raw('"High"*"Value_USD" as "High"'), DB::raw('"Low"*"Value_USD" as "Low"'), DB::raw('"Close"*"Value_USD" as "Close"'), DB::raw('"Volume"*"Value_USD" as "Volume"'), DB::raw('"Fiat_id" as "Converted to"'))
+            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+            ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
+            ->where([
+                ['Exchange_id', '=', DB::raw("'{$exchange}'")]
+            ])
+            ->whereBetween('Timestamp', [$start, $end])
+            ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])->get();
+
+        return response()->json([
+            "message" => $result
+        ], 200);
+
+    }
+
+
 }
