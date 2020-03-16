@@ -232,7 +232,7 @@ class ApiController extends Controller
         catch (QueryException $e){
 
             return response()->json([
-                "message" => $e->getMessage()
+                "message" => $this->get_timestamp($request['Key'])
             ], 501);
         }
 
