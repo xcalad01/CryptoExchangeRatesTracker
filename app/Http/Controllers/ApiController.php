@@ -119,7 +119,7 @@ class ApiController extends Controller
         }
 
 
-
+        echo "Historical five minutes saved\n";
         return response()->json([
             "message" => "Historical five min saved"
         ], 200);

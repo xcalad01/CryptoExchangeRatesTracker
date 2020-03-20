@@ -2,6 +2,7 @@
 
 
 namespace App\Modules;
+use Illuminate\Support\Facades\Log;
 
 class AddFiat extends Base
 {
