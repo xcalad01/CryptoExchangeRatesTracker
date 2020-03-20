@@ -68,7 +68,8 @@ class AddFiat extends Base
     }
 
     public function run_task(){
-        $data = $this->send_get();
+	$data = $this->send_get();
+	echo $data["date"], "\n";
         if ($data){
             $this->send_post($data, $data["date"]);
         }
