@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Modules;
+use Illuminate\Support\Facades\Log;
 
 class Base
 {
