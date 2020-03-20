@@ -54,7 +54,6 @@ class CryptoHist extends Base
                 ));
             }
 
-            echo "Added\n";
             $this->statsd->statsd->gauge('cryptowatch_remaining', $data['allowance']['remaining'], 1);
 	    echo "Added";
 	}
