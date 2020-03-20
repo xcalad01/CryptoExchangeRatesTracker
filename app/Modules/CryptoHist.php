@@ -2,6 +2,7 @@
 
 
 namespace App\Modules;
+use Illuminate\Support\Facades\Log;
 
 class CryptoHist extends Base
 {
@@ -54,7 +55,8 @@ class CryptoHist extends Base
             }
 
             $this->statsd->statsd->gauge('cryptowatch_remaining', $data['allowance']['remaining'], 1);
-        }
+	    echo "Added";
+	}
 
         return $results;
 
