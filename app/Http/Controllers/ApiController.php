@@ -309,7 +309,7 @@ class ApiController extends Controller
         }
 
         $result = DB::table('historical_available')
-            ->select('Exchange_id', DB::raw('"Open"*"Value_USD" as "Open"'), DB::raw('"High"*"Value_USD" as "High"'), DB::raw('"Low"*"Value_USD" as "Low"'), DB::raw('"Close"*"Value_USD" as "Close"'), DB::raw('"Volume"*"Value_USD" as "Volume"'), DB::raw('"Fiat_id" as "Converted to"'))
+            ->select(DB::raw('"Timestamp", "Open"*"Value_USD" as "Open"'), DB::raw('"High"*"Value_USD" as "High"'), DB::raw('"Low"*"Value_USD" as "Low"'), DB::raw('"Close"*"Value_USD" as "Close"'))
             ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
             ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
             ->where([
@@ -318,8 +318,18 @@ class ApiController extends Controller
             ->whereBetween('Timestamp', [$start, $end])
             ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])->get();
 
+        $ohlc_chart = array();
+        $result = json_decode($result, true);
+
+        foreach ($result as $res){
+            array_push($ohlc_chart, array(
+                "x" => $res['Timestamp'],
+                "y" => array($res["Open"], $res["High"], $res["Low"], $res["Close"])
+            ));
+        }
+
         return response()->json([
-            "message" => $result
+            "data" => $ohlc_chart
         ], 200);
 
     }

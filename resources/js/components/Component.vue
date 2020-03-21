@@ -1,3 +1,4 @@
+import ApexCharts from "apexcharts";
 <template>
     <div>
         <h1>Crypto Hist Value/Ohlc</h1>
@@ -46,10 +47,16 @@
             </div>
             <pre>{{ content | pretty }}</pre>
         </form>
+
+        <div id="chart_view">
+            <div ref="chart" class="chart"></div>
+        </div>
     </div>
 </template>
 
 <script>
+    import ApexCharts from "apexcharts";
+
     export default {
         data(){
             return {
@@ -57,10 +64,45 @@
                 post:{}
             }
         },
+        mounted() {
+        },
         methods: {
             addPost(){
+                console.log(process.env.MIX_API_PORT);
                 let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + this.post.action + "/" + this.post.start + "/" + this.post.end + "/" + this.post.exchange + "/" + this.post.convert;
-                this.content = this.axios.get(uri).then(response => (this.content = response.data))
+                this.axios.get(uri).then(response => (this.create_update_chart(response.data)));
+            },
+
+            create_update_chart(data){
+                console.log(data);
+                // code from Example: https://apexcharts.com/javascript-chart-demos/area-charts/spline/
+                var chartOptions = {
+                    chart: {
+                        type: 'candlestick',
+                        height: 350
+                    },
+                    title: {
+                        text: 'CandleStick Chart',
+                        align: 'left'
+                    },
+                    xaxis: {
+                        type: 'datetime'
+                    },
+                    yaxis: {
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    series: [{
+                        data: data['data']
+                    }],
+                };
+
+                if (this.$refs.chart) {
+                    // HTML element exists
+                    var chart = new ApexCharts(this.$refs.chart, chartOptions);
+                    chart.render();
+                }
             }
         },
         filters: {
