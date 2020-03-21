@@ -10,6 +10,9 @@ import VueAxios from 'vue-axios';
 import axios from 'axios';
 
 import App from './App.vue';
+
+
+
 Vue.use(VueAxios, axios);
 
 import FirstComponent from './components/Component.vue';
@@ -18,7 +21,7 @@ const routes = [
     {
         name: 'first_component',
         path: '/',
-        component: FirstComponent
+        component: FirstComponent,
     }
 ];
 
