@@ -59,15 +59,12 @@
         },
         methods: {
             addPost(){
-                console.log(this.post.start);
-                let uri = "http://localhost:8000/api/crypto_historical/" + this.post.action + "/" + this.post.start + "/" + this.post.end + "/" + this.post.exchange + "/" + this.post.convert;
-                console.log(uri);
+                let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + this.post.action + "/" + this.post.start + "/" + this.post.end + "/" + this.post.exchange + "/" + this.post.convert;
                 this.content = this.axios.get(uri).then(response => (this.content = response.data))
             }
         },
         filters: {
             pretty: function(value) {
-                console.log(value);
                 return JSON.stringify(value, null, 4);
             }
         }
