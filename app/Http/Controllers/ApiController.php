@@ -323,7 +323,7 @@ class ApiController extends Controller
 
         foreach ($result as $res){
             array_push($ohlc_chart, array(
-                "x" => $res['Timestamp'],
+                "x" => date("Y-m-d h:i:sa", $res['Timestamp']),
                 "y" => array($res["Open"], $res["High"], $res["Low"], $res["Close"])
             ));
         }
