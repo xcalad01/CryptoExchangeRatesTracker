@@ -33,3 +33,5 @@ Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value'
 Route::post('crypto', 'ApiController@create_crypto');
 
 Route::post('fiat', 'ApiController@create_fiat');
+
+//Route::post('fiat_fix', 'ApiController@fix_fiat_timestamp');
