@@ -200,8 +200,39 @@ class ApiController extends Controller
         ], 200);
     }
 
+//    public function fix_fiat_timestamp(Request $request){
+//        $timestamps = $request["Timestamps"];
+//        foreach ($timestamps as $t){
+//            $fiats = Fiat_historical::where("Date", $t)->get();
+//            foreach ($fiats as $f) {
+//                if ($f->Fiat_id == 'usd'){
+//                    continue;
+//                }
+//                $fiat_hist1 = new Fiat_historical();
+//                $fiat_hist2 = new Fiat_historical();
+//
+//                $fiat_hist1->Fiat_id = $f->Fiat_id;
+//                $fiat_hist2->Fiat_id = $f->Fiat_id;
+//
+//                $fiat_hist1->Value_USD = $f->Value_USD;
+//                $fiat_hist2->Value_USD = $f->Value_USD;
+//
+//
+//                $fiat_hist1->Date = $f->Date + 86400;
+//                $fiat_hist2->Date = $f->Date + (86400*2);
+//
+//                $fiat_hist1->save();
+//                $fiat_hist2->save();
+//            }
+//        }
+//    }
+
     private function get_timestamp($date){
         return strtotime($date . '16:05:00');
+    }
+
+    private function get_today_timestamp($time){
+        return strtotime($time);
     }
 
     private function insert_fiat($item){
@@ -211,16 +242,25 @@ class ApiController extends Controller
             $fiat->Fiat_id = $item["Id"];
             $fiat->Name = $item["Name"];
         }
+
+        $fiat_hist = Fiat_historical::where($this->get_timestamp($item["Key"]))->first();
+        if ($fiat_hist){
+            $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_special_day"));
+            $date = $this->get_today_timestamp("16:05");
+        }
+        else{
+            $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_normal_day"));
+            $date = $this->get_timestamp($item["Key"]);
+        }
+
         $fiat_hist = new Fiat_historical();
         $fiat_hist->Fiat_id = $fiat->Fiat_id;
         $fiat_hist->Value_USD = $item['Value'];
-        $fiat_hist->Date = $this->get_timestamp($item["Key"]);
+        $fiat_hist->Date = $date;
 
 
         $fiat->save();
         $fiat_hist->save();
-
-        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat"));
     }
 
     public function create_fiat(Request $request){
@@ -350,7 +390,7 @@ class ApiController extends Controller
 
         foreach ($result as $res){
             array_push($ohlc_chart, array(
-                "x" => date("Y-m-d h:i:sa", $res['Timestamp']),
+                "x" => date("Y-m-d H:i:s", $res['Timestamp']),
                 "y" => array($res["Open"], $res["High"], $res["Low"], $res["Close"])
             ));
         }

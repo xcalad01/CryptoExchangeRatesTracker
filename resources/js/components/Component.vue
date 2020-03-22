@@ -58,6 +58,10 @@ import ApexCharts from "apexcharts";
         <div id="chart_view">
             <div ref="chart" class="chart"></div>
         </div>
+
+        <div id="chart_value">
+            <div ref="chart_value" class="chart"></div>
+        </div>
     </div>
 </template>
 
@@ -186,7 +190,7 @@ import ApexCharts from "apexcharts";
                 };
 
                 if (this.$refs.chart) {
-                    var chart = new ApexCharts(this.$refs.chart, options);
+                    var chart = new ApexCharts(this.$refs.chart_value, options);
                     chart.render();
                 }
                 // var chart = new ApexCharts(document.querySelector("#chart"), options);
