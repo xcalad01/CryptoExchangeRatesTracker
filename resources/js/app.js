@@ -10,7 +10,8 @@ import VueAxios from 'vue-axios';
 import axios from 'axios';
 
 import App from './App.vue';
-
+import { Datetime } from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css'
 
 
 Vue.use(VueAxios, axios);
@@ -26,4 +27,4 @@ const routes = [
 ];
 
 const router = new VueRouter({ mode: 'history', routes: routes});
-const app = new Vue(Vue.util.extend({ router }, App)).$mount('#app');
+const app = new Vue(Vue.util.extend({ router }, App, Datetime)).$mount('#app');

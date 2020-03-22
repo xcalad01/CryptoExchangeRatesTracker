@@ -257,7 +257,12 @@ class ApiController extends Controller
         return $fiat;
     }
 
-    public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $convert_to = null){
+    public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $range = "1h", $convert_to = null){
+        $config = array(
+            "1d" => 86400,
+            "1h" => 3600
+        );
+
         try {
             $this->check_exchange($exchange);
             if ($convert_to){
@@ -266,6 +271,16 @@ class ApiController extends Controller
             else{
                 $convert_to = "usd";
             }
+
+            if ($range and !key_exists($range, $config)){
+                throw new \Exception('Time range not supported');
+            }
+            $range = $config[$range];
+
+            if ($start + $range > $end){
+                throw new \Exception('Range not between start and end');
+
+            }
         }
         catch (\Exception $e){
             return response()->json([
@@ -273,26 +288,38 @@ class ApiController extends Controller
             ], 404);
         }
 
-        $result = DB::table('historical_available')
-            ->select('Exchange_id', DB::raw('AVG(("Open"+"Close")/2*"Value_USD")'), DB::raw('"Fiat_id" as "Converted to"'))
-            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-            ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
-            ->where([
-                ['Exchange_id', '=', DB::raw("'{$exchange}'")]
-            ])
-            ->whereBetween('Timestamp', [$start, $end])
-            ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
-            ->groupBy(['Exchange_id', 'Fiat_id'])->get();
+        $values = array();
+        while ($start + $range <= $end){
+            $result = DB::table('historical_available')
+                ->select(DB::raw('AVG(("Open"+"Close")/2*"Value_USD") as value'))
+                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
+                ->where([
+                    ['Exchange_id', '=', DB::raw("'{$exchange}'")]
+                ])
+                ->whereBetween('Timestamp', [$start, $start + $range])
+                ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
+                ->groupBy(['Exchange_id', 'Fiat_id'])->get();
+
+            $result = json_decode($result, true);
+            foreach ($result as $res){
+                array_push($values, array(
+                    date("Y-m-d h:i:s", $start),
+                    $res['value']
+                ));
+            }
+            $start += $range;
+        }
 
 
         return response()->json([
-            "message" => $result
+            "data" => $values
         ], 200);
 
 
     }
 
-    public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $convert_to = null){
+    public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $convert_to = null){
         try {
             $this->check_exchange($exchange);
             if ($convert_to){
