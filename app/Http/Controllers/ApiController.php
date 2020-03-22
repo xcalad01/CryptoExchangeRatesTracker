@@ -360,6 +360,12 @@ class ApiController extends Controller
     }
 
     public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $convert_to = null){
+        $config = array(
+            "1d" => 86400,
+            "1h" => 3600,
+            "6h" => 21600
+        );
+
         try {
             $this->check_exchange($exchange);
             if ($convert_to){
@@ -368,6 +374,16 @@ class ApiController extends Controller
             else{
                 $convert_to = "usd";
             }
+
+            if ($range and !key_exists($range, $config)){
+                throw new \Exception('Time range not supported');
+            }
+            $range = $config[$range];
+
+            if ($start + $range > $end){
+                throw new \Exception('Range not between start and end');
+
+            }
         }
         catch (\Exception $e){
             return response()->json([
@@ -375,24 +391,28 @@ class ApiController extends Controller
             ], 404);
         }
 
-        $result = DB::table('historical_available')
-            ->select(DB::raw('"Timestamp", "Open"*"Value_USD" as "Open"'), DB::raw('"High"*"Value_USD" as "High"'), DB::raw('"Low"*"Value_USD" as "Low"'), DB::raw('"Close"*"Value_USD" as "Close"'))
-            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-            ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
-            ->where([
-                ['Exchange_id', '=', DB::raw("'{$exchange}'")]
-            ])
-            ->whereBetween('Timestamp', [$start, $end])
-            ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])->get();
-
         $ohlc_chart = array();
-        $result = json_decode($result, true);
+        while ($start + $range <= $end){
+            $result = DB::table('historical_available')
+                ->select(DB::raw('AVG("Open"*"Value_USD") as "Open", AVG("High"*"Value_USD") as "High", AVG("Low"*"Value_USD") as "Low", AVG("Close"*"Value_USD") as "Close"'))
+                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
+                ->where([
+                    ['Exchange_id', '=', DB::raw("'{$exchange}'")]
+                ])
+                ->whereBetween('Timestamp', [$start, $start + $range])
+                ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
+                ->get();
 
-        foreach ($result as $res){
-            array_push($ohlc_chart, array(
-                "x" => date("Y-m-d H:i:s", $res['Timestamp']),
-                "y" => array($res["Open"], $res["High"], $res["Low"], $res["Close"])
-            ));
+            $result = json_decode($result, true);
+            foreach ($result as $res){
+                array_push($ohlc_chart, array(
+                    "x" => date("Y-m-d H:i:s", $start),
+                    "y" => array($res["Open"], $res["High"], $res["Low"], $res["Close"])
+                ));
+            }
+
+            $start += $range;
         }
 
         return response()->json([
