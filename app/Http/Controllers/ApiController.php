@@ -304,7 +304,7 @@ class ApiController extends Controller
             $result = json_decode($result, true);
             foreach ($result as $res){
                 array_push($values, array(
-                    date("Y-m-d h:i:s", $start),
+                    date("Y-m-d H:i:s", $start),
                     $res['value']
                 ));
             }
