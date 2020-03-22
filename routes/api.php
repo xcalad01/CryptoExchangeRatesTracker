@@ -25,7 +25,7 @@ Route::post('crypto_historical', 'ApiController@crypto_add_historical');
 
 Route::get('crypto_historical/value/{start}/{end}/{exchange}/{range}/{convert_to?}', 'ApiController@get_crypto_value_time_range');
 
-Route::get('crypto_historical/ohlc/{start}/{end}/{exchange}/{convert_to?}', 'ApiController@get_crypto_ohlc_time_range');
+Route::get('crypto_historical/ohlc/{start}/{end}/{exchange}/{range}/{convert_to?}', 'ApiController@get_crypto_ohlc_time_range');
 
 Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value');
 
