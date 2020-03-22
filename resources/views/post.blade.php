@@ -9,7 +9,6 @@
     <meta name="csrf-token" value="{{ csrf_token() }}" />
 </head>
 <body>
-<datetime type="datetime" v-model="datetime"></datetime>
 <div id="app">
 </div>
 
