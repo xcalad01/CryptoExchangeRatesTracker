@@ -362,7 +362,8 @@ class ApiController extends Controller
     public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $convert_to = null){
         $config = array(
             "1d" => 86400,
-            "1h" => 3600
+            "1h" => 3600,
+            "6h" => 21600
         );
 
         try {
