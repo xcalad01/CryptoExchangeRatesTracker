@@ -242,9 +242,9 @@ class ApiController extends Controller
             $fiat->Fiat_id = $item["Id"];
             $fiat->Name = $item["Name"];
         }
-
-        $fiat_hist = Fiat_historical::where($this->get_timestamp($item["Key"]))->first();
-        if ($fiat_hist){
+	
+	$fiat_hist = Fiat_historical::where(["Date" => $this->get_timestamp($item["Key"]), "Fiat_id" => $item['Id']])->first();
+	if ($fiat_hist){
             $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_special_day"));
             $date = $this->get_today_timestamp("16:05");
         }
@@ -264,13 +264,13 @@ class ApiController extends Controller
     }
 
     public function create_fiat(Request $request){
-        try {
+	    try {
             $this->insert_fiat($request);
         }
         catch (QueryException $e){
 
             return response()->json([
-                "message" => $this->get_timestamp($request['Key'])
+                "message" => $e->getMessage()
             ], 501);
         }
 

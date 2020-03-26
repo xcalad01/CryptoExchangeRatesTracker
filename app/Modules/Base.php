@@ -54,7 +54,7 @@ class Base
                 'Content-Type: application/json',
                 'Content-Length: ' . strlen($payload))
         );
-        $result = curl_exec($this->ch);
+	$result = curl_exec($this->ch);
         $return_code = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
         if($return_code != 200){
             $this->statsd->statsd->increment("api.error", 1, array('message'=>$result));

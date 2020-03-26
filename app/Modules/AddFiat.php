@@ -45,8 +45,8 @@ class AddFiat extends Base
     protected $url = 'http://127.0.0.1:8000/api/fiat';
 
     private function send_get(){
-        $this->set_curl_url("https://api.exchangeratesapi.io/latest?base=USD");
-        return $this->do_send_get();
+	$this->set_curl_url("https://api.exchangeratesapi.io/latest?base=USD");
+	return $this->do_send_get();
 
     }
 
@@ -54,7 +54,7 @@ class AddFiat extends Base
         $this->set_curl_post();
         $this->set_curl_url($this->url);
 
-        foreach ($this->config as $item){
+	foreach ($this->config as $item){
             $payload = json_encode(array(
                 "Id"=>$item[0],
                 "Name"=>$item[1],
@@ -69,7 +69,6 @@ class AddFiat extends Base
 
     public function run_task(){
 	$data = $this->send_get();
-	echo $data["date"], "\n";
         if ($data){
             $this->send_post($data, $data["date"]);
         }

@@ -45,7 +45,7 @@ class FiatHistorical extends Base
     protected $url = 'http://127.0.0.1:8000/api/fiat';
 
     private function send_get(){
-        $this->set_curl_url("https://api.exchangeratesapi.io/history?start_at=2020-02-01&end_at=2020-03-08&base=USD");
+        $this->set_curl_url("https://api.exchangeratesapi.io/history?start_at=2020-03-24&end_at=2020-03-25&base=USD");
         return $this->do_send_get();
     }
 
