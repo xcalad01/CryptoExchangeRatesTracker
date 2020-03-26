@@ -243,7 +243,8 @@ class ApiController extends Controller
             $fiat->Name = $item["Name"];
         }
 
-        $fiat_hist = Fiat_historical::where($this->get_timestamp($item["Key"]))->first();
+        $fiat_hist = Fiat_historical::where(["Date", $this->get_timestamp($item["Key"])])->first();
+        echo $fiat_hist;
         if ($fiat_hist){
             $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_special_day"));
             $date = $this->get_today_timestamp("16:05");
@@ -270,7 +271,7 @@ class ApiController extends Controller
         catch (QueryException $e){
 
             return response()->json([
-                "message" => $this->get_timestamp($request['Key'])
+                "message" => $e->getMessage()
             ], 501);
         }
 
@@ -394,7 +395,7 @@ class ApiController extends Controller
         $ohlc_chart = array();
         while ($start + $range <= $end){
             $result = DB::table('historical_available')
-                ->select(DB::raw('AVG("Open"*"Value_USD") as "Open", AVG("High"*"Value_USD") as "High", AVG("Low"*"Value_USD") as "Low", AVG("Close"*"Value_USD") as "Close"'))
+                ->select(DB::raw('FIRST_VALUE("Open"*"Value_USD") OVER (ORDER BY "Timestamp") as "Open", MAX("High"*"Value_USD") as "High", MIN("Low"*"Value_USD") as "Low", LAST_VALUE("Close"*"Value_USD") OVER(ORDER BY "Timestamp") as "Close"'))
                 ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
                 ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
                 ->where([
@@ -402,8 +403,10 @@ class ApiController extends Controller
                 ])
                 ->whereBetween('Timestamp', [$start, $start + $range])
                 ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
+                ->groupBy(['Open', 'High', 'Low', 'Close', 'Value_USD', 'Timestamp'])
                 ->get();
 
+            print_r($result);
             $result = json_decode($result, true);
             foreach ($result as $res){
                 array_push($ohlc_chart, array(

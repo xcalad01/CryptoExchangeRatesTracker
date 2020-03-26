@@ -55,6 +55,7 @@ class AddFiat extends Base
         $this->set_curl_url($this->url);
 
         foreach ($this->config as $item){
+            echo $item, "\n";
             $payload = json_encode(array(
                 "Id"=>$item[0],
                 "Name"=>$item[1],
