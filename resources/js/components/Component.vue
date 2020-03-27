@@ -36,10 +36,10 @@ import ApexCharts from "apexcharts";
                 </div>
             </div><br />
             <select v-model="post.range">
-                <option disabled value="">Please select one</option>
+                <option disabled value="">Date rang, please select ne</option>
                 <option>1d</option>
                 <option>1h</option>
-            </select>
+            </select><br />
             <select v-model="post.action">
                 <option disabled value="">Please select one</option>
                 <option>value</option>
