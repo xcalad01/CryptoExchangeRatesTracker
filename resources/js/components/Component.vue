@@ -35,14 +35,11 @@ import ApexCharts from "apexcharts";
                     </div>
                 </div>
             </div><br />
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Range:</label>
-                        <input type="text" class="form-control" v-model="post.range">
-                    </div>
-                </div>
-            </div>
+            <select v-model="post.range">
+                <option disabled value="">Please select one</option>
+                <option>1d</option>
+                <option>1h</option>
+            </select>
             <select v-model="post.action">
                 <option disabled value="">Please select one</option>
                 <option>value</option>
