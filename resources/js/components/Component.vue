@@ -79,7 +79,7 @@ import ApexCharts from "apexcharts";
             }
         },
         mounted() {
-           this. create_update_value_chart();
+           this. create_update_realtime_value();
         },
         methods: {
             addPost(){
