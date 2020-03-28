@@ -73,12 +73,12 @@ import ApexCharts from "apexcharts";
     var real_time_data = [];
     var realtime_response_data = null;
 
-    function getNewSeries(){
+    function getNewSeries(axios_client){
         if (lastDate == null){
             lastDate = new Date().setSeconds(0,0) / 1000;
         }
         let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current/" + "/" + lastDate + "/" + "kraken" + "/" + "usd";
-        this.axios.get(uri).then(response => (realtime_response_data = response.data));
+        axios_client.get(uri).then(response => (realtime_response_data = response.data));
         var date = _.cloneDeep(lastDate);
         var result = {x: date , y: realtime_response_data['data']};
         lastDate += 60;
@@ -233,7 +233,7 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_realtime_value(){
-                real_time_data.push(getNewSeries());
+                real_time_data.push(getNewSeries(this.axios));
                 var options = {
                     series: [{
                         data: real_time_data
@@ -285,7 +285,7 @@ import ApexCharts from "apexcharts";
                 realtime_chart.render();
 
                 window.setInterval(function () {
-                    real_time_data.push(getNewSeries());
+                    real_time_data.push(getNewSeries(this.axios));
 
                     realtime_chart.updateSeries([{
                         data: real_time_data
