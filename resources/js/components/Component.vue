@@ -74,6 +74,7 @@ import ApexCharts from "apexcharts";
     var realtime_response_data = '';
 
     function getNewSeries(axios_client){
+        console.log(lastDate);
         if (lastDate == null){
             lastDate = new Date().setSeconds(0,0) / 1000;
         }
