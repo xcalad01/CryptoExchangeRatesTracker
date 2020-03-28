@@ -68,8 +68,8 @@ import ApexCharts from "apexcharts";
 <script>
     import ApexCharts from "apexcharts";
 
-    lastDate = null;
-    realtime_chart = null;
+    var lastDate = null;
+    var realtime_chart = null;
 
     function getNewSeries(min_max){
         lastDate = lastDate.setDate(lastDate.getDate() + 1);
