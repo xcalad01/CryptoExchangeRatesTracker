@@ -71,7 +71,7 @@ import ApexCharts from "apexcharts";
     var lastDate = null;
     var realtime_chart = null;
 
-    function getNewSeries(min_max){
+    function getNewSeries(lastDate, min_max){
         lastDate = lastDate.setDate(lastDate.getDate() + 1);
         return [lastDate, Math.random() * (min_max["max"] - min_max["min"]) + min_max["min"]]
     }
@@ -275,7 +275,7 @@ import ApexCharts from "apexcharts";
                 realtime_chart.render();
 
                 window.setInterval(function () {
-                    var new_data = getNewSeries({
+                    var new_data = getNewSeries(lastDate, {
                         min: 10,
                         max: 90
                     });
