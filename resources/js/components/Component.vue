@@ -286,7 +286,7 @@ import ApexCharts from "apexcharts";
                     realtime_chart.updateSeries([{
                         data: real_time_data
                     }])
-                }, 1000)
+                }, 60 * 1000)
             },
         },
         filters: {
