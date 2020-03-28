@@ -58,6 +58,10 @@ import ApexCharts from "apexcharts";
         <div id="chart_value">
             <div ref="chart_value" class="chart"></div>
         </div>
+
+        <div id="realtime">
+            <div ref="chart_value" class="chart"></div>
+        </div>
     </div>
 </template>
 
@@ -70,6 +74,7 @@ import ApexCharts from "apexcharts";
                 content:null,
                 ohlc_chart:null,
                 value_chart: null,
+                realtime_chart: null,
                 post:{}
             }
         },
@@ -208,6 +213,69 @@ import ApexCharts from "apexcharts";
                     this.value_chart = new ApexCharts(this.$refs.chart_value, options);
                     this.value_chart.render();
                 }
+            }
+
+            create_update_realtime_value(){
+                var options = {
+                    series: [{
+                        data: data.slice()
+                    }],
+                    chart: {
+                        id: 'realtime',
+                        height: 350,
+                        type: 'line',
+                        animations: {
+                            enabled: true,
+                            easing: 'linear',
+                            dynamicAnimation: {
+                                speed: 1000
+                            }
+                        },
+                        toolbar: {
+                            show: false
+                        },
+                        zoom: {
+                            enabled: false
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        curve: 'smooth'
+                    },
+                    title: {
+                        text: 'Dynamic Updating Chart',
+                        align: 'left'
+                    },
+                    markers: {
+                        size: 0
+                    },
+                    xaxis: {
+                        type: 'datetime',
+                        range: XAXISRANGE,
+                    },
+                    yaxis: {
+                        max: 100
+                    },
+                    legend: {
+                        show: false
+                    },
+                };
+
+                this.realtime_chart = new ApexCharts(document.querySelector("#realtime"), options);
+                this.realtime_chart.render();
+
+                window.setInterval(function () {
+                    getNewSeries(lastDate, {
+                        min: 10,
+                        max: 90
+                    });
+
+                    this.realtime_chart.updateSeries([{
+                        data: data
+                    }])
+                }, 1000)
             }
         },
         filters: {
