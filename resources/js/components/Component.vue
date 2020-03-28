@@ -241,7 +241,7 @@ import ApexCharts from "apexcharts";
                     }],
                     chart: {
                         id: 'realtime',
-                        height: 50,
+                        height: 350,
                         type: 'line',
                         animations: {
                             enabled: true,
@@ -275,7 +275,7 @@ import ApexCharts from "apexcharts";
                         range: 900000
                     },
                     yaxis: {
-                        max: 100
+                        max: 10
                     },
                     legend: {
                         show: false
