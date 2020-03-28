@@ -228,7 +228,7 @@ import ApexCharts from "apexcharts";
                 real_time_data.push({x: lastDate, x: 50});
                 var options = {
                     series: [{
-                        data: data
+                        data: real_time_data
                     }],
                     chart: {
                         id: 'realtime',
