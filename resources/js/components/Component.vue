@@ -73,7 +73,7 @@ import ApexCharts from "apexcharts";
     var real_time_data = [];
 
     function getNewSeries(lastDate, min_max){
-        var new_date = lastDate.getDate() + 1;
+        var new_date = lastDate + 86400000;
         lastDate = new_date;
         return {x: new_date, y: Math.floor(Math.random() * (min_max.max - min_max.min + 1)) + min_max.min};
     }
@@ -225,7 +225,7 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_realtime_value(){
-                lastDate = new Date("2020-02-03");
+                lastDate = 1584662400000;
                 real_time_data.push({x: lastDate, x: 50});
                 var options = {
                     series: [{
