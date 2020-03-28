@@ -242,7 +242,7 @@ class ApiController extends Controller
             $fiat->Fiat_id = $item["Id"];
             $fiat->Name = $item["Name"];
         }
-	
+
 	$fiat_hist = Fiat_historical::where(["Date" => $this->get_timestamp($item["Key"]), "Fiat_id" => $item['Id']])->first();
 	if ($fiat_hist){
             $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_special_day"));
@@ -360,6 +360,7 @@ class ApiController extends Controller
     }
 
     public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $convert_to = null){
+//        select (array_agg("Open" * "Value_USD" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High"*"Value_USD") as "High", MIN("Low"*"Value_USD") "Low", (array_agg("Close" * "Value_USD" ORDER BY "Timestamp" DESC))[1] as "Close", AVG("Volume"*"Value_USD") from historical_available JOIN crypto_historical on historical_available.id = crypto_historical.id JOIN fiat_historicals on "Fiat_id" = 'gbp' WHERE "Exchange_id" = 'kraken' AND "Timestamp" BETWEEN  1583712000 AND 1583798400 AND "Timestamp" BETWEEN "Date" AND "Date" + 86399;
         $config = array(
             "1d" => 86400,
             "1h" => 3600,
@@ -394,7 +395,7 @@ class ApiController extends Controller
         $ohlc_chart = array();
         while ($start + $range <= $end){
             $result = DB::table('historical_available')
-                ->select(DB::raw('AVG("Open"*"Value_USD") as "Open", AVG("High"*"Value_USD") as "High", AVG("Low"*"Value_USD") as "Low", AVG("Close"*"Value_USD") as "Close"'))
+                ->select(DB::raw('(array_agg("Open" * "Value_USD" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High"*"Value_USD") as "High", MIN("Low"*"Value_USD") as "Low", (array_agg("Close" * "Value_USD" ORDER BY "Timestamp" DESC))[1] as "Close"'))
                 ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
                 ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
                 ->where([
