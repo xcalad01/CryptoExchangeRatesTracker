@@ -49,7 +49,6 @@ import ApexCharts from "apexcharts";
             <div class="form-group">
                 <button class="btn btn-primary">Query</button>
             </div>
-            <pre>{{ content | pretty }}</pre>
         </form>
 
         <div id="chart_view">
@@ -69,6 +68,8 @@ import ApexCharts from "apexcharts";
         data(){
             return {
                 content:null,
+                ohlc_chart:null,
+                value_chart: null,
                 post:{}
             }
         },
@@ -88,11 +89,13 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_ohlc_chart(data){
-		console.log(data["data"]);
                 var new_data = data['data'].map(function (item) {
                     return {x:(item['x'] - 3600) * 1000, y:item["y"]}
                 });
-		console.log(new_data)
+
+                if (this.ohlc_chart != null){
+                    this.ohlc_chart.series = data
+                }
                 var chartOptions = {
                     chart: {
                         type: 'candlestick',
@@ -124,19 +127,20 @@ import ApexCharts from "apexcharts";
                 };
 
                 if (this.$refs.chart) {
-                    // HTML element exists
-                    var chart = new ApexCharts(this.$refs.chart, chartOptions);
-                    chart.render();
+                    this.ohlc_chart = new ApexCharts(this.$refs.chart, chartOptions);
+                    this.ohlc_chart.render();
                 }
             },
 
             create_update_value_chart(data){
-		console.log(data);
                 var new_data = data['data'].map(function (item) {
-                    console.log(item[0]);
                     return [new Date(item[0] * 1000 -  3600 * 1000), item[1]]
                 });
-                console.log(new_data);
+
+                if (this.value_chart != null){
+                    this.value_chart.series = data
+                }
+
                 var options = {
                     series: [{
                         name: 'Price',
@@ -199,10 +203,9 @@ import ApexCharts from "apexcharts";
                 };
 
                 if (this.$refs.chart) {
-                    var chart = new ApexCharts(this.$refs.chart_value, options);
-                    chart.render();
+                    this.value_chart = new ApexCharts(this.$refs.chart_value, options);
+                    this.value_chart.render();
                 }
-                // var chart = new ApexCharts(document.querySelector("#chart"), options);
             }
         },
         filters: {
