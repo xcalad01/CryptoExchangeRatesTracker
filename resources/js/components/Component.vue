@@ -221,7 +221,7 @@ import ApexCharts from "apexcharts";
                 var data = [this.last_day, 50];
                 var options = {
                     series: [{
-                        data: data.slice()
+                        data: data
                     }],
                     chart: {
                         id: 'realtime',
@@ -270,13 +270,13 @@ import ApexCharts from "apexcharts";
 
                 window.setInterval(function () {
                     this.last_day.setDate(this.last_day.getDate() + 1);
-                    getNewSeries(lastDate, {
+                    var new_data = getNewSeries(lastDate, {
                         min: 10,
                         max: 90
                     });
 
                     this.realtime_chart.updateSeries([{
-                        data: data
+                        data: new_data
                     }])
                 }, 1000)
             }
