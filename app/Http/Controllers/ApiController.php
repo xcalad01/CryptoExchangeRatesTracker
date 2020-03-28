@@ -320,7 +320,8 @@ class ApiController extends Controller
             if ($start + $range > $end){
                 throw new \Exception('Range not between start and end');
 
-            }
+	    }
+	    $start = intval($start);
         }
         catch (\Exception $e){
             return response()->json([
@@ -384,7 +385,9 @@ class ApiController extends Controller
             if ($start + $range > $end){
                 throw new \Exception('Range not between start and end');
 
-            }
+	    }
+
+	    $start = intval($start);
         }
         catch (\Exception $e){
             return response()->json([
@@ -392,7 +395,11 @@ class ApiController extends Controller
             ], 404);
         }
 
-        $ohlc_chart = array();
+	$ohlc_chart = array();
+	array_push($ohlc_chart, array(
+                    "x" => $start,
+                    "y" => array(0, 0, 0, 0)
+        	));
         while ($start + $range <= $end){
             $result = DB::table('historical_available')
                 ->select(DB::raw('(array_agg("Open" * "Value_USD" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High"*"Value_USD") as "High", MIN("Low"*"Value_USD") as "Low", (array_agg("Close" * "Value_USD" ORDER BY "Timestamp" DESC))[1] as "Close"'))
@@ -408,7 +415,7 @@ class ApiController extends Controller
             $result = json_decode($result, true);
             foreach ($result as $res){
                 array_push($ohlc_chart, array(
-                    "x" => $start,
+                    "x" => $start + $range,
                     "y" => array($res["Open"], $res["High"], $res["Low"], $res["Close"])
                 ));
             }

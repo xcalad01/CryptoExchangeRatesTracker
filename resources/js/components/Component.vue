@@ -88,11 +88,11 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_ohlc_chart(data){
+		console.log(data["data"]);
                 var new_data = data['data'].map(function (item) {
-                    console.log(item[0]);
-                    return [new Date(item[0]), item[1]]
+                    return {x:(item['x'] - 3600) * 1000, y:item["y"]}
                 });
-
+		console.log(new_data)
                 var chartOptions = {
                     chart: {
                         type: 'candlestick',
@@ -106,7 +106,7 @@ import ApexCharts from "apexcharts";
                         type: 'category',
                         labels: {
                             formatter: function(val) {
-                                return dayjs(val).format('MMM DD HH:mm')
+                                return new Date(val).toLocaleString();
                             }
                         }
                     },
@@ -119,7 +119,7 @@ import ApexCharts from "apexcharts";
                         }
                     },
                     series: [{
-                        data: new_data['data']
+                        data: new_data
                     }],
                 };
 
@@ -131,9 +131,10 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_value_chart(data){
+		console.log(data);
                 var new_data = data['data'].map(function (item) {
                     console.log(item[0]);
-                    return [new Date(item[0]), item[1]]
+                    return [new Date(item[0] * 1000 -  3600 * 1000), item[1]]
                 });
                 console.log(new_data);
                 var options = {
