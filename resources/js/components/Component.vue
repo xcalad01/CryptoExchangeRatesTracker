@@ -70,12 +70,18 @@ import ApexCharts from "apexcharts";
 
     var lastDate = null;
     var realtime_chart = null;
-    var real_time_data = [];
+    var realtime_data = [];
+    var realtime_response_data = null;
 
-    function getNewSeries(min_max){
+    function getNewSeries(){
+        if (lastDate == null){
+            lastDate = new Date().setSeconds(0,0) / 1000;
+        }
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current/" + "/" + lastDate + "/" + "kraken" + "/" + "usd";
+        this.axios.get(uri).then(response => (realtime_response_data = response.data));
         var date = _.cloneDeep(lastDate);
-        var result = {x: date + 86400000, y: Math.floor(Math.random() * (min_max.max - min_max.min + 1)) + min_max.min};
-        lastDate += 86400000;
+        var result = {x: date , y: realtime_response_data['data']};
+        lastDate += 60;
         return result;
     }
 
@@ -89,7 +95,8 @@ import ApexCharts from "apexcharts";
             }
         },
         mounted() {
-           this. create_update_realtime_value();
+
+           this.create_update_realtime_value();
         },
         methods: {
             addPost(){
@@ -226,7 +233,7 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_realtime_value(){
-                real_time_data.push({x: lastDate, x: 50});
+                real_time_data.push(getNewSeries());
                 var options = {
                     series: [{
                         data: real_time_data
@@ -278,10 +285,7 @@ import ApexCharts from "apexcharts";
                 realtime_chart.render();
 
                 window.setInterval(function () {
-                    real_time_data.push(getNewSeries({
-                        min: 10,
-                        max: 90
-                    }));
+                    real_time_data.push(getNewSeries());
 
                     realtime_chart.updateSeries([{
                         data: real_time_data

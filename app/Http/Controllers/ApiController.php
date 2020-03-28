@@ -297,10 +297,44 @@ class ApiController extends Controller
         return $fiat;
     }
 
+    public function get_crypto_value_timestamp(Request $request, $timestamp, $exchange, $convert_to=null){
+        try {
+            $this->check_exchange($exchange);
+            if ($convert_to){
+                $this->check_fiat($convert_to);
+            }
+            else{
+                $convert_to = "usd";
+            }
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        $result = DB::table('historical_available')
+            ->select(DB::raw('("Open"+"Close")/2*"Value_USD" as value'))
+            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+            ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
+            ->where([
+                ['Exchange_id', '=', DB::raw("'{$exchange}'")],
+                ['Timestamp', '=', DB::raw("'{$timestamp}'")]
+            ])
+            ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
+            ->groupBy(['Exchange_id', 'Fiat_id', 'Open', 'Close', 'Value_USD'])->get();
+
+        $result = json_decode($result, true);
+        return response()->json([
+            "data" => $result[0]['value']
+        ], 200);
+    }
+
     public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $range = "1h", $convert_to = null){
         $config = array(
             "1d" => 86400,
-            "1h" => 3600
+            "1h" => 3600,
+            "1m" => 60
         );
 
         try {
@@ -361,7 +395,6 @@ class ApiController extends Controller
     }
 
     public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $convert_to = null){
-//        select (array_agg("Open" * "Value_USD" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High"*"Value_USD") as "High", MIN("Low"*"Value_USD") "Low", (array_agg("Close" * "Value_USD" ORDER BY "Timestamp" DESC))[1] as "Close", AVG("Volume"*"Value_USD") from historical_available JOIN crypto_historical on historical_available.id = crypto_historical.id JOIN fiat_historicals on "Fiat_id" = 'gbp' WHERE "Exchange_id" = 'kraken' AND "Timestamp" BETWEEN  1583712000 AND 1583798400 AND "Timestamp" BETWEEN "Date" AND "Date" + 86399;
         $config = array(
             "1d" => 86400,
             "1h" => 3600,
