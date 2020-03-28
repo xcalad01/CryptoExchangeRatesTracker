@@ -75,7 +75,7 @@ import ApexCharts from "apexcharts";
                 ohlc_chart:null,
                 value_chart: null,
                 realtime_chart: null,
-                last_day: null,
+                lastDate: null,
                 post:{}
             }
         },
@@ -217,8 +217,8 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_realtime_value(){
-                this.last_day = new Date("2020-02-03");
-                var data = [this.last_day, 50];
+                this.lastDate = new Date("2020-02-03");
+                var data = [this.lastDate, 50];
                 var options = {
                     series: [{
                         data: data
@@ -269,7 +269,7 @@ import ApexCharts from "apexcharts";
                 this.realtime_chart.render();
 
                 window.setInterval(function () {
-                    var new_data = getNewSeries(lastDate, {
+                    var new_data = getNewSeries({
                         min: 10,
                         max: 90
                     });
@@ -278,6 +278,11 @@ import ApexCharts from "apexcharts";
                         data: new_data
                     }])
                 }, 1000)
+            },
+
+            getNewSeries(min_max){
+                this.lastDate = this.lastDate.setDate(this.lastDate.getDate() + 1);
+                return [this.lastDate, Math.random() * (min_max["max"] - min_max["min"]) + min_max["min"]]
             }
         },
         filters: {
