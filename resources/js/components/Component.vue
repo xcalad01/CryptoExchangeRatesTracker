@@ -216,6 +216,7 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_realtime_value(){
+                var data = [new Date("2020-02-03"), 50];
                 var options = {
                     series: [{
                         data: data.slice()
