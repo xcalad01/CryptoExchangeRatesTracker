@@ -272,7 +272,7 @@ import ApexCharts from "apexcharts";
                     },
                     xaxis: {
                         type: 'datetime',
-                        range: 777600000
+                        range: 60000
                     },
                     yaxis: {
                         max: 100
