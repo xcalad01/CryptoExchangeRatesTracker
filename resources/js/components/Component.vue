@@ -213,7 +213,7 @@ import ApexCharts from "apexcharts";
                     this.value_chart = new ApexCharts(this.$refs.chart_value, options);
                     this.value_chart.render();
                 }
-            }
+            },
 
             create_update_realtime_value(){
                 var options = {
