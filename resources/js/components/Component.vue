@@ -269,7 +269,6 @@ import ApexCharts from "apexcharts";
                 this.realtime_chart.render();
 
                 window.setInterval(function () {
-                    this.last_day.setDate(this.last_day.getDate() + 1);
                     var new_data = getNewSeries(lastDate, {
                         min: 10,
                         max: 90
