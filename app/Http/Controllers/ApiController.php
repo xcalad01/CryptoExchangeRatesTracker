@@ -344,7 +344,7 @@ class ApiController extends Controller
             $result = json_decode($result, true);
             foreach ($result as $res){
                 array_push($values, array(
-                    date("Y-m-d H:i:s", $start),
+                    $start,
                     $res['value']
                 ));
             }
@@ -401,14 +401,14 @@ class ApiController extends Controller
                 ->where([
                     ['Exchange_id', '=', DB::raw("'{$exchange}'")]
                 ])
-                ->whereBetween('Timestamp', [$start, $start + $range])
+                ->whereBetween('Timestamp', [$start, $start + $range - 1])
                 ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
                 ->get();
 
             $result = json_decode($result, true);
             foreach ($result as $res){
                 array_push($ohlc_chart, array(
-                    "x" => date("Y-m-d H:i:s", $start),
+                    "x" => $start,
                     "y" => array($res["Open"], $res["High"], $res["Low"], $res["Close"])
                 ));
             }

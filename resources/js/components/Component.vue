@@ -88,8 +88,11 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_ohlc_chart(data){
-                console.log(data);
-                // code from Example: https://apexcharts.com/javascript-chart-demos/area-charts/spline/
+                var new_data = data['data'].map(function (item) {
+                    console.log(item[0]);
+                    return [new Date(item[0]), item[1]]
+                });
+
                 var chartOptions = {
                     chart: {
                         type: 'candlestick',
@@ -100,7 +103,15 @@ import ApexCharts from "apexcharts";
                         align: 'left'
                     },
                     xaxis: {
-                        type: 'datetime'
+                        type: 'category',
+                        labels: {
+                            formatter: function(val) {
+                                return dayjs(val).format('MMM DD HH:mm')
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
                     },
                     yaxis: {
                         tooltip: {
@@ -108,7 +119,7 @@ import ApexCharts from "apexcharts";
                         }
                     },
                     series: [{
-                        data: data['data']
+                        data: new_data['data']
                     }],
                 };
 
