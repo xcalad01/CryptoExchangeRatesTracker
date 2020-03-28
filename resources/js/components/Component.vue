@@ -70,10 +70,11 @@ import ApexCharts from "apexcharts";
 
     var lastDate = null;
     var realtime_chart = null;
+    var real_time_data = [];
 
     function getNewSeries(lastDate, min_max){
         lastDate.setDate(lastDate.getDate() + 1);
-        return [lastDate, Math.random() * (min_max["max"] - min_max["min"]) + min_max["min"]]
+        return {x: lastDate, y: Math.random() * (min_max["max"] - min_max["min"]) + min_max["min"]};
     }
 
     export default {
@@ -224,7 +225,7 @@ import ApexCharts from "apexcharts";
 
             create_update_realtime_value(){
                 lastDate = new Date("2020-02-03");
-                var data = [lastDate, 50];
+                real_time_data.push({x: lastDate, x: 50});
                 var options = {
                     series: [{
                         data: data
@@ -262,6 +263,7 @@ import ApexCharts from "apexcharts";
                     },
                     xaxis: {
                         type: 'datetime',
+                        range: 777600000
                     },
                     yaxis: {
                         max: 100
@@ -275,13 +277,13 @@ import ApexCharts from "apexcharts";
                 realtime_chart.render();
 
                 window.setInterval(function () {
-                    var new_data = getNewSeries(lastDate, {
+                    real_time_data.push(getNewSeries(lastDate, {
                         min: 10,
                         max: 90
-                    });
+                    }));
 
                     realtime_chart.updateSeries([{
-                        data: new_data
+                        data: real_time_data
                     }])
                 }, 1000)
             },
