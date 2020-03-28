@@ -94,7 +94,7 @@ import ApexCharts from "apexcharts";
                 });
 
                 if (this.ohlc_chart != null){
-                    this.ohlc_chart.series = data
+                    this.ohlc_chart.updateSeries(new_data)
                 }
                 var chartOptions = {
                     chart: {
@@ -138,7 +138,7 @@ import ApexCharts from "apexcharts";
                 });
 
                 if (this.value_chart != null){
-                    this.value_chart.series = data
+                    this.value_chart.updateSeries(new_data)
                 }
 
                 var options = {
@@ -202,7 +202,7 @@ import ApexCharts from "apexcharts";
                     }
                 };
 
-                if (this.$refs.chart) {
+                if (this.$refs.chart_value) {
                     this.value_chart = new ApexCharts(this.$refs.chart_value, options);
                     this.value_chart.render();
                 }
