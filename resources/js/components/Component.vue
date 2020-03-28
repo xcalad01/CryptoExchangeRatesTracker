@@ -95,6 +95,7 @@ import ApexCharts from "apexcharts";
 
                 if (this.ohlc_chart != null){
                     this.ohlc_chart.updateSeries(new_data)
+                    return
                 }
                 var chartOptions = {
                     chart: {
@@ -139,6 +140,7 @@ import ApexCharts from "apexcharts";
 
                 if (this.value_chart != null){
                     this.value_chart.updateSeries(new_data)
+                    return
                 }
 
                 var options = {
