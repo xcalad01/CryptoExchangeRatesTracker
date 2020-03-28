@@ -241,7 +241,7 @@ import ApexCharts from "apexcharts";
                     }],
                     chart: {
                         id: 'realtime',
-                        height: 350,
+                        height: 50,
                         type: 'line',
                         animations: {
                             enabled: true,
