@@ -275,7 +275,6 @@ import ApexCharts from "apexcharts";
                         range: 900000
                     },
                     yaxis: {
-                        max: 100,
                         forceNiceScale: true
                     },
                     legend: {
