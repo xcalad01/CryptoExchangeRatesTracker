@@ -78,7 +78,7 @@ import ApexCharts from "apexcharts";
         if (lastDate == null){
             lastDate = new Date().setSeconds(0,0) / 1000;
         }
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current/" + "/" + lastDate + "/" + "kraken" + "/" + "usd";
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + lastDate + "/" + "kraken" + "/" + "usd";
         axios_client.get(uri).then(response => (realtime_response_data = response.data));
         var date = _.cloneDeep(lastDate);
         var result = {x: date , y: realtime_response_data['data']};
