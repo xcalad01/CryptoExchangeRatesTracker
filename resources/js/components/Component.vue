@@ -94,7 +94,7 @@ import ApexCharts from "apexcharts";
                 });
 
                 if (this.ohlc_chart != null){
-                    this.ohlc_chart.updateSeries(data)
+                    this.ohlc_chart.series = data
                 }
                 var chartOptions = {
                     chart: {
@@ -138,7 +138,7 @@ import ApexCharts from "apexcharts";
                 });
 
                 if (this.value_chart != null){
-                    this.value_chart.updateSeries(data)
+                    this.value_chart.series = data
                 }
 
                 var options = {
