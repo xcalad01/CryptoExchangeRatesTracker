@@ -70,7 +70,7 @@ import ApexCharts from "apexcharts";
 
     var lastDate = null;
     var realtime_chart = null;
-    var realtime_data = [];
+    var real_time_data = [];
     var realtime_response_data = null;
 
     function getNewSeries(){
