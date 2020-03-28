@@ -71,7 +71,7 @@ import ApexCharts from "apexcharts";
     var lastDate = null;
     var realtime_chart = null;
     var real_time_data = [];
-    var realtime_response_data = null;
+    var realtime_response_data = '';
 
     function getNewSeries(axios_client){
         if (lastDate == null){
