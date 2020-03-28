@@ -73,7 +73,8 @@ import ApexCharts from "apexcharts";
     var real_time_data = [];
 
     function getNewSeries(lastDate, min_max){
-        var result = {x: _.cloneDeep(lastDate) + 86400000, y: Math.floor(Math.random() * (min_max.max - min_max.min + 1)) + min_max.min};
+        var date = _.cloneDeep(lastDate);
+        var result = {x: date + 86400000, y: Math.floor(Math.random() * (min_max.max - min_max.min + 1)) + min_max.min};
         lastDate += 86400000;
         return result;
     }
