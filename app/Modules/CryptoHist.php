@@ -8,7 +8,6 @@ class CryptoHist extends Base
 {
     protected $config = array(
     array('gemini', 'btc', 'usd'),
-    array('gdax', 'btc', 'usd'),
     array('bitstamp', 'btc', 'usd'),
     array('cexio/cex', 'btc', 'usd'),
     array('poloniex', 'btc', 'usdt'),
