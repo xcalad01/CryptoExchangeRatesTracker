@@ -49,7 +49,7 @@ class CoinbasePro extends Base
                     "Exchange_id" => $this->exchange_id,
                     "From" => $from,
                     "To" => $to,
-                    "Timestamp" => $data[0],
+                    "Timestamp" => $data[0][0],
                     "Historical" => array(
                         null,
                         $data[0][3],
@@ -60,7 +60,7 @@ class CoinbasePro extends Base
                     )
                 ));
             }
-            sleep(0.9);
+            sleep(1);
         }
 
         return $results;
