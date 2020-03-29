@@ -11,7 +11,6 @@ class CryptoHist extends Base
     array('bitstamp', 'btc', 'usd'),
     array('cexio/cex', 'btc', 'usd'),
     array('poloniex', 'btc', 'usdt'),
-    array('binance', 'btc', 'usdt'),
     array('bittrex', 'btc', 'usdt'),
     array('hitbtc', 'btc', 'usdt'),
     array('bitbay', 'btc', 'usd'),
