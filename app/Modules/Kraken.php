@@ -63,7 +63,6 @@ class Kraken extends Base
         }
 
         print_r($results);
-        return $results;
     }
 
     private function send_post($payload){
@@ -78,7 +77,7 @@ class Kraken extends Base
     }
 
     public function run_task(){
-        $this->timestamp = strtotime(date('Y-m-d H:i'));
+        $this->timestamp = strtotime(date('Y-m-d H:i')) - 61;
         $payload = $this->send_get();
         if (!empty($payload)){
             $this->send_post($payload);
