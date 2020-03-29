@@ -54,8 +54,7 @@ class BitFinex extends Base
             }
         }
 
-        print_r($results);
-//        return $results;
+        return $results;
     }
 
     private function send_post($payload){
