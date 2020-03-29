@@ -26,15 +26,13 @@ class BitFinex extends Base
 
     protected $exchange_id = "bitfinex";
 
-    protected $timestamp = null;
-
     private function send_get(){
         $results = array();
         foreach ($this->config as $item){
             $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:{$item}/hist?limit=2";
             $this->set_curl_url($url);
             $data = $this->do_send_get();
-            if ($data[1][0] / 1000 == $this->timestamp){
+            if ($data[1][0]){
                 $from = strtolower(substr($item,1, 3));
                 $to = strtolower(substr($item, 4, 3));
 
@@ -43,7 +41,7 @@ class BitFinex extends Base
                     "Exchange_id" => $this->exchange_id,
                     "From" => $from,
                     "To" => $to,
-                    "Timestamp" => $this->timestamp,
+                    "Timestamp" => $data[1][0] / 1000,
                     "Historical" => array(
                         null,
                         $data[1][1],
@@ -56,7 +54,7 @@ class BitFinex extends Base
             }
         }
 
-
+//        print_r($results);
         return $results;
     }
 
@@ -72,7 +70,6 @@ class BitFinex extends Base
     }
 
     public function run_task(){
-        $this->timestamp = strtotime(date('Y-m-d H:i')) - 60;
         $payload = $this->send_get();
         if (!empty($payload)){
             $this->send_post($payload);
