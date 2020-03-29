@@ -7,6 +7,11 @@ class Base
 {
     protected $statsd;
     private $ch;
+    private $get_headers = array(
+        'Content-Type: application/json',
+        'Accept: application/json'
+    );
+
     protected $url_base;
 
     public function __construct(){
@@ -48,6 +53,12 @@ class Base
         curl_close($this->ch);
     }
 
+    protected function set_user_agent($key){
+        if ($key == "get"){
+            array_push($this->get_headers, "User-Agent: PostmanRuntime/7.23.0");
+        }
+    }
+
     protected function do_send_post($payload){
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, array(
@@ -66,10 +77,7 @@ class Base
     protected function do_send_get(){
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($this->ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Accept: application/json'
-        ));
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->get_headers);
 
         return json_decode(curl_exec($this->ch), true);
     }
