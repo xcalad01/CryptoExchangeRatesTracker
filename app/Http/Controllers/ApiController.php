@@ -114,7 +114,7 @@ class ApiController extends Controller
         }
         catch (QueryException $e){
             return response()->json([
-                "message" => $e->getMessage()
+                "message" => "crypto hist duplicate {$request['Exchange_id']}"
             ], 501);
         }
 
