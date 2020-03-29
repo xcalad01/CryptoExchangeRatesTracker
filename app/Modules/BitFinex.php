@@ -35,10 +35,14 @@ class BitFinex extends Base
             $this->set_curl_url($url);
             $data = $this->do_send_get();
             if ($data[0][0] / 1000 == $this->timestamp){
+                $from = strtolower(substr($item,1, 3));
+                $to = strtolower(substr($item, 4, 3));
+
+                $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $this->exchange_id, 'from' => $from, 'to' => $to));
                 array_push($results, array(
                     "Exchange_id" => $this->exchange_id,
-                    "From" => strtolower(substr($item,1, 3)),
-                    "To" => strtolower(substr($item, 4, 3)),
+                    "From" => $from,
+                    "To" => $to,
                     "Timestamp" => $this->timestamp,
                     "Historical" => array(
                         null,
