@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('crypto:hist_five')->everyMinute()->sendOutputTo('/var/log/bakalarka/crypto_hist_five.log');
+	    $schedule->command('crypto:hist_five')->cron('*/2 * * * *')->sendOutputTo('/var/log/bakalarka/crypto_hist_five.log');
         #$schedule->command('crypto:current')->everyMinute();
         $schedule->command('fiat:current')->dailyAt('16:05')->sendOutputTo('/var/log/bakalarka/fiat_current.log');
     }

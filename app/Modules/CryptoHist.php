@@ -7,11 +7,21 @@ use Illuminate\Support\Facades\Log;
 class CryptoHist extends Base
 {
     protected $config = array(
-        array('kraken', 'btc', 'usd'),
+	array('kraken', 'btc', 'usd'),
+	array('kraken', 'eth', 'usd'),
+    	array('kraken', 'ltc', 'usd'),
+	array('kraken', 'xrp', 'usd'),
+	array('kraken', 'bch', 'usd'),
+	array('kraken', 'eos', 'usd'),
+	array('kraken', 'trx', 'usd'),	
         array('gemini', 'btc', 'usd'),
         array('gdax', 'btc', 'usd'),
         array('bitstamp', 'btc', 'usd'),
-        array('bitfinex', 'btc', 'usd'),
+	array('bitfinex', 'btc', 'usd'),
+	array('bitfinex', 'ltc', 'usd'),
+	array('bitfinex', 'eth', 'usd'),
+	array('bitfinex', 'xrp', 'usd'),
+	array('bitfinex', 'eos', 'usd'),
         array('cexio/cex', 'btc', 'usd'),
         array('poloniex', 'btc', 'usdt'),
         array('binance', 'btc', 'usdt'),

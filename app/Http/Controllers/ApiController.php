@@ -84,7 +84,7 @@ class ApiController extends Controller
 
     public function crypto_add_historical(Request $request) {
         $exchange_id = $request['Exchange_id'];
-        $available = Historical_available::where('Exchange_id', $exchange_id)->first();
+        $available = Historical_available::where(['Exchange_id' => $exchange_id, 'From' => $request['From'], 'To' => $request['To']])->first();
         if (!$available) {
             $data = array(
                 "from" => $request['From'],
@@ -102,7 +102,7 @@ class ApiController extends Controller
 
         }
 
-        $available = Historical_available::where('Exchange_id', $exchange_id)->first();
+        $available = Historical_available::where(['Exchange_id' => $exchange_id, 'From' => $request['From'], 'To' => $request['To']])->first();
         $data = array(
             "id"=>$available->id,
             'timestamp'=>$request['Timestamp'],
