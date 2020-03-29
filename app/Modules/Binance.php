@@ -52,7 +52,7 @@ class Binance extends Base
                     "Exchange_id" => $this->exchange_id,
                     "From" => $from,
                     "To" => $to,
-                    "Timestamp" => $this->timestamp,
+                    "Timestamp" => $this->timestamp - 60,
                     "Historical" => array(
                         null,
                         $data[0][1],
