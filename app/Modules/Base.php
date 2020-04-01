@@ -16,15 +16,8 @@ class Base
 
     public function __construct(){
         $this->statsd = new Stats();
-	$this->ch = curl_init();
-
-	$integrationsLoaderExists = class_exists('\\DDTrace\\Integrations\\IntegrationsLoader');
-	if ($integrationsLoaderExists) {
-    		$notLoaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('web');
-
-    		$loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('web');
-    	}
-   }
+	    $this->ch = curl_init();
+    }
 
     protected function set_url_base($url){
         $this->url_base = $url;
