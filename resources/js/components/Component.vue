@@ -30,13 +30,29 @@ import ApexCharts from "apexcharts";
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label>From:</label>
+                        <input type="text" class="form-control" v-model="post.from">
+                    </div>
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>To:</label>
+                        <input type="text" class="form-control" v-model="post.to">
+                    </div>
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label>Convert:</label>
                         <input type="text" class="form-control" v-model="post.convert">
                     </div>
                 </div>
             </div><br />
             <select v-model="post.range">
-                <option disabled value="">Date rang, please select ne</option>
+                <option disabled value="">Date rang, please select one</option>
                 <option>1d</option>
                 <option>1h</option>
             </select><br />
@@ -102,7 +118,7 @@ import ApexCharts from "apexcharts";
         methods: {
             addPost(){
                 console.log(process.env.MIX_API_PORT);
-                let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + this.post.action + "/" + this.post.start + "/" + this.post.end + "/" + this.post.exchange + "/" + this.post.range + "/" + this.post.convert;
+                let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + this.post.action + "/" + this.post.start + "/" + this.post.end + "/" + this.post.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to + "/" + this.post.convert;
                 if (this.post.action === "ohlc"){
                     this.axios.get(uri).then(response => (this.create_update_ohlc_chart(response.data)));
                 }
