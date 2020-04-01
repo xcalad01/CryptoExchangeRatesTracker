@@ -380,7 +380,7 @@ class ApiController extends Controller
             $result = Redis::hgetall($redis_key);
 
             if ($result){
-                array_push($ohlc_chart, array(
+                array_push($values, array(
                     "x" => $start,
                     "y" => $result
                 ));
@@ -459,10 +459,7 @@ class ApiController extends Controller
         }
 
 	$ohlc_chart = array();
-	array_push($ohlc_chart, array(
-                    "x" => $start,
-                    "y" => array(0, 0, 0, 0)
-        	));
+
 	while ($start + $range <= $end){
         $x_value = $start + $range;
         $redis_key = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}_{$to}";
@@ -492,7 +489,6 @@ class ApiController extends Controller
             ->get();
 
         $result = json_decode($result, true);
-        print_r($result);
 
         foreach ($result as $res){
             $y_value = array($res["Open"], $res["High"], $res["Low"], $res["Close"]);
