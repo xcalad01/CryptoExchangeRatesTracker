@@ -289,7 +289,7 @@ class ApiController extends Controller
     }
 
     private function check_exchange($exchange){
-        $exchange = DB::select(DB::raw('SELECT "Exchange_id" from exchanges where "Exchange_id" = kraken'));
+        $exchange = DB::table('exchanges')->where('Exchange_id', $exchange)->first();
         if (!$exchange){
             throw new \Exception('Exchange is not supported');
         }
@@ -298,7 +298,7 @@ class ApiController extends Controller
     }
 
     private function check_fiat($fiat){
-        $fiat = DB::select(DB::raw('SELECT "Fiat_id" from fiats where "Fiat_id" = usd'));
+        $fiat = DB::table('fiats')->where('Fiat_id', $fiat)->first();
         if (!$fiat){
             throw new \Exception('Fiat is not supported');
         }
