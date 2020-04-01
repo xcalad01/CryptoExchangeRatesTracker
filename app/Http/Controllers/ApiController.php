@@ -374,6 +374,20 @@ class ApiController extends Controller
 
         $values = array();
         while ($start + $range <= $end){
+            $x_value = $start + $range;
+            $redis_key = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}_{$to}";
+
+            $result = Redis::hgetall($redis_key);
+
+            if ($result){
+                array_push($ohlc_chart, array(
+                    "x" => $start,
+                    "y" => $result
+                ));
+                $start += $range;
+                continue;
+            }
+
             $result = DB::table('historical_available')
                 ->select(DB::raw('AVG(("Open"+"Close")/2*"Value_USD") as value'))
                 ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
@@ -389,6 +403,10 @@ class ApiController extends Controller
 
             $result = json_decode($result, true);
             foreach ($result as $res){
+                $y_value = array($res["Open"], $res["High"], $res["Low"], $res["Close"]);
+
+                Redis::hmset($redis_key, $y_value);
+
                 array_push($values, array(
                     $start,
                     $res['value']
@@ -447,9 +465,10 @@ class ApiController extends Controller
         	));
 	while ($start + $range <= $end){
         $x_value = $start + $range;
-        $redis_key = "ohlc_{$x_value}_{$range}";
+        $redis_key = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}_{$to}";
 
         $result = Redis::hgetall($redis_key);
+
         if ($result){
             array_push($ohlc_chart, array(
                 "x" => $start,
@@ -466,13 +485,14 @@ class ApiController extends Controller
             ->where([
                 ['Exchange_id', '=', DB::raw("'{$exchange}'")],
                 ['From', '=', DB::raw("'{$from}'")],
-                ['To', '=', DB::raw("'$to'")]
+                ['To', '=', DB::raw("'{$to}'")]
             ])
             ->whereBetween('Timestamp', [$start, $start + $range - 1])
             ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
             ->get();
 
         $result = json_decode($result, true);
+        print_r($result);
 
         foreach ($result as $res){
             $y_value = array($res["Open"], $res["High"], $res["Low"], $res["Close"]);
