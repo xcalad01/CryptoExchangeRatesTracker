@@ -7,8 +7,10 @@ if ($integrationsLoaderExists) {
     //$notLoaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('pdo');
 
     $loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('web');
-    $loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('pdo');
-    $loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('db');
+    $loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('postgres');
+    $loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('redis');
+    $loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('cache');
+
 
 
 }
