@@ -16,8 +16,15 @@ class Base
 
     public function __construct(){
         $this->statsd = new Stats();
-        $this->ch = curl_init();
-    }
+	$this->ch = curl_init();
+
+	$integrationsLoaderExists = class_exists('\\DDTrace\\Integrations\\IntegrationsLoader');
+	if ($integrationsLoaderExists) {
+    		$notLoaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('web');
+
+    		$loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('web');
+    	}
+   }
 
     protected function set_url_base($url){
         $this->url_base = $url;
@@ -45,7 +52,7 @@ class Base
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-            'Accept: application/json'
+	    'Accept: application/json'
         ));
     }
 
@@ -63,7 +70,7 @@ class Base
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, array(
                 'Content-Type: application/json',
-                'Content-Length: ' . strlen($payload))
+		'Content-Length: ' . strlen($payload))
         );
 	    $result = curl_exec($this->ch);
         $return_code = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);

@@ -24,7 +24,15 @@ class ApiController extends Controller
 
     public function __construct()
     {
-        $this->statsd = new Stats();
+	$this->statsd = new Stats();
+	$integrationsLoaderExists = class_exists('\\DDTrace\\Integrations\\IntegrationsLoader');
+        if ($integrationsLoaderExists) {
+                $notLoaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('web');
+		$notLoaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('pdo');
+
+		$loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('web');
+		$loaded = \DDTrace\Integrations\IntegrationsLoader::get()->getLoadingStatus('pdo');
+        }
     }
 
     public function ping(){
