@@ -403,7 +403,7 @@ class ApiController extends Controller
 
             $result = json_decode($result, true);
             foreach ($result as $res){
-                $y_value = array($res["Open"], $res["High"], $res["Low"], $res["Close"]);
+                $y_value = array($res['value']);
 
                 Redis::hmset($redis_key, $y_value);
 
