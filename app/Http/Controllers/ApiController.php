@@ -6,6 +6,7 @@ require __DIR__ . "/../../Modules/Stats.php";
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 use App\Exchange;
 use App\Historical_available;
@@ -280,7 +281,7 @@ class ApiController extends Controller
     }
 
     private function check_exchange($exchange){
-        $exchange = DB::table('exchanges')->where('Exchange_id', $exchange)->first();
+        $exchange = DB::select(DB::raw('SELECT "Exchange_id" from exchanges where "Exchange_id" = kraken'));
         if (!$exchange){
             throw new \Exception('Exchange is not supported');
         }
@@ -289,7 +290,7 @@ class ApiController extends Controller
     }
 
     private function check_fiat($fiat){
-        $fiat = DB::table('fiats')->where('Fiat_id', $fiat)->first();
+        $fiat = DB::select(DB::raw('SELECT "Fiat_id" from fiats where "Fiat_id" = usd'));
         if (!$fiat){
             throw new \Exception('Fiat is not supported');
         }
@@ -330,7 +331,7 @@ class ApiController extends Controller
         ], 200);
     }
 
-    public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $range = "1h", $convert_to = null){
+    public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $range, $from, $to, $convert_to = null){
         $config = array(
             "1d" => 86400,
             "1h" => 3600,
@@ -370,7 +371,9 @@ class ApiController extends Controller
                 ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
                 ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
                 ->where([
-                    ['Exchange_id', '=', DB::raw("'{$exchange}'")]
+                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
+                    ['From', '=', DB::raw("'{$from}'")],
+                    ['To', '=', DB::raw("'$to'")]
                 ])
                 ->whereBetween('Timestamp', [$start, $start + $range])
                 ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
@@ -394,7 +397,7 @@ class ApiController extends Controller
 
     }
 
-    public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $convert_to = null){
+    public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $from, $to, $convert_to = null){
         $config = array(
             "1d" => 86400,
             "1h" => 3600,
@@ -403,6 +406,7 @@ class ApiController extends Controller
 
         try {
             $this->check_exchange($exchange);
+
             if ($convert_to){
                 $this->check_fiat($convert_to);
             }
@@ -417,10 +421,10 @@ class ApiController extends Controller
 
             if ($start + $range > $end){
                 throw new \Exception('Range not between start and end');
-
-	    }
+            }
 
 	    $start = intval($start);
+
         }
         catch (\Exception $e){
             return response()->json([
@@ -433,28 +437,48 @@ class ApiController extends Controller
                     "x" => $start,
                     "y" => array(0, 0, 0, 0)
         	));
-        while ($start + $range <= $end){
-            $result = DB::table('historical_available')
-                ->select(DB::raw('(array_agg("Open" * "Value_USD" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High"*"Value_USD") as "High", MIN("Low"*"Value_USD") as "Low", (array_agg("Close" * "Value_USD" ORDER BY "Timestamp" DESC))[1] as "Close"'))
-                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
-                ->where([
-                    ['Exchange_id', '=', DB::raw("'{$exchange}'")]
-                ])
-                ->whereBetween('Timestamp', [$start, $start + $range - 1])
-                ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
-                ->get();
+	while ($start + $range <= $end){
+        $x_value = $start + $range;
+        $redis_key = "ohlc_{$x_value}_{$range}";
 
-            $result = json_decode($result, true);
-            foreach ($result as $res){
-                array_push($ohlc_chart, array(
-                    "x" => $start + $range,
-                    "y" => array($res["Open"], $res["High"], $res["Low"], $res["Close"])
-                ));
-            }
-
+        $result = Redis::hgetall($redis_key);
+        if ($result){
+            array_push($ohlc_chart, array(
+                "x" => $start,
+                "y" => $result
+            ));
             $start += $range;
+            continue;
         }
+
+        $result = DB::table('historical_available')
+            ->select(DB::raw('(array_agg("Open" * "Value_USD" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High"*"Value_USD") as "High", MIN("Low"*"Value_USD") as "Low", (array_agg("Close" * "Value_USD" ORDER BY "Timestamp" DESC))[1] as "Close"'))
+            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+            ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$convert_to}'"))
+            ->where([
+                ['Exchange_id', '=', DB::raw("'{$exchange}'")],
+                ['From', '=', DB::raw("'{$from}'")],
+                ['To', '=', DB::raw("'$to'")]
+            ])
+            ->whereBetween('Timestamp', [$start, $start + $range - 1])
+            ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
+            ->get();
+
+        $result = json_decode($result, true);
+
+        foreach ($result as $res){
+            $y_value = array($res["Open"], $res["High"], $res["Low"], $res["Close"]);
+
+            Redis::hmset($redis_key, $y_value);
+
+            array_push($ohlc_chart, array(
+                "x" => $start + $range,
+                "y" => $y_value
+            ));
+        }
+
+        $start += $range;
+	}
 
         return response()->json([
             "data" => $ohlc_chart
