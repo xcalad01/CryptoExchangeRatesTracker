@@ -395,7 +395,7 @@ class ApiController extends Controller
                 ->where([
                     ['Exchange_id', '=', DB::raw("'{$exchange}'")],
                     ['From', '=', DB::raw("'{$from}'")],
-                    ['To', '=', DB::raw("'$to'")]
+                    ['To', '=', DB::raw("'{$to}'")]
                 ])
                 ->whereBetween('Timestamp', [$start, $start + $range])
                 ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
