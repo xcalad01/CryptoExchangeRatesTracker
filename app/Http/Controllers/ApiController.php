@@ -375,7 +375,7 @@ class ApiController extends Controller
         $values = array();
         while ($start + $range <= $end){
             $x_value = $start + $range;
-            $redis_key = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}_{$to}";
+            $redis_key = "crypto_value_{$x_value}_{$range}_{$exchange}_{$from}_{$to}";
 
             $result = Redis::hgetall($redis_key);
 
