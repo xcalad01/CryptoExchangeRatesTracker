@@ -13,7 +13,7 @@ class Stats
 
 
     private $config = array(
-        "host" => "127.0.0.1",
+        "host" => "167.86.75.179",
         "port" => 8125
     );
 
