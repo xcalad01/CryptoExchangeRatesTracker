@@ -24,7 +24,9 @@ class BitFinex extends Base
         'tZRXUSD'
     );
 
-    protected $exchange_id = "bitfinex";
+    private $exchange_id = "bitfinex";
+
+    private $timestamp = null;
 
     private function send_get(){
         $results = array();
@@ -32,7 +34,7 @@ class BitFinex extends Base
             $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:{$item}/hist?limit=2";
             $this->set_curl_url($url);
             $data = $this->do_send_get();
-            if ($data[1][0]){
+            if ($data[1][0] and $data[1][0] / 1000 == $this->timestamp){
                 $from = strtolower(substr($item,1, 3));
                 $to = strtolower(substr($item, 4, 3));
 
@@ -69,6 +71,8 @@ class BitFinex extends Base
     }
 
     public function run_task(){
+        $this->timestamp = strtotime(date('Y-m-d H:i')) - 60;
+        print_r($this->timestamp);
         $payload = $this->send_get();
         if (!empty($payload)){
             $this->send_post($payload);
