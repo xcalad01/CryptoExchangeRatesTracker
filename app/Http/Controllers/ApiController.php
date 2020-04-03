@@ -373,8 +373,8 @@ class ApiController extends Controller
 
             if ($result){
                 array_push($values, array(
-                    "x" => $start,
-                    "y" => $result
+                    $start,
+                    $result
                 ));
                 $start += $range;
                 continue;

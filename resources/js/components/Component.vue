@@ -70,11 +70,11 @@ import ApexCharts from "apexcharts";
         <div id="chart_view">
             <div ref="chart" class="chart"></div>
         </div>
-
+        <br />
         <div id="chart_value">
             <div ref="chart_value" class="chart"></div>
         </div>
-
+        <br />
         <div id="realtime">
             <div ref="chart_value" class="chart"></div>
         </div>
@@ -113,7 +113,7 @@ import ApexCharts from "apexcharts";
         },
         mounted() {
 
-           this.create_update_realtime_value();
+           //this.create_update_realtime_value();
         },
         methods: {
             addPost(){
