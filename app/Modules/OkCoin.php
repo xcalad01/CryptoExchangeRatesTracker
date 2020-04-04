@@ -28,8 +28,15 @@ class OkCoin extends Base
             $this->set_curl_url($url);
             $data = $this->do_send_get();
             if ($data){
-                $from = strtolower(substr($item,0, 3));
-                $to = strtolower(substr($item, 4, 3));
+                if (strpos($item, 'USDT') !== false) {
+                    $from = strtolower(substr($item,0, 4));
+                    $to = strtolower(substr($item, 5, 3));
+                }
+                else{
+                    $from = strtolower(substr($item,0, 3));
+                    $to = strtolower(substr($item, 4, 3));
+                }
+
                 $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $this->exchange_id, 'from' => $from, 'to' => $to));
                 array_push($results, array(
                     "Exchange_id" => $this->exchange_id,
