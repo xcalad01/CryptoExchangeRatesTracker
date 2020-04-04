@@ -40,8 +40,14 @@ class CoinbasePro extends Base
                     print_r($data);
                     continue;
                 }
-                $from = strtolower(substr($item,0, 3));
-                $to = strtolower(substr($item, 4, 3));
+                if (strpos($item, 'DASH') !== false) {
+                    $from = strtolower(substr($item,0, 4));
+                    $to = strtolower(substr($item, 5, 3));
+                }
+                else{
+                    $from = strtolower(substr($item,0, 3));
+                    $to = strtolower(substr($item, 4, 3));
+                }
 
                 $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $this->exchange_id, 'from' => $from, 'to' => $to));
 
