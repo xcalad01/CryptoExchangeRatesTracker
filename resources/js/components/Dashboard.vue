@@ -127,10 +127,10 @@
     </div>
 </template>
 <script>
-    import LineChart from 'resources/js/components/charts/LineChart';
-    import BarChart from 'resources/js/components/charts/BarChart';
-    import * as chartConfigs from 'resources/js/components/charts/config';
-    import config from 'resources/config';
+    import LineChart from '@resources/js/components/charts/LineChart';
+    import BarChart from '@resources/js/components/charts/BarChart';
+    import * as chartConfigs from '@resources/js/components/charts/config';
+    import config from '@resources/config';
 
     export default {
         components: {
