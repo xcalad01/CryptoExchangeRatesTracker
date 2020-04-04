@@ -495,9 +495,9 @@ class ApiController extends Controller
                         $fiat_historical_prev = $this->get_fiat_historical($fiat_historical_prev_to_key, $start);
                     }
                 }
-                else{
+		else{
                     if (!$fiat_historical_prev or !($fiat_historical_prev->Date >= $start && $fiat_historical_prev->Date <= $start + $range)){
-                        if ($fiat_historical_prev_to_key != "usd"){
+			    if ($fiat_historical_prev_to_key != "usd"){
                             $fiat_historical_to_dollar = null;
                             $fiat_historical_prev = $this->get_fiat_historical($fiat_historical_prev_to_key, $start);
                         }
@@ -507,8 +507,8 @@ class ApiController extends Controller
                         }
                     }
                 }
-
-                if ($fiat_historical_prev){
+		
+		if ($fiat_historical_prev){
                     $value1 = $fiat_historical_prev->Value_USD;
                 }
                 else{
@@ -521,7 +521,7 @@ class ApiController extends Controller
                 else{
                     $value2 = 1;
                 }
-
+		
                 array_push($ohlc_chart, array(
                     "x" => $start,
                     "y" => array(
@@ -530,7 +530,14 @@ class ApiController extends Controller
                         $result[2] / $value1 * $value2,
                         $result[3] / $value1 * $value2,
                     )
-                ));
+	    ));
+
+		Redis::hmset($redis_key_value, array(
+                        $result[0] / $value1 * $value2,
+                        $result[1] / $value1 * $value2,
+                        $result[2] / $value1 * $value2,
+                        $result[3] / $value1 * $value2,
+                    ));
 
                 $start += $range;
                 continue;
