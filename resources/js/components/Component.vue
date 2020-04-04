@@ -251,6 +251,7 @@ import ApexCharts from "apexcharts";
 
             create_update_realtime_value(){
                 real_time_data.push(getNewSeries(this.axios));
+
                 var options = {
                     series: [{
                         data: real_time_data
