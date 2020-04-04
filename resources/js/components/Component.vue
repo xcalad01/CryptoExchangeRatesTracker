@@ -76,7 +76,7 @@ import ApexCharts from "apexcharts";
         </div>
         <br />
         <div id="realtime">
-            <div ref="chart_value" class="chart"></div>
+            <div ref="chart_realtime" class="chart"></div>
         </div>
     </div>
 </template>
@@ -298,8 +298,10 @@ import ApexCharts from "apexcharts";
                     },
                 };
 
-                realtime_chart = new ApexCharts(document.querySelector("#realtime"), options);
-                realtime_chart.render();
+                if (this.$refs.chart_realtime) {
+                    this.value_chart = new ApexCharts(this.$refs.chart_realtime, options);
+                    this.value_chart.render();
+                }
 
                 window.setInterval(function () {
                     real_time_data.push(getNewSeries(this.axios));
