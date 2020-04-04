@@ -94,7 +94,7 @@ import ApexCharts from "apexcharts";
         if (lastDate == null){
             lastDate = new Date().setSeconds(0,0) / 1000;
         }
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + lastDate + "/" + "kraken" + "/" + "usd";
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + lastDate + "/" + "kraken" + "/" + "btc" + "/" + "usd";
         axios_client.get(uri).then(response => (realtime_response_data = response.data));
         var date = _.cloneDeep(lastDate);
         var result = {x: date * 1000 , y: realtime_response_data['data']};
@@ -113,7 +113,7 @@ import ApexCharts from "apexcharts";
         },
         mounted() {
 
-           //this.create_update_realtime_value();
+           this.create_update_realtime_value();
         },
         methods: {
             addPost(){
