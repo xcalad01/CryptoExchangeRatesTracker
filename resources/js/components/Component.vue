@@ -299,8 +299,8 @@ import ApexCharts from "apexcharts";
                 };
 
                 if (this.$refs.chart_realtime) {
-                    this.value_chart = new ApexCharts(this.$refs.chart_realtime, options);
-                    this.value_chart.render();
+                    this.realtime_chart = new ApexCharts(this.$refs.chart_realtime, options);
+                    this.realtime_chart.render();
                 }
 
                 window.setInterval(function () {
