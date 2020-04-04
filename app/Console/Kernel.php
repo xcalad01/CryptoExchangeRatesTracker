@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('coinbasepro:ohlc')->cron('*/1 * * * *')->sendOutputTo('/var/log/bakalarka/coinbasepro.log');
         $schedule->command('binance:ohlc')->cron('*/1 * * * *')->sendOutputTo('/var/log/bakalarka/binance.log');
         $schedule->command('hitbtc:ohlc')->cron('*/1 * * * *')->sendOutputTo('/var/log/bakalarka/hitbtc.log');
+        $schedule->command('okcoin:ohlc')->cron('*/1 * * * *')->sendOutputTo('/var/log/bakalarka/okcoin.log');
         #$schedule->command('crypto:current')->everyMinute();
         $schedule->command('fiat:current')->dailyAt('16:05')->sendOutputTo('/var/log/bakalarka/fiat_current.log');
     }

@@ -13,7 +13,6 @@ class CryptoHist extends Base
     array('poloniex', 'btc', 'usdt'),
     array('bittrex', 'btc', 'usdt'),
     array('bitbay', 'btc', 'usd'),
-    array('okcoin', 'btc', 'usd'),
     array('okex', 'btc', 'usdt'),
     );
 
