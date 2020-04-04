@@ -531,9 +531,7 @@ class ApiController extends Controller
                         $result[3] / $value1 * $value2,
                     )
                 ));
-                return response()->json([
-                    "data" => $ohlc_chart
-                ], 200);
+
                 $start += $range;
                 continue;
             }
