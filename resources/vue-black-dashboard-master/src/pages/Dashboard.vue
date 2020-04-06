@@ -487,7 +487,7 @@ import ApexCharts from "apexcharts";
 
         window.setInterval(function () {
           global_component_instance.getNewSeriesValue(false);
-        }, this.real_time_value_interval)
+        }, this.real_time_value_interval * 1000)
       },
 
       create_update_realtime_volume(){
@@ -597,10 +597,7 @@ import ApexCharts from "apexcharts";
         }
 
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + "gdax" + "/" + "btc" + "/" + "usd/" + init;
-
-        setTimeout(function(){
-          axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, global_component_instance.lastDateValue)));
-        }, 2000);
+        axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, global_component_instance.lastDateValue)));
       },
 
       getNewSeriesVolume(init){
@@ -615,11 +612,7 @@ import ApexCharts from "apexcharts";
         else{
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
         }
-
-        setTimeout(function(){
-          axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, global_component_instance.lastDateVolume)));
-        }, 2000);
-
+        axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, global_component_instance.lastDateVolume)));
       },
 
       finish_init_avail(data){
