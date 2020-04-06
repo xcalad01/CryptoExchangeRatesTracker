@@ -102,7 +102,7 @@ import ApexCharts from "apexcharts";
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">Realtime Value</h5>
-            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i>{{last_realtime_value}}</h3>
+            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i>{{last_realtime_value}} {{post.to}}</h3>
           </template>
           <div class="chart-area">
             <div id="realtime">
@@ -115,7 +115,7 @@ import ApexCharts from "apexcharts";
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">Realtime Volume</h5>
-            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i>{{last_realtime_volume}}</h3>
+            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i>{{last_realtime_volume}} {{post.to}}</h3>
           </template>
           <div class="chart-area">
             <div id="volume">
@@ -569,6 +569,7 @@ import ApexCharts from "apexcharts";
         this.volume_chart.updateSeries([{
           data: this.real_time_volume_data
         }]);
+
         this.last_realtime_volume = this.real_time_volume_data.slice(-1)[0]['y'];
 
         if (this.real_time_volume_interval == null){
