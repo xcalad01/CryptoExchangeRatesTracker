@@ -353,7 +353,7 @@ import ApexCharts from "apexcharts";
           }],
         };
 
-        if (this.$refs.chart) {
+        if (this.$refs.chart_ohlc) {
           this.ohlc_chart = new ApexCharts(this.$refs.chart_ohlc, chartOptions);
           this.ohlc_chart.render();
         }
