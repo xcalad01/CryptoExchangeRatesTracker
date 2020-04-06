@@ -15,43 +15,69 @@ const routes = [
     {
         path: "/",
         component: DashboardLayout,
-        redirect: "/dashboard",
+        redirect: "kraken",
         children: [
             {
-                path: "dashboard",
-                name: "dashboard",
+                path: "kraken",
+                name: "kraken",
                 component: Dashboard
             },
             {
-                path: "profile",
-                name: "profile",
-                component: Profile
+                path: "gdax",
+                name: "gdax",
+                component: Dashboard
             },
             {
-                path: "notifications",
-                name: "notifications",
-                component: Notifications
+                path: "bitfinex",
+                name: "bitfinex",
+                component: Dashboard
             },
             {
-                path: "icons",
-                name: "icons",
-                component: Icons
+                path: "gemini",
+                name: "gemini",
+                component: Dashboard
             },
             {
-                path: "maps",
-                name: "maps",
-                component: Maps
+                path: "bitstamp",
+                name: "bitstamp",
+                component: Dashboard
             },
             {
-                path: "typography",
-                name: "typography",
-                component: Typography
+                path: "poloniex",
+                name: "poloniex",
+                component: Dashboard
             },
             {
-                path: "table-list",
-                name: "table-list",
-                component: TableList
-            }
+                path: "binance",
+                name: "binance",
+                component: Dashboard
+            },
+            {
+                path: "bittrex",
+                name: "bittrex",
+                component: Dashboard
+            },
+            {
+                path: "hitbtc",
+                name: "hitbtc",
+                component: Dashboard
+            },
+            {
+                path: "bitbay",
+                name: "bitbay",
+                component: Dashboard
+            },
+            {
+                path: "okcoin",
+                name: "okcoin",
+                component: Dashboard
+            },
+            {
+                path: "okex",
+                name: "okex",
+                component: Dashboard
+            },
+
         ]
     },
     { path: "*", component: NotFound },

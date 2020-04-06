@@ -2,14 +2,18 @@
   <div class="wrapper">
     <side-bar>
       <template slot="links">
-        <sidebar-link to="/dashboard" :name="$t('sidebar.dashboard')" icon="tim-icons icon-chart-pie-36"/>
-        <sidebar-link to="/icons" :name="$t('sidebar.icons')" icon="tim-icons icon-atom"/>
-        <sidebar-link to="/maps" :name="$t('sidebar.maps')" icon="tim-icons icon-pin"/>
-        <sidebar-link to="/notifications" :name="$t('sidebar.notifications')" icon="tim-icons icon-bell-55"/>
-        <sidebar-link to="/profile" :name="$t('sidebar.userProfile')" icon="tim-icons icon-single-02"/>
-        <sidebar-link to="/table-list" :name="$t('sidebar.tableList')" icon="tim-icons icon-puzzle-10"/>
-        <sidebar-link to="/typography" :name="$t('sidebar.typography')" icon="tim-icons icon-align-center"/>
-        <sidebar-link to="/dashboard?enableRTL=true" :name="$t('sidebar.rtlSupport')" icon="tim-icons icon-world"/>
+        <sidebar-link to="/kraken" :name="$t('kraken')" icon="https://assets.coingecko.com/markets/images/23/small/fe290a14-ac8f-4c90-9aed-5e72abf271f0.jpeg?1527171545"/>
+        <sidebar-link to="/gdax" :name="$t('gdax')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/bitfinex" :name="$t('bitfinex')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/gemini" :name="$t('gemini')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/bitstamp" :name="$t('bitstamp')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/poloniex" :name="$t('poloniex')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/binance" :name="$t('binance')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/bittrex" :name="$t('bittrex')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/hitbtc" :name="$t('hitbtc')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/bitbay" :name="$t('bitbay')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/okcoin" :name="$t('okcoin')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/okex" :name="$t('okex')" icon="tim-icons icon-gdax"/>
       </template>
     </side-bar>
     <div class="main-panel">

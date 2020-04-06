@@ -1,4 +1,3 @@
-import ApexCharts from "apexcharts";
 <template>
   <div>
     <div class="row">
@@ -18,31 +17,21 @@ import ApexCharts from "apexcharts";
           </select>
         </div>
       </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Start:</label>
+          <input type="text" class="form-control" v-model="post.start">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>End:</label>
+            <input type="text" class="form-control" v-model="post.end">
+          </div>
+        </div>
+      </div>
       <form @submit.prevent="addPost">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Start:</label>
-              <input type="text" class="form-control" v-model="post.start">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>End:</label>
-              <input type="text" class="form-control" v-model="post.end">
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Exchange:</label>
-              <input type="text" class="form-control" v-model="post.exchange">
-            </div>
-          </div>
-        </div>
         <select v-model="post.range">
           <option disabled value="">Date rang, please select one</option>
           <option>1d</option>
@@ -263,7 +252,9 @@ import ApexCharts from "apexcharts";
         lastDateVolume: null,
         real_time_data: [],
         real_time_volume_data: [],
-        last_realtime_value: null
+        last_realtime_value: null,
+
+        exchange: null,
       }
     },
     computed: {
@@ -588,7 +579,7 @@ import ApexCharts from "apexcharts";
           this.lastDateValue = new Date().setSeconds(0, 0) / 1000;
         }
 
-        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + "gdax" + "/" + "btc" + "/" + "usd/" + init;
+        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + "btc" + "/" + "usd/" + init;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, global_component_instance.lastDateValue)));
 
         window.setTimeout(function () {
@@ -608,10 +599,10 @@ import ApexCharts from "apexcharts";
 
         let volume_uri;
         if (init){
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd/";
         }
         else{
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd/";
         }
         axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, global_component_instance.lastDateVolume)));
 
@@ -632,12 +623,14 @@ import ApexCharts from "apexcharts";
       },
 
       init_available(){
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/all_hist_avail/" + 'bitfinex';
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/all_hist_avail/" + this.exchange;
         this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
       }
 
     },
     mounted() {
+      this.exchange = this.$route.name;
+
       global_component_instance = this;
       this.create_update_realtime_value();
       this.create_update_realtime_volume();
