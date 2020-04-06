@@ -256,6 +256,9 @@ import ApexCharts from "apexcharts";
         last_realtime_value:null,
         last_realtime_volume:null,
 
+        real_time_value_interval:null,
+        real_time_volume_interval:null,
+
         lastDateValue: null,
         lastDateVolume: null,
         real_time_data: [],
@@ -484,7 +487,7 @@ import ApexCharts from "apexcharts";
 
         window.setInterval(function () {
           global_component_instance.getNewSeriesValue(false);
-        }, 60 * 1000)
+        }, this.real_time_value_interval)
       },
 
       create_update_realtime_volume(){
@@ -537,9 +540,10 @@ import ApexCharts from "apexcharts";
 
         this.getNewSeriesVolume(true);
 
+
         window.setInterval(function () {
           global_component_instance.getNewSeriesVolume(false);
-        }, 60 * 1000)
+        }, this.real_time_volume_interval * 1000)
       },
 
       save_realtime_response_data_value(data, init, date){
@@ -550,7 +554,9 @@ import ApexCharts from "apexcharts";
           this.last_realtime_value = this.real_time_data.slice(-1)[0]['y'];
           this.realtime_chart.updateSeries([{
             data: this.real_time_data
-          }])
+          }]);
+          var now = new Date() / 1000;
+          this.real_time_value_interval = (this.lastDateValue + 60 + 10) - now;
         }
         else{
           this.real_time_data.push({x: date * 1000, y: data['data']});
@@ -558,6 +564,7 @@ import ApexCharts from "apexcharts";
             data: this.real_time_data
           }]);
           this.last_realtime_value = data['data'];
+          this.real_time_value_interval = 60;
         }
 
         this.lastDateValue += 60;
@@ -572,6 +579,14 @@ import ApexCharts from "apexcharts";
           data: this.real_time_volume_data
         }]);
         this.last_realtime_volume = this.real_time_volume_data.slice(-1)[0]['y'];
+
+        if (this.real_time_volume_interval === null){
+          var now = new Date() / 1000;
+          this.real_time_volume_interval = (this.lastDateValue + 60 + 10) - now;
+        }
+        else{
+          this.real_time_volume_interval = 60;
+        }
 
         this.lastDateVolume += 60;
       },
