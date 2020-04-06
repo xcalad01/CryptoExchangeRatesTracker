@@ -295,7 +295,7 @@
 
       addPost(){
         console.log(process.env.MIX_API_PORT);
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + this.post.action + "/" + this.post.start + "/" + this.post.end + "/" + this.post.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + this.post.action + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
         if (this.post.action === "ohlc"){
           this.axios.get(uri).then(response => (this.create_update_ohlc_chart(response.data)));
         }
