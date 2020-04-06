@@ -597,10 +597,10 @@ import ApexCharts from "apexcharts";
 
         let volume_uri;
         if (init){
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDate-1080) + "/" + (this.lastDate+60) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
         }
         else{
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDate-60) + "/" + (this.lastDate) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
         }
 
         axios.get(volume_uri).then(response => (this.save_realtime_response_data_volume(response.data, init, this.lastDate)));
