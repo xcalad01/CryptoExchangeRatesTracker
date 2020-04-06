@@ -238,7 +238,13 @@
         real_time_volume_data: [],
         last_realtime_value: null,
 
+        interval_id_value: null,
+        interval_id_volume: null,
+
+
         exchange: null,
+
+        schedule: schedule
       }
     },
     computed: {
@@ -252,6 +258,7 @@
         return this.$t('dashboard.chartCategories');
       }
     },
+
     methods: {
       initBigChart(index) {
         let chartData = {
@@ -459,6 +466,12 @@
         }
 
         this.getNewSeriesValue(true);
+
+        setTimeout(function () {
+          setInterval(function () {
+            global_component_instance.interval_id_value = global_component_instance.getNewSeriesValue(false);
+          }, 60 * 1000)
+        }, global_component_instance.real_time_value_interval * 1000)
       },
 
       create_update_realtime_volume(){
@@ -510,6 +523,12 @@
         }
 
         this.getNewSeriesVolume(true);
+
+        setTimeout(function () {
+          setInterval(function () {
+            global_component_instance.interval_id_volume = global_component_instance.getNewSeriesVolume(false);
+          }, 60 * 1000)
+        }, global_component_instance.real_time_volume_interval * 1000)
       },
 
       save_realtime_response_data_value(data, init, date){
@@ -535,7 +554,11 @@
       },
 
       save_realtime_response_data_volume(data){
+        var last_value = this.last_realtime_volume;
         this.real_time_volume_data.push(...data['data'].map(function (item) {
+          if(item['y']){
+            last_value = item['y'];
+          }
           return {x:item['x'] * 1000, y: item['y']}
         }));
 
@@ -543,7 +566,7 @@
           data: this.real_time_volume_data
         }]);
 
-        this.last_realtime_volume = this.real_time_volume_data.slice(-1)[0]['y'];
+        this.last_realtime_volume = last_value;
 
         if (this.real_time_volume_interval == null){
           var now = new Date() / 1000;
@@ -562,15 +585,6 @@
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + "btc" + "/" + "usd/" + init;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
         this.lastDateValue += 60;
-
-        window.setTimeout(function () {
-          if(init){
-            setTimeout(function () {
-              return true;
-            }, global_component_instance.real_time_value_interval * 1000)
-          }
-          global_component_instance.getNewSeriesValue(false);
-        } , 60 * 1000);
       },
 
       getNewSeriesVolume(init){
@@ -587,15 +601,6 @@
         }
         axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, this.lastDateVolume)));
         this.lastDateVolume += 60;
-        window.setTimeout(function () {
-          if(init){
-            setTimeout(function () {
-              return true;
-            }, global_component_instance.real_time_volume_interval * 1000)
-          }
-          global_component_instance.getNewSeriesVolume(false);
-        } , 60 * 1000);
-
       },
 
       finish_init_avail(data){

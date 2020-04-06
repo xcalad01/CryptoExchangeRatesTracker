@@ -455,8 +455,14 @@ class ApiController extends Controller
 
             $result = json_decode($result, true);
 
+            if (!empty($result)){
+                $result = $result[0]['value'];
+            }
+            else{
+                $result = null;
+            }
             return response()->json([
-                "data" => $result[0]['value']
+                "data" => $result
             ], 200);
         }
     }
