@@ -587,7 +587,9 @@ import ApexCharts from "apexcharts";
 
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + "gdax" + "/" + "btc" + "/" + "usd/" + init;
 
-        axios.get(value_uri).then(response => (this.save_realtime_response_data_value(response.data, init, this.lastDate)));
+        setTimeout(function(){
+          axios.get(value_uri).then(response => (this.save_realtime_response_data_value(response.data, init, this.lastDate)));
+        }, 2000);
       },
 
       getNewSeriesVolume(init){
@@ -603,7 +605,9 @@ import ApexCharts from "apexcharts";
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
         }
 
-        axios.get(volume_uri).then(response => (this.save_realtime_response_data_volume(response.data, init, this.lastDate)));
+        setTimeout(function(){
+          axios.get(volume_uri).then(response => (this.save_realtime_response_data_volume(response.data, init, this.lastDate)));
+        }, 2000);
 
       },
 
