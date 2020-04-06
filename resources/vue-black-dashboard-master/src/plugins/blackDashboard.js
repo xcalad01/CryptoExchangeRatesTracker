@@ -5,9 +5,9 @@ import GlobalDirectives from "./globalDirectives";
 import RTLPlugin from "./RTLPlugin";
 
 //css assets
-import "/Users/filipcaladi/Sites/bakalarka/resources/vue-black-dashboard-master/src/assets/sass/black-dashboard.scss";
-import "/Users/filipcaladi/Sites/bakalarka/resources/vue-black-dashboard-master/src/assets/css/nucleo-icons.css";
-import "/Users/filipcaladi/Sites/bakalarka/resources/vue-black-dashboard-master/src/assets/demo/demo.css";
+import "../assets/sass/black-dashboard.scss";
+import "../assets/css/nucleo-icons.css";
+import "../assets/demo/demo.css";
 
 export default {
   install(Vue) {
