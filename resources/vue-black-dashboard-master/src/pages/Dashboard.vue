@@ -580,7 +580,7 @@ import ApexCharts from "apexcharts";
         }]);
         this.last_realtime_volume = this.real_time_volume_data.slice(-1)[0]['y'];
 
-        if (this.real_time_volume_interval === null){
+        if (this.real_time_volume_interval == null){
           var now = new Date() / 1000;
           this.real_time_volume_interval = (this.lastDateVolume + 60 + 10) - now;
         }
