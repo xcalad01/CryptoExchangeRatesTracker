@@ -113,22 +113,6 @@
           </div>
         </card>
       </div>
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.completedTasks')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-send text-success "></i> 12,100K</h3>
-          </template>
-          <div class="chart-area">
-            <line-chart style="height: 100%"
-                        chart-id="green-line-chart"
-                        :chart-data="greenLineChart.chartData"
-                        :gradient-stops="greenLineChart.gradientStops"
-                        :extra-options="greenLineChart.extraOptions">
-            </line-chart>
-          </div>
-        </card>
-      </div>
     </div>
   </div>
 </template>
@@ -548,8 +532,6 @@
           this.last_realtime_value = data['data'];
           this.real_time_value_interval = 60;
         }
-
-        this.lastDateValue += 60;
       },
 
       save_realtime_response_data_volume(data){
@@ -570,8 +552,6 @@
         else{
           this.real_time_volume_interval = 60;
         }
-
-        this.lastDateVolume += 60;
       },
 
       getNewSeriesValue(init){
@@ -580,7 +560,8 @@
         }
 
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + "btc" + "/" + "usd/" + init;
-        axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, global_component_instance.lastDateValue)));
+        axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
+        this.lastDateValue += 60;
 
         window.setTimeout(function () {
           if(init){
@@ -588,7 +569,7 @@
               return true;
             }, global_component_instance.real_time_value_interval * 1000)
           }
-          global_component_instance.getNewSeriesValue(false)
+          global_component_instance.getNewSeriesValue(false);
         } , 60 * 1000);
       },
 
@@ -599,20 +580,20 @@
 
         let volume_uri;
         if (init){
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd/";
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd";
         }
         else{
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd/";
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd";
         }
-        axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, global_component_instance.lastDateVolume)));
-
+        axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, this.lastDateVolume)));
+        this.lastDateVolume += 60;
         window.setTimeout(function () {
           if(init){
             setTimeout(function () {
               return true;
             }, global_component_instance.real_time_volume_interval * 1000)
           }
-          global_component_instance.getNewSeriesVolume(false)
+          global_component_instance.getNewSeriesVolume(false);
         } , 60 * 1000);
 
       },

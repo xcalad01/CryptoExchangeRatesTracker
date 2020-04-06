@@ -21,36 +21,6 @@ const routes = [
         path: "dashboard",
         name: "dashboard",
         component: Dashboard
-      },
-      {
-        path: "profile",
-        name: "profile",
-        component: Profile
-      },
-      {
-        path: "notifications",
-        name: "notifications",
-        component: Notifications
-      },
-      {
-        path: "icons",
-        name: "icons",
-        component: Icons
-      },
-      {
-        path: "maps",
-        name: "maps",
-        component: Maps
-      },
-      {
-        path: "typography",
-        name: "typography",
-        component: Typography
-      },
-      {
-        path: "table-list",
-        name: "table-list",
-        component: TableList
       }
     ]
   },
