@@ -588,7 +588,7 @@ import ApexCharts from "apexcharts";
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + "gdax" + "/" + "btc" + "/" + "usd/" + init;
 
         setTimeout(function(){
-          axios.get(value_uri).then(response => (this.save_realtime_response_data_value(response.data, init, this.lastDate)));
+          axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, global_component_instance.lastDate)));
         }, 2000);
       },
 
@@ -606,7 +606,7 @@ import ApexCharts from "apexcharts";
         }
 
         setTimeout(function(){
-          axios.get(volume_uri).then(response => (this.save_realtime_response_data_volume(response.data, init, this.lastDate)));
+          axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, global_component_instance.lastDate)));
         }, 2000);
 
       },
