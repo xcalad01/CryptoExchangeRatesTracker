@@ -243,8 +243,6 @@
 
 
         exchange: null,
-
-        schedule: schedule
       }
     },
     computed: {
