@@ -260,7 +260,8 @@ import ApexCharts from "apexcharts";
         last_realtime_value:null,
         last_realtime_volume:null,
 
-        lastDate: null,
+        lastDateValue: null,
+        lastDateVolume: null,
         real_time_data: [],
         real_time_volume_data: [],
         last_realtime_value: null
@@ -483,10 +484,10 @@ import ApexCharts from "apexcharts";
           this.realtime_chart.render();
         }
 
-        this.getNewSeries(true);
+        this.getNewSeriesValue(true);
 
         window.setInterval(function () {
-          global_component_instance.getNewSeries(false);
+          global_component_instance.getNewSeriesValue(false);
         }, 60 * 1000)
       },
 
@@ -538,10 +539,10 @@ import ApexCharts from "apexcharts";
           this.volume_chart.render();
         }
 
-        this.getNewSeries(true);
+        this.getNewSeriesVolume(true);
 
         window.setInterval(function () {
-          global_component_instance.getNewSeries(false);
+          global_component_instance.getNewSeriesVolume(false);
         }, 60 * 1000)
       },
 
@@ -562,6 +563,8 @@ import ApexCharts from "apexcharts";
           }]);
           this.last_realtime_value = data['data'];
         }
+
+        this.lastDateValue += 60;
       },
 
       save_realtime_response_data_volume(data){
@@ -573,13 +576,25 @@ import ApexCharts from "apexcharts";
           data: this.real_time_volume_data
         }]);
         this.last_realtime_volume = this.real_time_volume_data.slice(-1)[0]['y'];
+
+        this.lastDateVolume += 60;
       },
 
-      getNewSeries(init){
-        if (this.lastDate == null) {
-          this.lastDate = new Date().setSeconds(0, 0) / 1000;
+      getNewSeriesValue(init){
+        if (this.lastDateValue == null) {
+          this.lastDateValue = new Date().setSeconds(0, 0) / 1000;
         }
-        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDate-60) + "/" + "gdax" + "/" + "btc" + "/" + "usd/" + init;
+
+        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + "gdax" + "/" + "btc" + "/" + "usd/" + init;
+
+        axios.get(value_uri).then(response => (this.save_realtime_response_data_value(response.data, init, this.lastDate)));
+      },
+
+      getNewSeriesVolume(init){
+        if (this.lastDateVolume == null) {
+          this.lastDateVolume = new Date().setSeconds(0, 0) / 1000;
+        }
+
         let volume_uri;
         if (init){
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDate-1080) + "/" + (this.lastDate+60) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
@@ -588,10 +603,8 @@ import ApexCharts from "apexcharts";
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDate-60) + "/" + (this.lastDate) + "/" + "gdax" + "/" + "1m" + "/" + "btc" + "/" + "usd/";
         }
 
-        axios.get(value_uri).then(response => (this.save_realtime_response_data_value(response.data, init, this.lastDate)));
         axios.get(volume_uri).then(response => (this.save_realtime_response_data_volume(response.data, init, this.lastDate)));
 
-        this.lastDate += 60;
       },
 
       finish_init_avail(data){
