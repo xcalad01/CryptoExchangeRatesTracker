@@ -591,6 +591,11 @@ import ApexCharts from "apexcharts";
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, global_component_instance.lastDateValue)));
 
         window.setTimeout(function () {
+          if(init){
+            setTimeout(function () {
+              return true;
+            }, global_component_instance.real_time_value_interval)
+          }
           global_component_instance.getNewSeriesValue(false)
         } , 60 * 1000);
       },
@@ -610,6 +615,11 @@ import ApexCharts from "apexcharts";
         axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, global_component_instance.lastDateVolume)));
 
         window.setTimeout(function () {
+          if(init){
+            setTimeout(function () {
+              return true;
+            }, global_component_instance.real_time_volume_interval)
+          }
           global_component_instance.getNewSeriesVolume(false)
         } , 60 * 1000);
 
