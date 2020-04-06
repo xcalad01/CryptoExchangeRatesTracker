@@ -582,7 +582,7 @@ import ApexCharts from "apexcharts";
 
         if (this.real_time_volume_interval === null){
           var now = new Date() / 1000;
-          this.real_time_volume_interval = (this.lastDateValue + 60 + 10) - now;
+          this.real_time_volume_interval = (this.lastDateVolume + 60 + 10) - now;
         }
         else{
           this.real_time_volume_interval = 60;
