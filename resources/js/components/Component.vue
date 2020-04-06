@@ -89,12 +89,12 @@ import ApexCharts from "apexcharts";
     var real_time_data = [];
     var realtime_response_data = '';
 
-    function getNewSeries(axios_client){
+    function getNewSeries(axios_client, init){
         console.log(lastDate);
         if (lastDate == null){
             lastDate = new Date().setSeconds(0,0) / 1000;
         }
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + lastDate + "/" + "kraken" + "/" + "btc" + "/" + "usd";
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + lastDate + "/" + "kraken" + "/" + "btc" + "/" + "usd/" + init;
         axios_client.get(uri).then(response => (realtime_response_data = response.data));
         var date = _.cloneDeep(lastDate);
         var result = {x: date * 1000 , y: realtime_response_data['data']};
@@ -114,6 +114,7 @@ import ApexCharts from "apexcharts";
         mounted() {
 
            this.create_update_realtime_value();
+           this.create_update_realtime_volume();
         },
         methods: {
             addPost(){
@@ -250,7 +251,7 @@ import ApexCharts from "apexcharts";
             },
 
             create_update_realtime_value(){
-                real_time_data.push(getNewSeries(this.axios));
+                real_time_data.push(getNewSeries(this.axios, true));
 
                 var options = {
                     series: [{
@@ -305,7 +306,7 @@ import ApexCharts from "apexcharts";
                 }
 
                 window.setInterval(function () {
-                    real_time_data.push(getNewSeries(this.axios));
+                    real_time_data.push(getNewSeries(this.axios, false));
 
                     realtime_chart.updateSeries([{
                         data: real_time_data

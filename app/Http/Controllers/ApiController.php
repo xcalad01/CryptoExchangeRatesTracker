@@ -343,70 +343,7 @@ class ApiController extends Controller
         return array($fiat_actual, $fiat_prev);
     }
 
-    public function get_crypto_value_timestamp(Request $request, $timestamp, $exchange, $from, $to){
-        try {
-            $this->check_exchange($exchange);
-            $this->check_fiat($to);
-        }
-        catch (\Exception $e){
-            return response()->json([
-                "message" => $e->getMessage()
-            ], 404);
-        }
-
-        $result = DB::table('historical_available')
-            ->select(DB::raw('("Open"+"Close")/2*"Value_USD" as value'))
-            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-            ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$to}'"))
-            ->where([
-                ['Exchange_id', '=', DB::raw("'{$exchange}'")],
-                ['From', '=', DB::raw("'{$from}'")],
-                ['To', '=', DB::raw("'{$to}'")],
-                ['Timestamp', '=', DB::raw("'{$timestamp}'")]
-            ])
-            ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
-            ->groupBy(['Exchange_id', 'Fiat_id', 'Open', 'Close', 'Value_USD'])->get();
-
-        $result = json_decode($result, true);
-        return response()->json([
-            "data" => $result[0]['value']
-        ], 200);
-    }
-
-    public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
-        $config = array(
-            "1d" => 86400,
-            "1h" => 3600,
-            "1m" => 60
-        );
-
-        $historical_available = null;
-
-        try {
-            $this->check_exchange($exchange);
-
-            $this->check_fiat($to);
-
-            if ($range and !key_exists($range, $config)){
-                throw new \Exception('Time range not supported');
-            }
-            $range = $config[$range];
-
-            if ($start + $range > $end){
-                throw new \Exception('Range not between start and end');
-
-	        }
-
-            $historical_available = $this->get_historical_available($exchange, $from);
-
-            $start = intval($start);
-        }
-        catch (\Exception $e){
-            return response()->json([
-                "message" => $e->getMessage()
-            ], 404);
-        }
-
+    private function do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available){
         $values = array();
         $fiat_actual = null;
         $fiat_prev  =  null;
@@ -476,6 +413,89 @@ class ApiController extends Controller
         if (!empty($values)){
             Redis::set($fiat_prev_key, $to);
         }
+
+        return $values;
+    }
+
+    public function get_crypto_value_timestamp(Request $request, $timestamp, $exchange, $from, $to, $init){
+        $historical_available = null;
+
+        try {
+            $this->check_exchange($exchange);
+            $this->check_fiat($to);
+
+            $historical_available = $this->get_historical_available($exchange, $from);
+
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        if($init == "true"){
+            $result = $this->do_get_value_time_range($timestamp - 1080, $timestamp + 60, $exchange, 60, $from, $to, $historical_available);
+            return response()->json([
+                "data" => $result
+            ], 200);
+        }
+        else{
+            $result = DB::table('historical_available')
+                ->select(DB::raw('("Open"+"Close")/2*"Value_USD" as value'))
+                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$to}'"))
+                ->where([
+                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
+                    ['From', '=', DB::raw("'{$historical_available->From}'")],
+                    ['To', '=', DB::raw("'{$historical_available->To}'")],
+                    ['Timestamp', '=', DB::raw("'{$timestamp}'")]
+                ])
+                ->whereBetween('Date', [ DB::raw('"Timestamp" - 86399'), DB::raw('"Timestamp"')])
+                ->groupBy(['Exchange_id', 'Fiat_id', 'Open', 'Close', 'Value_USD'])->get();
+
+            $result = json_decode($result, true);
+
+            return response()->json([
+                "data" => $result[0]['value']
+            ], 200);
+        }
+    }
+
+    public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
+        $config = array(
+            "1d" => 86400,
+            "1h" => 3600,
+            "1m" => 60
+        );
+
+        $historical_available = null;
+
+        try {
+            $this->check_exchange($exchange);
+
+            $this->check_fiat($to);
+
+            if ($range and !key_exists($range, $config)){
+                throw new \Exception('Time range not supported');
+            }
+            $range = $config[$range];
+
+            if ($start + $range > $end){
+                throw new \Exception('Range not between start and end');
+
+	        }
+
+            $historical_available = $this->get_historical_available($exchange, $from);
+
+            $start = intval($start);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        $values = $this->do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available);
 
         return response()->json([
             "data" => $values
@@ -608,5 +628,151 @@ class ApiController extends Controller
 
     }
 
+    public function get_all_hist_avail(Request $request, $exchange){
+        try {
+            $this->check_exchange($exchange);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
 
+        $results = DB::table('historical_available')->where('Exchange_id', $exchange)->get();
+
+        $from_data = array();
+        $to_data = array();
+        foreach ($results as $result){
+            array_push($from_data, array(
+               'value'=>$result->From,
+                'text'=>strtoupper($result->From)
+            ));
+
+            array_push($to_data, array(
+               'value'=>$result->To,
+               'text'=>strtoupper($result->To)
+            ));
+        }
+
+        return response()->json([
+            "from" => $from_data,
+            "to"=>$to_data
+        ], 200);
+    }
+
+
+    public function get_crypto_volume_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
+        $config = array(
+            "1d" => 86400,
+            "1h" => 3600,
+            "6h" => 21600,
+            "1m" => 60
+        );
+
+        $historical_available = null;
+
+        try {
+            $this->check_exchange($exchange);
+
+            $this->check_fiat($to);
+
+            if ($range and !key_exists($range, $config)){
+                throw new \Exception('Time range not supported');
+            }
+            $range = $config[$range];
+
+            if ($start + $range > $end){
+                throw new \Exception('Range not between start and end');
+            }
+
+            $historical_available = $this->get_historical_available($exchange, $from);
+
+
+            $start = intval($start);
+
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        $volume_data = array();
+        $fiat_actual = null;
+        $fiat_prev  =  null;
+        $fiat_prev_key = "volume_fiat_prev_{$range}_{$exchange}_{$from}";
+        $fiat_prev_id = Redis::get($fiat_prev_key);
+
+        while ($start + $range <= $end){
+            $x_value = $start + $range;
+            $redis_key_value = "volume_{$x_value}_{$range}_{$exchange}_{$from}";
+            $result = Redis::get($redis_key_value);
+            if ($result){
+                $fiat_data = $this->get_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
+                $fiat_actual = $fiat_data[0];
+                $fiat_prev = $fiat_data[1];
+
+                if ($fiat_prev){
+                    $value1 = $fiat_prev->Value_USD;
+                }
+                else{
+                    $value1 = 1;
+                }
+
+                if ($fiat_actual){
+                    $value2 = $fiat_actual->Value_USD;
+                }
+                else{
+                    $value2 = 1;
+                }
+
+                array_push($volume_data, array(
+                    "x" => $start,
+                    "y" => $result / $value1 * $value2
+                ));
+
+                Redis::set($redis_key_value, $result / $value1 * $value2);
+
+                $start += $range;
+                continue;
+            }
+
+            $result = DB::table('historical_available')
+                ->select(DB::raw('AVG("Volume"*"Value_USD") as "Volume"'))
+                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$to}'"))
+                ->where([
+                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
+                    ['From', '=', DB::raw("'{$historical_available->From}'")],
+                    ['To', '=', DB::raw("'{$historical_available->To}'")]
+                ])
+                ->whereBetween('Timestamp', [$start, $start + $range - 1])
+                ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
+                ->get();
+
+            $result = json_decode($result, true);
+
+            foreach ($result as $res){
+                $y_value = $res['Volume'];
+
+                Redis::set($redis_key_value, $y_value);
+
+                array_push($volume_data, array(
+                    "x" => $start + $range,
+                    "y" => $y_value
+                ));
+            }
+
+            $start += $range;
+        }
+
+        if (!empty($volume_data)){
+            Redis::set($fiat_prev_key, $to);
+        }
+
+        return response()->json([
+            "data" => $volume_data
+        ], 200);
+
+    }
 }

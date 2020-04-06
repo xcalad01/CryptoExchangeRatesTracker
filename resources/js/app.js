@@ -1,34 +1,37 @@
+/*
+ =========================================================
+ * Vue Black Dashboard - v1.1.0
+ =========================================================
 
-require('./bootstrap');
+ * Product Page: https://www.creative-tim.com/product/black-dashboard
+ * Copyright 2018 Creative Tim (http://www.creative-tim.com)
 
-window.Vue = require('vue');
+ =========================================================
 
-import VueRouter from 'vue-router';
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+ */
+import Vue from "vue";
+import VueRouter from "vue-router";
+import RouterPrefetch from 'vue-router-prefetch'
+import App from "./App.vue";
+// TIP: change to import router from "./router/starterRouter"; to start with a clean layout
+import router from "./router";
+
+import BlackDashboard from "../vue-black-dashboard-master/src/plugins/blackDashboard";
+import i18n from "./i18n"
+import '../vue-black-dashboard-master/src/registerServiceWorker'
+
+import VueAxios from '../vue-black-dashboard-master/src/plugins/axios';
+
+Vue.use(BlackDashboard);
 Vue.use(VueRouter);
+Vue.use(RouterPrefetch);
+Vue.use(VueAxios);
 
-import VueAxios from 'vue-axios';
-import axios from 'axios';
-
-import App from './App.vue';
-
-
-Vue.use(VueAxios, axios);
-
-import FirstComponent from './components/Component.vue';
-import DashboardComp from './components/Dashboard';
-
-const routes = [
-    {
-        name: 'first_component',
-        path: '/',
-        component: FirstComponent,
-    },
-    {
-        name: 'dashboard',
-        path: '/dashboard',
-        component: DashboardComp
-    }
-];
-
-const router = new VueRouter({ mode: 'history', routes: routes});
-const app = new Vue(Vue.util.extend({ router }, App)).$mount('#app');
+/* eslint-disable no-new */
+new Vue({
+    router,
+    i18n,
+    render: h => h(App)
+}).$mount("#app");
