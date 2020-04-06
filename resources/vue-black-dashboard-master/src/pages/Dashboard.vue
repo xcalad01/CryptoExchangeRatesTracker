@@ -547,7 +547,7 @@ import ApexCharts from "apexcharts";
             data: this.real_time_data
           }]);
           var now = new Date() / 1000;
-          this.real_time_value_interval = (this.lastDateValue + 60 + 10) - now;
+          this.real_time_value_interval = (this.lastDateValue + 60 + 15) - now;
         }
         else{
           this.real_time_data.push({x: date * 1000, y: data['data']});
@@ -573,7 +573,7 @@ import ApexCharts from "apexcharts";
 
         if (this.real_time_volume_interval == null){
           var now = new Date() / 1000;
-          this.real_time_volume_interval = (this.lastDateVolume + 60 + 10) - now;
+          this.real_time_volume_interval = (this.lastDateVolume + 60 + 15) - now;
         }
         else{
           this.real_time_volume_interval = 60;
