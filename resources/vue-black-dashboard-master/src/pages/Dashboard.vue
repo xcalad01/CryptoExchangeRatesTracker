@@ -487,7 +487,7 @@ import ApexCharts from "apexcharts";
 
         window.setInterval(function () {
           global_component_instance.getNewSeriesValue(false);
-        }, this.real_time_value_interval * 1000)
+        }, global_component_instance.real_time_value_interval * 1000)
       },
 
       create_update_realtime_volume(){
@@ -543,7 +543,7 @@ import ApexCharts from "apexcharts";
 
         window.setInterval(function () {
           global_component_instance.getNewSeriesVolume(false);
-        }, this.real_time_volume_interval * 1000)
+        }, global_component_instance.real_time_volume_interval * 1000)
       },
 
       save_realtime_response_data_value(data, init, date){
@@ -580,7 +580,7 @@ import ApexCharts from "apexcharts";
         }]);
         this.last_realtime_volume = this.real_time_volume_data.slice(-1)[0]['y'];
 
-        if (!this.real_time_volume_interval){
+        if (this.real_time_volume_interval == null){
           var now = new Date() / 1000;
           this.real_time_volume_interval = (this.lastDateVolume + 60 + 10) - now;
         }
