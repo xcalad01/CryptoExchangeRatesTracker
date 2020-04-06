@@ -595,7 +595,7 @@ import ApexCharts from "apexcharts";
           if(init){
             setTimeout(function () {
               return true;
-            }, global_component_instance.real_time_value_interval)
+            }, global_component_instance.real_time_value_interval * 1000)
           }
           global_component_instance.getNewSeriesValue(false)
         } , 60 * 1000);
@@ -619,7 +619,7 @@ import ApexCharts from "apexcharts";
           if(init){
             setTimeout(function () {
               return true;
-            }, global_component_instance.real_time_volume_interval)
+            }, global_component_instance.real_time_volume_interval * 1000)
           }
           global_component_instance.getNewSeriesVolume(false)
         } , 60 * 1000);
