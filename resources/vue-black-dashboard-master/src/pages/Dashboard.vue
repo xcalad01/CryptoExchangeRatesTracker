@@ -18,6 +18,46 @@ import ApexCharts from "apexcharts";
           </select>
         </div>
       </div>
+      <form @submit.prevent="addPost">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Start:</label>
+              <input type="text" class="form-control" v-model="post.start">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>End:</label>
+              <input type="text" class="form-control" v-model="post.end">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Exchange:</label>
+              <input type="text" class="form-control" v-model="post.exchange">
+            </div>
+          </div>
+        </div>
+        <select v-model="post.range">
+          <option disabled value="">Date rang, please select one</option>
+          <option>1d</option>
+          <option>1h</option>
+        </select><br />
+        <select v-model="post.action">
+          <option disabled value="">Please select one</option>
+          <option>value</option>
+          <option>ohlc</option>
+        </select>
+
+        <div class="form-group">
+          <button class="btn btn-primary">Query</button>
+        </div>
+      </form>
     </div>
     <div class="row">
       <div class="col-12">
@@ -99,50 +139,6 @@ import ApexCharts from "apexcharts";
             </line-chart>
           </div>
         </card>
-      </div>
-    </div>
-    <div class="row">
-      <div>
-        <form @submit.prevent="addPost">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Start:</label>
-                <input type="text" class="form-control" v-model="post.start">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>End:</label>
-                <input type="text" class="form-control" v-model="post.end">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Exchange:</label>
-                <input type="text" class="form-control" v-model="post.exchange">
-              </div>
-            </div>
-          </div>
-          <select v-model="post.range">
-            <option disabled value="">Date rang, please select one</option>
-            <option>1d</option>
-            <option>1h</option>
-          </select><br />
-          <select v-model="post.action">
-            <option disabled value="">Please select one</option>
-            <option>value</option>
-            <option>ohlc</option>
-          </select>
-
-          <div class="form-group">
-            <button class="btn btn-primary">Query</button>
-          </div>
-        </form>
       </div>
     </div>
   </div>
