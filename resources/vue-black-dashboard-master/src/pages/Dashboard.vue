@@ -4,7 +4,7 @@
       <div class="col-md-6">
         <div class="form-group">
           <label>From:</label>
-          <select v-model=post.from>
+          <select v-model=post.from @change="onChangeFrom()">
             <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
           </select>
         </div>
@@ -12,37 +12,33 @@
       <div class="col-md-6">
         <div class="form-group">
           <label>To:</label>
-          <select v-model=post.to>
+          <select v-model=post.to @change="onChangeTo()">
             <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
           </select>
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
-          <label>Start:</label>
-          <input type="text" class="form-control" v-model="post.start">
+          <label>Range:</label>
+          <select v-model="post.range">
+            <option disabled value="">Date rang, please select one</option>
+            <option>1d</option>
+            <option>1h</option>
+          </select>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="form-group">
-            <label>End:</label>
-            <input type="text" class="form-control" v-model="post.end">
-          </div>
+          <label>Start:</label>
+          <datetime type="datetime" v-model="post.start"></datetime>
+        </div>
+        <div class="col-md-6">
+          <label>End:</label>
+          <datetime type="datetime" v-model="post.end"></datetime>
         </div>
       </div>
-      <form @submit.prevent="addPost">
-        <select v-model="post.range">
-          <option disabled value="">Date rang, please select one</option>
-          <option>1d</option>
-          <option>1h</option>
-        </select><br />
-        <select v-model="post.action">
-          <option disabled value="">Please select one</option>
-          <option>value</option>
-          <option>ohlc</option>
-        </select>
 
+      <form @submit.prevent="ohlc_value_chart(false)">
         <div class="form-group">
           <button class="btn btn-primary">Query</button>
         </div>
@@ -127,6 +123,7 @@
 
   import { axios } from '../plugins/axios';
   import ApexCharts from "apexcharts";
+  import { Datetime } from 'vue-datetime';
 
   var global_component_instance = null;
 
@@ -136,7 +133,8 @@
       BarChart,
       Ohlcchart,
       TaskList,
-      UserTable
+      UserTable,
+      datetime: Datetime
     },
     data() {
       return {
@@ -244,9 +242,12 @@
         timeout_id_value: null,
         timeout_id_volume: null,
 
-
+        old_to: null,
 
         exchange: null,
+
+        start_date: null,
+        end_date: null
       }
     },
     computed: {
@@ -279,21 +280,28 @@
             data: this.bigLineChart.allData[index]
           }],
           labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-        }
+        };
         this.$refs.bigChart.updateGradients(chartData);
         this.bigLineChart.chartData = chartData;
         this.bigLineChart.activeIndex = index;
       },
 
-      addPost(){
-        console.log(process.env.MIX_API_PORT);
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + this.post.action + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
-        if (this.post.action === "ohlc"){
-          this.axios.get(uri).then(response => (this.create_update_ohlc_chart(response.data)));
+      ohlc_value_chart(init){
+        if (init){
+          this.post.start = new Date() / 1000 - 86400;
+          this.post.end = new Date() / 1000;
+          this.post.range = '1h';
         }
         else{
-          this.axios.get(uri).then(response => (this.create_update_value_chart(response.data)));
+          this.post.start = Date.parse(this.post.start) / 1000;
+          this.post.end = Date.parse(this.post.end) / 1000;
         }
+
+        let url_value = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + "value" + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
+        this.axios.get(url_value).then(response => (this.create_update_ohlc_chart(response.data)));
+
+        let url_volume = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + "volume" + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
+        this.axios.get(url_volume).then(response => (this.create_update_value_chart(response.data)));
       },
 
       create_update_ohlc_chart(data){
@@ -622,6 +630,51 @@
       init_available(){
         let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/all_hist_avail/" + this.exchange;
         this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
+      },
+
+      onChangeFrom(){
+        this.clear_all_timeouts_intervals();
+        this.create_update_realtime_value();
+        this.create_update_realtime_volume();
+      },
+
+      finish_change_to(data){
+        var new_fiat = data['data']['fiat'];
+        var old_fiat = data['data']['old_fiat'];
+        var new_data = this.real_time_data.map(function (item) {
+          return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
+        });
+
+        this.realtime_chart.updateSeries([{
+          data: new_data
+        }]);
+        this.real_time_data= new_data;
+        this.last_realtime_value = new_data.slice(-1)[0]['y']
+
+        new_data = this.real_time_volume_data.map(function (item) {
+          return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
+        });
+
+        this.volume_chart.updateSeries([{
+          data: new_data
+        }]);
+        this.real_time_volume_data = new_data;
+        this.last_realtime_volume = new_data.slice(-1)[0]['y']
+
+      },
+
+      onChangeTo(){
+        var now = new Date().setSeconds(0, 0) / 1000;
+        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
+        this.old_to = this.post.to;
+        this.axios.get(url).then(response => (this.finish_change_to(response.data)));
+      },
+
+      clear_all_timeouts_intervals(){
+        clearTimeout(this.timeout_id_value);
+        clearTimeout(this.timeout_id_volume);
+        clearInterval(this.interval_id_value);
+        clearInterval(this.interval_id_volume);
       }
 
     },
@@ -629,9 +682,11 @@
       this.exchange = this.$route.name;
       this.post.from = 'btc';
       this.post.to = 'usd';
+      this.old_to ='usd';
       this.init_available();
 
       global_component_instance = this;
+      this.ohlc_value_chart(true);
       this.create_update_realtime_value();
       this.create_update_realtime_volume();
     },
@@ -642,10 +697,7 @@
       console.log(this.interval_id_value);
       console.log(this.interval_id_volume);
       console.log("destroy");
-      clearTimeout(this.timeout_id_value);
-      clearTimeout(this.timeout_id_volume);
-      clearInterval(this.interval_id_value);
-      clearInterval(this.interval_id_volume);
+      this.clear_all_timeouts_intervals();
 
     }
   };

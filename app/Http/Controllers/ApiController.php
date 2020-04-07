@@ -800,4 +800,27 @@ class ApiController extends Controller
         ], 200);
 
     }
+
+    public function fiat_historical(Request $request, $timestamp, $fiat, $old_fiat=null){
+        try {
+            $fiat = $this->get_fiat_historical($fiat, $timestamp);
+            if ($old_fiat){
+                $old_fiat = $this->get_fiat_historical($old_fiat, $timestamp);
+            }
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        return response()->json([
+            "data" => array(
+                "fiat"=>$fiat->Value_USD,
+                "old_fiat"=>$old_fiat->Value_USD
+            )
+        ], 200);
+
+
+    }
 }

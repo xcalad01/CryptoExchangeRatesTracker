@@ -24,10 +24,14 @@ import '../vue-black-dashboard-master/src/registerServiceWorker'
 
 import VueAxios from '../vue-black-dashboard-master/src/plugins/axios';
 
+import { Datetime } from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css'
+
 Vue.use(BlackDashboard);
 Vue.use(VueRouter);
 Vue.use(RouterPrefetch);
 Vue.use(VueAxios);
+Vue.use(Datetime);
 
 /* eslint-disable no-new */
 new Vue({

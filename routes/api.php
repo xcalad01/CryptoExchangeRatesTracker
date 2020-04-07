@@ -31,13 +31,13 @@ Route::get('crypto_historical/volume/{start}/{end}/{exchange}/{range}/{from}/{to
 
 Route::get('crypto_current/{timestamp}/{exchange}/{from}/{to}/{init}', 'ApiController@get_crypto_value_timestamp');
 
-
 Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value');
-
 
 Route::post('crypto', 'ApiController@create_crypto');
 
 Route::post('fiat', 'ApiController@create_fiat');
+
+Route::get('fiat/historical/{timestamp}/{fiat}/{old_fiat?}', 'ApiController@fiat_historical');
 
 Route::get('all_hist_avail/{exchange}', 'ApiController@get_all_hist_avail');
 
