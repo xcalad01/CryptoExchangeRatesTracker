@@ -582,7 +582,7 @@
           this.real_time_value_interval = (this.lastDateValue + 60 + 30) - now;
         }
 
-        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + "btc" + "/" + "usd/" + init;
+        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + this.post.from + "/" + this.post.to + "/" + init;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
         console.log(this.exchange);
         console.log("Value");
@@ -601,10 +601,10 @@
         if (init){
           var now = new Date() / 1000;
           this.real_time_volume_interval = (this.lastDateVolume + 60 + 30) - now;
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd";
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + this.post.from + "/" + this.post.to;
         }
         else{
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd";
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + this.post.from + "/" + this.post.to;
         }
         axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, this.lastDateVolume)));
         console.log("Volume");
@@ -617,6 +617,8 @@
       finish_init_avail(data){
         this.from_available = data['from'];
         this.to_available = data['to'];
+        this.post.from = this.from_available[0]['value'];
+        this.post.to = this.to_available[0]['value'];
       },
 
       init_available(){
@@ -627,18 +629,11 @@
     },
     mounted() {
       this.exchange = this.$route.name;
+      this.init_available();
 
       global_component_instance = this;
       this.create_update_realtime_value();
       this.create_update_realtime_volume();
-      this.init_available();
-
-      this.i18n = this.$i18n;
-      if (this.enableRTL) {
-        this.i18n.locale = 'ar';
-        this.$rtl.enableRTL();
-      }
-      // this.initBigChart(0);
     },
     beforeDestroy() {
       console.log(this.exchange);
@@ -647,15 +642,11 @@
       console.log(this.interval_id_value);
       console.log(this.interval_id_volume);
       console.log("destroy");
-      clearTimeout(this.timeout_id_value)
-      clearTimeout(this.timeout_id_volume)
+      clearTimeout(this.timeout_id_value);
+      clearTimeout(this.timeout_id_volume);
       clearInterval(this.interval_id_value);
       clearInterval(this.interval_id_volume);
 
-      if (this.$rtl.isRTL) {
-        this.i18n.locale = 'en';
-        this.$rtl.disableRTL();
-      }
     }
   };
 </script>
