@@ -225,9 +225,11 @@
 
         lastDateValue: null,
         lastDateVolume: null,
+
         real_time_data: [],
         real_time_volume_data: [],
-        last_realtime_value: null,
+        value_chart_data: [],
+        ohlc_chart_data: [],
 
         interval_id_value: null,
         interval_id_volume: null,
@@ -298,18 +300,19 @@
       },
 
       create_update_ohlc_chart(data){
-        var new_data = data['data'].map(function (item) {
+        this.ohlc_chart_data = data['data'].map(function (item) {
           return {x:(item['x'] - 3600) * 1000, y:item["y"]}
         });
 
         if (this.ohlc_chart != null){
-          this.ohlc_chart.updateSeries([{data: new_data}]);
+          this.ohlc_chart.updateSeries([{data: this.ohlc_chart_data}]);
           return
         }
         var chartOptions = {
           chart: {
             type: 'candlestick',
-            height: 250
+            height: 250,
+            foreColor: '#ffffff'
           },
           title: {
             text: 'CandleStick Chart',
@@ -332,7 +335,7 @@
             }
           },
           series: [{
-            data: new_data
+            data: this.ohlc_chart_data
           }],
         };
 
@@ -343,19 +346,19 @@
       },
 
       create_update_value_chart(data){
-        var new_data = data['data'].map(function (item) {
+        this.value_chart_data = data['data'].map(function (item) {
           return [new Date(item[0] * 1000 -  3600 * 1000), item[1]]
         });
 
         if (this.value_chart != null){
-          this.value_chart.updateSeries([{name: "Price", "data": new_data}]);
+          this.value_chart.updateSeries([{name: "Price", "data": this.value_chart_data}]);
           return
         }
 
         var options = {
           series: [{
             name: 'Price',
-            data: new_data
+            data: this.value_chart_data,
           }],
           chart: {
             type: 'area',
@@ -368,7 +371,8 @@
             },
             toolbar: {
               autoSelected: 'zoom'
-            }
+            },
+            foreColor: '#ffffff'
           },
           dataLabels: {
             enabled: false
@@ -422,7 +426,8 @@
       create_update_realtime_value(){
         var options = {
           series: [{
-            data: this.real_time_data
+            data: this.real_time_data,
+            foreColor: '#ffffff',
           }],
           chart: {
             id: 'realtime',
@@ -484,6 +489,7 @@
           }],
           chart: {
             id: 'realtime',
+            foreColor: '#ffffff',
             height: 180,
             type: 'bar',
             animations: {
@@ -629,30 +635,48 @@
         this.clear_all_timeouts_intervals();
         this.create_update_realtime_value();
         this.create_update_realtime_volume();
+        this.ohlc_value_chart(true);
       },
 
       finish_change_to(data){
         var new_fiat = data['data']['fiat'];
         var old_fiat = data['data']['old_fiat'];
+
         var new_data = this.real_time_data.map(function (item) {
           return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
         });
-
         this.realtime_chart.updateSeries([{
           data: new_data
         }]);
         this.real_time_data= new_data;
-        this.last_realtime_value = new_data.slice(-1)[0]['y']
+        this.last_realtime_value = new_data.slice(-1)[0]['y'];
 
         new_data = this.real_time_volume_data.map(function (item) {
           return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
         });
-
         this.volume_chart.updateSeries([{
           data: new_data
         }]);
         this.real_time_volume_data = new_data;
-        this.last_realtime_volume = new_data.slice(-1)[0]['y']
+        this.last_realtime_volume = new_data.slice(-1)[0]['y'];
+
+        new_data = this.ohlc_chart_data.map(function (item) {
+          return {x:item['x'], y:item["y"].map(function (item_y) {
+            return item_y / old_fiat * new_fiat
+            })}
+        });
+        this.ohlc_chart.updateSeries([{
+          data: new_data
+        }]);
+        this.ohlc_chart_data = data;
+
+        new_data = this.value_chart_data.map(function (item) {
+          return {x:item[0], y:item[1] / old_fiat * new_fiat}
+        });
+        this.value_chart.updateSeries([{
+          data: new_data
+        }]);
+        this.value_chart_data = data;
 
       },
 
