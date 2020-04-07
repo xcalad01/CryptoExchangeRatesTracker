@@ -586,7 +586,7 @@
         }
         if (init){
           var now = new Date() / 1000;
-          this.real_time_value_interval = (this.lastDateValue + 60 + 30) - now;
+          this.real_time_value_interval = (this.lastDateValue + 60 + 50) - now;
         }
 
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + this.post.from + "/" + this.post.to + "/" + init;
@@ -607,7 +607,7 @@
         let volume_uri;
         if (init){
           var now = new Date() / 1000;
-          this.real_time_volume_interval = (this.lastDateVolume + 60 + 30) - now;
+          this.real_time_volume_interval = (this.lastDateVolume + 60 + 50) - now;
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + this.post.from + "/" + this.post.to;
         }
         else{
