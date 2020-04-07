@@ -427,7 +427,6 @@
         var options = {
           series: [{
             data: this.real_time_data,
-            foreColor: '#ffffff',
           }],
           chart: {
             id: 'realtime',
@@ -445,7 +444,8 @@
             },
             zoom: {
               enabled: false
-            }
+            },
+            foreColor: '#ffffff'
           },
           dataLabels: {
             enabled: false
