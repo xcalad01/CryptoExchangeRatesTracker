@@ -466,6 +466,7 @@
         this.getNewSeriesValue(true);
 
         setTimeout(function () {
+          global_component_instance.interval_id_value = global_component_instance.getNewSeriesValue(false);
           setInterval(function () {
             global_component_instance.interval_id_value = global_component_instance.getNewSeriesValue(false);
           }, 60 * 1000)
@@ -523,6 +524,7 @@
         this.getNewSeriesVolume(true);
 
         setTimeout(function () {
+          global_component_instance.interval_id_volume = global_component_instance.getNewSeriesVolume(false);
           setInterval(function () {
             global_component_instance.interval_id_volume = global_component_instance.getNewSeriesVolume(false);
           }, 60 * 1000)
@@ -530,6 +532,7 @@
       },
 
       save_realtime_response_data_value(data, init, date){
+        var interval;
         if (init){
           this.real_time_data = data['data'].map(function (item) {
             return {x:item[0] * 1000, y: item[1]}
@@ -538,8 +541,6 @@
           this.realtime_chart.updateSeries([{
             data: this.real_time_data
           }]);
-          var now = new Date() / 1000;
-          this.real_time_value_interval = (this.lastDateValue + 60 + 15) - now;
         }
         else{
           this.real_time_data.push({x: date * 1000, y: data['data']});
@@ -549,6 +550,8 @@
           this.last_realtime_value = data['data'];
           this.real_time_value_interval = 60;
         }
+
+        return interval;
       },
 
       save_realtime_response_data_volume(data){
@@ -565,24 +568,24 @@
         }]);
 
         this.last_realtime_volume = last_value;
-
-        if (this.real_time_volume_interval == null){
-          var now = new Date() / 1000;
-          this.real_time_volume_interval = (this.lastDateVolume + 60 + 15) - now;
-        }
-        else{
-          this.real_time_volume_interval = 60;
-        }
       },
 
       getNewSeriesValue(init){
         if (this.lastDateValue == null) {
           this.lastDateValue = new Date().setSeconds(0, 0) / 1000;
         }
+        if (init){
+          var now = new Date() / 1000;
+          this.real_time_value_interval = (this.lastDateValue + 60 + 30) - now;
+        }
 
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + "btc" + "/" + "usd/" + init;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
+        console.log("Value");
+        console.log("Old: " + this.lastDateValue);
         this.lastDateValue += 60;
+        console.log("New: " + this.lastDateValue);
+        console.log(new Date());
       },
 
       getNewSeriesVolume(init){
@@ -592,13 +595,19 @@
 
         let volume_uri;
         if (init){
+          var now = new Date() / 1000;
+          this.real_time_volume_interval = (this.lastDateVolume + 60 + 30) - now;
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd";
         }
         else{
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + "btc" + "/" + "usd";
         }
         axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, this.lastDateVolume)));
+        console.log("Volume");
+        console.log("Old: " + this.lastDateVolume);
         this.lastDateVolume += 60;
+        console.log("New: " + this.lastDateVolume);
+        console.log(new Date());
       },
 
       finish_init_avail(data){
