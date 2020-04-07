@@ -532,7 +532,6 @@
       },
 
       save_realtime_response_data_value(data, init, date){
-        var interval;
         if (init){
           this.real_time_data = data['data'].map(function (item) {
             return {x:item[0] * 1000, y: item[1]}
@@ -547,11 +546,12 @@
           this.realtime_chart.updateSeries([{
             data: this.real_time_data
           }]);
-          this.last_realtime_value = data['data'];
+          if (data['data']){
+            this.last_realtime_value = data['data'];
+          }
+
           this.real_time_value_interval = 60;
         }
-
-        return interval;
       },
 
       save_realtime_response_data_volume(data){
