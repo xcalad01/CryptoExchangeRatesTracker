@@ -629,6 +629,8 @@
     },
     mounted() {
       this.exchange = this.$route.name;
+      this.post.from = 'btc';
+      this.post.to = 'usd';
       this.init_available();
 
       global_component_instance = this;
