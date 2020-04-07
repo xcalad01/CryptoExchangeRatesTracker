@@ -47,13 +47,6 @@
     <div class="row">
       <div class="col-12">
         <card type="chart">
-          <template slot="header">
-            <div class="row">
-              <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-                <h3 class="card-title">Candlestick chart</h3>
-              </div>
-            </div>
-          </template>
           <div class="chart-area">
             <div id="chart_view_ohlc">
               <div ref="chart_ohlc" class="chart"></div>

@@ -15,7 +15,7 @@ const routes = [
     {
         path: "/",
         component: DashboardLayout,
-        redirect: "kraken",
+        redirect: "gdax",
         children: [
             {
                 path: "kraken",
