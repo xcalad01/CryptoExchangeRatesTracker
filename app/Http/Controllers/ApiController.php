@@ -648,17 +648,36 @@ class ApiController extends Controller
 
         $from_data = array();
         $to_data = array();
+        $already_in = array();
         foreach ($results as $result){
             array_push($from_data, array(
                'value'=>$result->From,
                 'text'=>strtoupper($result->From)
             ));
 
-            array_push($to_data, array(
-               'value'=>$result->To,
-               'text'=>strtoupper($result->To)
-            ));
+            $item = array(
+                'value'=>$result->To,
+                'text'=>strtoupper($result->To)
+            );
+
+            if (!(in_array($item, $to_data))){
+                array_push($already_in, $result->To);
+                array_push($to_data, $item);
+            }
         }
+
+//        $to_data = array_unique($to_data, SORT_REGULAR);
+
+        $fiats = DB::table('fiats')->get("Fiat_id");
+        foreach ($fiats as $fiat){
+            if (!(in_array($fiat->Fiat_id, $already_in))){
+                array_push($to_data, array(
+                    'value'=>$fiat->Fiat_id,
+                    'text'=>strtoupper($fiat->Fiat_id)
+                ));
+            }
+        }
+
 
         return response()->json([
             "from" => $from_data,
