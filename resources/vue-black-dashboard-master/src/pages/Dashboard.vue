@@ -671,7 +671,7 @@
         this.ohlc_chart_data = new_data;
 
         new_data = this.value_chart_data.map(function (item) {
-          return {x:item[0], y:item[1] / old_fiat * new_fiat}
+          return [item[0], item[1] / old_fiat * new_fiat]
         });
         this.value_chart.updateSeries([{
           data: new_data
