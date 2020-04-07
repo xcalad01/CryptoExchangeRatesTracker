@@ -256,7 +256,6 @@
         return this.$t('dashboard.chartCategories');
       }
     },
-
     methods: {
       initBigChart(index) {
         let chartData = {
@@ -467,7 +466,7 @@
 
         setTimeout(function () {
           global_component_instance.interval_id_value = global_component_instance.getNewSeriesValue(false);
-          setInterval(function () {
+          global_component_instance.interval_id_value = setInterval(function () {
             global_component_instance.interval_id_value = global_component_instance.getNewSeriesValue(false);
           }, 60 * 1000)
         }, global_component_instance.real_time_value_interval * 1000)
@@ -525,7 +524,7 @@
 
         setTimeout(function () {
           global_component_instance.interval_id_volume = global_component_instance.getNewSeriesVolume(false);
-          setInterval(function () {
+          global_component_instance.interval_id_volume = setInterval(function () {
             global_component_instance.interval_id_volume = global_component_instance.getNewSeriesVolume(false);
           }, 60 * 1000)
         }, global_component_instance.real_time_volume_interval * 1000)
@@ -581,6 +580,7 @@
 
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_current" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + "btc" + "/" + "usd/" + init;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
+        console.log(this.exchange);
         console.log("Value");
         console.log("Old: " + this.lastDateValue);
         this.lastDateValue += 60;
@@ -637,6 +637,12 @@
       // this.initBigChart(0);
     },
     beforeDestroy() {
+      console.log(this.exchange);
+      console.log(this.interval_id_value);
+      console.log("destroy");
+      clearInterval(this.interval_id_value);
+      clearInterval(this.interval_id_volume);
+
       if (this.$rtl.isRTL) {
         this.i18n.locale = 'en';
         this.$rtl.disableRTL();
