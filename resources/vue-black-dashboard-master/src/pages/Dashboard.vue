@@ -617,8 +617,6 @@
       finish_init_avail(data){
         this.from_available = data['from'];
         this.to_available = data['to'];
-        this.post.from = this.from_available[0]['value'];
-        this.post.to = this.to_available[0]['value'];
       },
 
       init_available(){
