@@ -658,7 +658,7 @@
           data: new_data
         }]);
         this.real_time_volume_data = new_data;
-        this.last_realtime_volume = new_data.slice(-1)[0]['y'];
+        this.last_realtime_volume = this.last_realtime_volume / old_fiat * new_fiat;
 
         new_data = this.ohlc_chart_data.map(function (item) {
           return {x:item['x'], y:item["y"].map(function (item_y) {
