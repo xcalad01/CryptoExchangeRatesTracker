@@ -241,6 +241,10 @@
         interval_id_value: null,
         interval_id_volume: null,
 
+        timeout_id_value: null,
+        timeout_id_volume: null,
+
+
 
         exchange: null,
       }
@@ -464,7 +468,7 @@
 
         this.getNewSeriesValue(true);
 
-        setTimeout(function () {
+        this.timeout_id_value = setTimeout(function () {
           global_component_instance.interval_id_value = global_component_instance.getNewSeriesValue(false);
           global_component_instance.interval_id_value = setInterval(function () {
             global_component_instance.interval_id_value = global_component_instance.getNewSeriesValue(false);
@@ -522,7 +526,7 @@
 
         this.getNewSeriesVolume(true);
 
-        setTimeout(function () {
+        this.timeout_id_volume = setTimeout(function () {
           global_component_instance.interval_id_volume = global_component_instance.getNewSeriesVolume(false);
           global_component_instance.interval_id_volume = setInterval(function () {
             global_component_instance.interval_id_volume = global_component_instance.getNewSeriesVolume(false);
@@ -638,8 +642,13 @@
     },
     beforeDestroy() {
       console.log(this.exchange);
+      console.log(this.timeout_id_value);
+      console.log(this.timeout_id_volume);
       console.log(this.interval_id_value);
+      console.log(this.interval_id_volume);
       console.log("destroy");
+      clearTimeout(this.timeout_id_value)
+      clearTimeout(this.timeout_id_volume)
       clearInterval(this.interval_id_value);
       clearInterval(this.interval_id_volume);
 
