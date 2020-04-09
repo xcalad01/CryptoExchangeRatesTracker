@@ -16,7 +16,11 @@ class Base
 
     public function __construct(){
         $this->statsd = new Stats();
-	    $this->ch = curl_init();
+	    $this->new_curl_instance();
+    }
+
+    protected function new_curl_instance(){
+        $this->ch = curl_init();
     }
 
     protected function set_url_base($url){
@@ -45,7 +49,7 @@ class Base
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, array(
             'Content-Type: application/json',
-	    'Accept: application/json'
+	        'Accept: application/json'
         ));
     }
 

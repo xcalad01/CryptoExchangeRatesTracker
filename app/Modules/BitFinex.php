@@ -133,10 +133,13 @@ class BitFinex extends Base
                     $this->send_post($results);
 
                     $now = strtotime(date('Y-m-d H:i:s'));
-                    print_r("Data saved\nUTC timestamp: {$now}");
+                    print_r("Data saved\nUTC timestamp: {$now}\n");
                 }
 
                 print_r("Requesting from UTC timetamp: {$last_timestamp}\n");
+
+                $this->new_curl_instance();
+
                 $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:tBTCUSD/hist?limit=10000&start={$last_timestamp}&sort=1";
                 $this->set_curl_url($url);
                 $data = $this->do_send_get();

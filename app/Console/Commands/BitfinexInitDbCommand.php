@@ -39,7 +39,7 @@ class BitfinexInitDbCommand extends Command
     public function handle()
     {
         $now = $this->timestamp = strtotime(date('Y-m-d H:i:s'));
-        print_r("Starting init db bitfinex task\nUTC timestamp: $now");
+        print_r("Starting init db bitfinex task\nUTC timestamp: $now\n");
 
         $bitfinex = new BitFinex();
         $bitfinex->run_init_db_task();

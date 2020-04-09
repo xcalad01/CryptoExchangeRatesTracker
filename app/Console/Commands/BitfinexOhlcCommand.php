@@ -38,6 +38,7 @@ class BitfinexOhlcCommand extends Command
      */
     public function handle()
     {
+        sleep(5);
         $bitfinex = new BitFinex();
         $bitfinex->run_task();
     }
