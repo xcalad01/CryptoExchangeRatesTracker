@@ -84,9 +84,11 @@ class BitFinex extends Base
 
     public function run_init_db_task(){
         foreach ($this->config as $config_item) {
+            print_r("Pair: {$config_item}\n");
             $from = strtolower(substr($config_item,1, 3));
             $to = strtolower(substr($config_item, 4, 3));
 
+            print_r("Requesting from UTC timetamp: {$this->init_db_start_timestamp}\n");
             $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:t{$config_item}/hist?limit=10000&start={$this->init_db_start_timestamp}&sort=1";
             $this->set_curl_url($url);
             $data = $this->do_send_get();
@@ -125,10 +127,16 @@ class BitFinex extends Base
                 }
 
                 if (!empty($results)){
+                    $now = strtotime(date('Y-m-d H:i:s'));
+                    print_r("Saving to db\nUTC timestamp: {$now}\n");
+
                     $this->send_post($results);
+
+                    $now = strtotime(date('Y-m-d H:i:s'));
+                    print_r("Data saved\nUTC timestamp: {$now}");
                 }
 
-                print_r("Querying from new timestamp\n");
+                print_r("Requesting from UTC timetamp: {$last_timestamp}\n");
                 $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:tBTCUSD/hist?limit=10000&start={$last_timestamp}&sort=1";
                 $this->set_curl_url($url);
                 $data = $this->do_send_get();
