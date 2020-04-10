@@ -140,7 +140,7 @@ class Binance extends Base
                 }
 
                 print_r("Requesting from timestamp: {$last_timestamp}\n");
-                $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:tBTCUSD/hist?limit=10000&start={$last_timestamp}&sort=1";
+                $url = "https://api-pub.bitfinex.com/v2/candles/trade:15m:tBTCUSD/hist?limit=10000&start={$last_timestamp}&sort=1";
                 $this->set_curl_url($url);
                 $data = $this->do_send_get();
             }
