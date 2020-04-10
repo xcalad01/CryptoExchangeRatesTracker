@@ -96,8 +96,6 @@ class BitFinex extends Base
     }
 
     public function run_init_db_task(){
-        $client = new Client();
-
         foreach ($this->config as $config_item) {
 
             print_r("Pair: {$config_item}\n");
