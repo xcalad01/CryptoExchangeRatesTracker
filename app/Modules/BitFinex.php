@@ -3,12 +3,14 @@
 
 namespace App\Modules;
 
+use DemeterChain\C;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise;
+
 
 class BitFinex extends Base
 {
@@ -97,7 +99,6 @@ class BitFinex extends Base
 
     public function run_init_db_task(){
         $client = new Client();
-
         foreach ($this->config as $config_item) {
 
             print_r("Pair: {$config_item}\n");
@@ -113,6 +114,7 @@ class BitFinex extends Base
 
             $this->do_break = false;
 
+            $promises = array();
             while (true) {
                 $running = null;
                 $mh = curl_multi_init();
@@ -137,20 +139,11 @@ class BitFinex extends Base
                         )
                     );
                     $body = json_encode($body);
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, 'http://127.0.0.1:8000/api/crypto_historical');
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                        'Content-Type: application/json',
-                        'Accept: application/json'
-                    ));
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                            'Content-Type: application/json',
-                            'Content-Length: ' . strlen($body))
-                    );
-                    curl_multi_add_handle($mh, $ch);
+                    $request = new Request('POST', 'http://127.0.0.1:8000/api/crypto_historical', array(), $body);
+                    $promise = $client->sendAsync($request)->then(function ($response) {
+                        echo "Promise completed\n";
+                    });
+                    array_push($promises, $promise);
                 }
 
                 if ($this->do_break) {
@@ -160,12 +153,7 @@ class BitFinex extends Base
                 $now = strtotime(date('Y-m-d H:i:s'));
                 print_r("Saving to db\nUTC timestamp: {$now}\n");
 
-                do {
-                    curl_multi_exec($mh, $running);
-                    curl_multi_select($mh);
-                } while ($running > 0);
-
-
+                $results = Promise\unwrap($promises);
 
                 $now = strtotime(date('Y-m-d H:i:s'));
                 print_r("Data saved\nUTC timestamp: {$now}\n");
