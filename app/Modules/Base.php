@@ -17,6 +17,7 @@ class Base
     public function __construct(){
         $this->statsd = new Stats();
 	    $this->new_curl_instance();
+	    $this->post_socket = null;
     }
 
     protected function new_curl_instance(){
@@ -86,7 +87,7 @@ class Base
         return json_decode(curl_exec($this->ch), true);
     }
 
-    protected function fire_and_forget_post($endpoint, $postData){
+    protected function fire_and_forget_post($socket, $endpoint, $postData){
         $endpointParts = parse_url($endpoint);
 
         $contentLength = strlen($postData);
@@ -101,8 +102,5 @@ class Base
 
         $socket = fsockopen($prefix.$endpointParts['host'], $endpointParts['port']);
         fwrite($socket, $request);
-        fclose($socket);
-
-
     }
 }

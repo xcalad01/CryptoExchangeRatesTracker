@@ -96,8 +96,10 @@ class BitFinex extends Base
     }
 
     public function run_init_db_task(){
-        foreach ($this->config as $config_item) {
+        $endpointParts = parse_url("http://127.0.0.1:8000/api/crypto_historical");
+        $socket = fsockopen($endpointParts['host'], $endpointParts['port']);
 
+        foreach ($this->config as $config_item) {
             print_r("Pair: {$config_item}\n");
             $from = strtolower(substr($config_item,1, 3));
             $to = strtolower(substr($config_item, 4, 3));
@@ -133,7 +135,7 @@ class BitFinex extends Base
                         )
                     );
                     $body = json_encode($body);
-                    $this->fire_and_forget_post("http://127.0.0.1:8000/api/crypto_historical", $body);
+                    $this->fire_and_forget_post($socket,"http://127.0.0.1:8000/api/crypto_historical", $body);
                 }
 
                 if ($this->do_break) {
@@ -146,6 +148,7 @@ class BitFinex extends Base
                 $data = $this->do_send_get();
             }
         }
+        fclose($socket);
     }
 
 }
