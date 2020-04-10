@@ -35,6 +35,11 @@ class HitBtc extends Base
     private $start_timestamp;
     private $exchange_id = "hitbtc";
 
+    private $init_db_start_timestamp = "1356998400";
+    private $init_db_stop_timestamp = "1585990500";
+
+
+
     private function make_url_symbols(){
         $result = null;
         foreach ($this->config as $item){
@@ -49,7 +54,6 @@ class HitBtc extends Base
         $results = array();
         $url_symbols = $this->make_url_symbols();
         $url = "https://api.hitbtc.com/api/2/public/candles?period=M1&from={$this->start_timestamp}&till={$this->end_timestamp}&symbols={$url_symbols}";
-
         $this->set_curl_url($url);
         $data = $this->do_send_get();
 
@@ -101,6 +105,67 @@ class HitBtc extends Base
         $payload = $this->send_get();
         if (!empty($payload)){
             $this->send_post($payload);
+        }
+    }
+
+    public function run_init_db_task(){
+        $endpointParts = parse_url("http://127.0.0.1:8000/api/crypto_historical");
+        $socket = fsockopen($endpointParts['host'], $endpointParts['port']);
+
+        foreach ($this->config as $config_item){
+            print_r("Pair: {$config_item}\n");
+
+            $from = strtolower(substr($config_item,0, 3));
+            $to = strtolower(substr($config_item, 3, 3));
+
+            print_r("Requesting from UTC timetamp: {$this->init_db_start_timestamp}\n");
+            $url = "https://api.hitbtc.com/api/2/public/candles?period=M15&from={$this->init_db_start_timestamp}&symbols={$config_item}";
+            $this->set_curl_url($url);
+            $data = $this->do_send_get();
+            $key_data = $data[$config_item];
+
+            $last_timestamp = null;
+
+            $do_break = false;
+
+            while (true) {
+                foreach ($key_data as $item){
+                    if (strtotime($item['timestamp']) >= $this->init_db_stop_timestamp) {
+                        $do_break = true;
+                        break;
+                    }
+
+                    $last_timestamp = $item['timestamp'];
+                    $body = array(
+                        "Exchange_id" => $this->exchange_id,
+                        "From" => $from,
+                        "To" => $to,
+                        "Timestamp" => strtotime($item['timestamp']),
+                        "Historical" => array(
+                            null,
+                            $item['open'],
+                            $item['max'],
+                            $item['min'],
+                            $item['close'],
+                            $item['volume']
+                        )
+                    );
+                    $body = json_encode($body);
+                    $this->fire_and_forget_post($socket,"http://127.0.0.1:8000/api/crypto_historical", $body);
+                }
+
+                if ($do_break) {
+                    break;
+                }
+
+                print_r("Requesting from timestamp: {$last_timestamp}\n");
+                $url = "https://api.hitbtc.com/api/2/public/candles?period=M15&from={$last_timestamp}&symbols={$config_item}";
+                $this->set_curl_url($url);
+                $data = $this->do_send_get();
+                $key_data = $data[$config_item];
+            }
+
+            break; // BTC - EUR for now
         }
     }
 }

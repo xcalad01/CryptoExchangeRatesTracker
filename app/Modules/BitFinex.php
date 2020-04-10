@@ -147,6 +147,8 @@ class BitFinex extends Base
                 $this->set_curl_url($url);
                 $data = $this->do_send_get();
             }
+
+            break; // BTC - USD for now
         }
         fclose($socket);
     }

@@ -144,6 +144,8 @@ class Binance extends Base
                 $this->set_curl_url($url);
                 $data = $this->do_send_get();
             }
+
+            break; // BTC - EUR for now
         }
     }
 }
