@@ -9,8 +9,6 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Pool;
-use GuzzleHttp\Promise;
-
 
 class BitFinex extends Base
 {
@@ -98,7 +96,6 @@ class BitFinex extends Base
     }
 
     public function run_init_db_task(){
-        $client = new Client();
         foreach ($this->config as $config_item) {
 
             print_r("Pair: {$config_item}\n");
@@ -114,10 +111,7 @@ class BitFinex extends Base
 
             $this->do_break = false;
 
-            $promises = array();
             while (true) {
-                $running = null;
-                $mh = curl_multi_init();
                 foreach ($data as $item){
                     if ($item[0] == $this->init_db_stop_timestamp) {
                         $this->do_break = true;
@@ -139,26 +133,12 @@ class BitFinex extends Base
                         )
                     );
                     $body = json_encode($body);
-                    $request = new Request('POST', 'http://127.0.0.1:8000/api/crypto_historical', array(), $body);
-                    $promise = $client->sendAsync($request)->then(function ($response) {
-                        echo "Promise completed\n";
-                    });
-                    array_push($promises, $promise);
+                    $this->fire_and_forget_post("http://127.0.0.1:8000/api/crypto_historical", $body);
                 }
 
                 if ($this->do_break) {
                     break;
                 }
-
-                $now = strtotime(date('Y-m-d H:i:s'));
-                print_r("Saving to db\nUTC timestamp: {$now}\n");
-
-                $results = Promise\unwrap($promises);
-
-                $now = strtotime(date('Y-m-d H:i:s'));
-                print_r("Data saved\nUTC timestamp: {$now}\n");
-
-                curl_multi_close($mh);
 
                 print_r("Requesting from timestamp: {$last_timestamp}\n");
                 $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:tBTCUSD/hist?limit=10000&start={$last_timestamp}&sort=1";

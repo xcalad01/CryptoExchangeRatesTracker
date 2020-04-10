@@ -85,4 +85,24 @@ class Base
 
         return json_decode(curl_exec($this->ch), true);
     }
+
+    protected function fire_and_forget_post($endpoint, $postData){
+        $endpointParts = parse_url($endpoint);
+
+        $contentLength = strlen($postData);
+
+        $request = "POST {$endpointParts['path']} HTTP/1.1\r\n";
+        $request .= "Host: {$endpointParts['host']}\r\n";
+        $request .= "Content-Length: {$contentLength}\r\n";
+        $request .= "Content-Type: application/json\r\n\r\n";
+        $request .= $postData;
+
+        $prefix = substr($endpoint, 0, 8) === 'https://' ? 'tls://' : '';
+
+        $socket = fsockopen($prefix.$endpointParts['host'], $endpointParts['port']);
+        fwrite($socket, $request);
+        fclose($socket);
+
+
+    }
 }
