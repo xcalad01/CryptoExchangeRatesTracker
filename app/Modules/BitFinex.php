@@ -114,7 +114,6 @@ class BitFinex extends Base
             $this->do_break = false;
 
             while (true) {
-                $requests = array();
                 $running = null;
                 $mh = curl_multi_init();
                 foreach ($data as $item){
@@ -122,6 +121,7 @@ class BitFinex extends Base
                         $this->do_break = true;
                         break;
                     }
+                    $last_timestamp = $item[0];
                     $body = array(
                         "Exchange_id" => $this->exchange_id,
                         "From" => $from,
