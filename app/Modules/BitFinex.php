@@ -3,6 +3,12 @@
 
 namespace App\Modules;
 
+use GuzzleHttp\Promise\EachPromise;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Promise;
 
 class BitFinex extends Base
 {
@@ -30,6 +36,13 @@ class BitFinex extends Base
 
     private $init_db_start_timestamp = "1325376000000";
     private $init_db_stop_timestamp = "1585699200000";
+
+    private $from = null;
+    private $to = null;
+
+    private $do_break;
+
+    private $client;
 
     private function send_get(){
         $results = array();
@@ -83,7 +96,10 @@ class BitFinex extends Base
     }
 
     public function run_init_db_task(){
+        $client = new Client();
+
         foreach ($this->config as $config_item) {
+
             print_r("Pair: {$config_item}\n");
             $from = strtolower(substr($config_item,1, 3));
             $to = strtolower(substr($config_item, 4, 3));
@@ -95,16 +111,18 @@ class BitFinex extends Base
 
             $last_timestamp = null;
 
-            $do_break = false;
+            $this->do_break = false;
 
             while (true) {
-                $results = array();
-                foreach ($data as $item) {
+                $requests = array();
+                $running = null;
+                $mh = curl_multi_init();
+                foreach ($data as $item){
                     if ($item[0] == $this->init_db_stop_timestamp) {
-                        $do_break = true;
+                        $this->do_break = true;
                         break;
                     }
-                    array_push($results, array(
+                    $body = array(
                         "Exchange_id" => $this->exchange_id,
                         "From" => $from,
                         "To" => $to,
@@ -117,29 +135,42 @@ class BitFinex extends Base
                             $item[2],
                             $item[5]
                         )
+                    );
+                    $body = json_encode($body);
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, 'http://127.0.0.1:8000/api/crypto_historical');
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Content-Type: application/json',
+                        'Accept: application/json'
                     ));
-
-                    $last_timestamp = $item[0];
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                            'Content-Type: application/json',
+                            'Content-Length: ' . strlen($body))
+                    );
+                    curl_multi_add_handle($mh, $ch);
                 }
 
-                if ($do_break) {
+                if ($this->do_break) {
                     break;
                 }
 
-                if (!empty($results)){
-                    $now = strtotime(date('Y-m-d H:i:s'));
-                    print_r("Saving to db\nUTC timestamp: {$now}\n");
+                $now = strtotime(date('Y-m-d H:i:s'));
+                print_r("Saving to db\nUTC timestamp: {$now}\n");
 
-                    $this->send_post($results);
+                do {
+                    curl_multi_exec($mh, $running);
+                    curl_multi_select($mh);
+                } while ($running > 0);
 
-                    $now = strtotime(date('Y-m-d H:i:s'));
-                    print_r("Data saved\nUTC timestamp: {$now}\n");
-                }
 
-                print_r("Requesting from UTC timetamp: {$last_timestamp}\n");
 
-                $this->new_curl_instance();
+                $now = strtotime(date('Y-m-d H:i:s'));
+                print_r("Data saved\nUTC timestamp: {$now}\n");
 
+                curl_multi_close($mh);
                 $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:tBTCUSD/hist?limit=10000&start={$last_timestamp}&sort=1";
                 $this->set_curl_url($url);
                 $data = $this->do_send_get();
