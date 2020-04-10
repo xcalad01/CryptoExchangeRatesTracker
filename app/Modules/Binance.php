@@ -33,6 +33,9 @@ class Binance extends Base
 
     private $timestamp = null;
 
+    private $init_db_start_timestamp = "1498867200000";
+    private $init_db_stop_timestamp = "1585699200000";
+
     private function send_get(){
         $results = array();
         $start_end_timestamp = ($this->timestamp - 60) * 1000;
@@ -85,6 +88,62 @@ class Binance extends Base
         $payload = $this->send_get();
         if (!empty($payload)){
             $this->send_post($payload);
+        }
+    }
+
+    public function run_init_db_task(){
+        $endpointParts = parse_url("http://127.0.0.1:8000/api/crypto_historical");
+        $socket = fsockopen($endpointParts['host'], $endpointParts['port']);
+
+        foreach ($this->config as $config_item){
+            print_r("Pair: {$config_item}\n");
+
+            $from = strtolower(substr($config_item,0, 3));
+            $to = strtolower(substr($config_item, 3, 3));
+
+            print_r("Requesting from UTC timetamp: {$this->init_db_start_timestamp}\n");
+            $url = "https://api.binance.com/api/v3/klines?symbol={$config_item}&interval=15m&startTime={$this->init_db_start_timestamp}&limit=1000";
+            $this->set_curl_url($url);
+            $data = $this->do_send_get();
+
+            $last_timestamp = null;
+
+            $do_break = false;
+
+            while (true) {
+                foreach ($data as $item){
+                    if ($item[0] >= $this->init_db_stop_timestamp) {
+                        $do_break = true;
+                        break;
+                    }
+                    $last_timestamp = $item[0];
+                    $body = array(
+                        "Exchange_id" => $this->exchange_id,
+                        "From" => $from,
+                        "To" => $to,
+                        "Timestamp" => $item[0] / 1000,
+                        "Historical" => array(
+                            null,
+                            $item[1],
+                            $item[2],
+                            $item[3],
+                            $item[4],
+                            $item[5]
+                        )
+                    );
+                    $body = json_encode($body);
+                    $this->fire_and_forget_post($socket,"http://127.0.0.1:8000/api/crypto_historical", $body);
+                }
+
+                if ($do_break) {
+                    break;
+                }
+
+                print_r("Requesting from timestamp: {$last_timestamp}\n");
+                $url = "https://api-pub.bitfinex.com/v2/candles/trade:1m:tBTCUSD/hist?limit=10000&start={$last_timestamp}&sort=1";
+                $this->set_curl_url($url);
+                $data = $this->do_send_get();
+            }
         }
     }
 }
