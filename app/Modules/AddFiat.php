@@ -55,13 +55,15 @@ class AddFiat extends Base
         $this->set_curl_post();
         $this->set_curl_url($this->url);
 
-	foreach ($this->config as $item){
+        foreach ($this->config as $item){
             $payload = json_encode(array(
                 "Id"=>$item[0],
                 "Name"=>$item[1],
                 "Value"=>$rates['rates'][strtoupper($item[0])],
                 "Key"=>$date
             ));
+            print_r($payload);
+            exit(0);
             $this->do_send_post($payload);
         }
 
@@ -84,15 +86,11 @@ class AddFiat extends Base
         if ($min_timestamp){
             $min_timestamp = $min_timestamp[0]->min;
             $min_timestamp = date("Y-m-d", $min_timestamp);
-
-            print_r($min_timestamp);
             $today = date("Y-m-d");
 
             $url = "https://api.exchangeratesapi.io/history?start_at={$min_timestamp}&end_at={$today}&base=USD";
-            print_r($url);
             $this->set_curl_url($url);
-
-            $data = $this->send_get();
+            $data = $this->do_send_get();
 
             foreach ($data['rates'] as $key => $rates){
                 foreach ($this->config as $item){
