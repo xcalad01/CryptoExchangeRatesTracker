@@ -318,7 +318,7 @@ class ApiController extends Controller
         return $fiat_historical;
     }
 
-    private function get_values_for_cached($hist_avail, $fiat_to_id, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range){
+    private function get_fiat_values_for_cached($hist_avail, $fiat_to_id, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range){
         if ($hist_avail->To != $fiat_to_id){
             if ($fiat_actual) {
                 if (!($fiat_actual->Date >= $start && $fiat_actual->Date <= $start + $range)) {
@@ -361,7 +361,7 @@ class ApiController extends Controller
 
             $result = Redis::get($redis_key);
             if ($result){
-                $fiat_data = $this->get_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
+                $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
                 $fiat_actual = $fiat_data[0];
                 $fiat_prev = $fiat_data[1];
 
@@ -572,7 +572,7 @@ class ApiController extends Controller
             $redis_key_value = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}";
             $result = Redis::hgetall($redis_key_value);
             if ($result){
-                $fiat_data = $this->get_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
+                $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
                 $fiat_actual = $fiat_data[0];
                 $fiat_prev = $fiat_data[1];
 
@@ -694,8 +694,6 @@ class ApiController extends Controller
             }
         }
 
-//        $to_data = array_unique($to_data, SORT_REGULAR);
-
         $fiats = DB::table('fiats')->get("Fiat_id");
         foreach ($fiats as $fiat){
             if (!(in_array($fiat->Fiat_id, $already_in))){
@@ -756,12 +754,15 @@ class ApiController extends Controller
         $fiat_prev_key = "volume_fiat_prev_{$range}_{$exchange}_{$from}";
         $fiat_prev_id = Redis::get($fiat_prev_key);
 
+        $fiat_db = null;
+        $fiat_to = null;
+
         while ($start + $range <= $end){
             $x_value = $start + $range;
             $redis_key_value = "volume_{$x_value}_{$range}_{$exchange}_{$from}";
             $result = Redis::get($redis_key_value);
             if ($result){
-                $fiat_data = $this->get_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
+                $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
                 $fiat_actual = $fiat_data[0];
                 $fiat_prev = $fiat_data[1];
 
@@ -791,23 +792,29 @@ class ApiController extends Controller
             }
 
             $result = DB::table('historical_available')
-                ->select(DB::raw('AVG("Volume"*"Value_USD") as "Volume"'))
+                ->select(DB::raw('AVG("Volume") as "Volume"'))
                 ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$to}'"))
                 ->where([
                     ['Exchange_id', '=', DB::raw("'{$exchange}'")],
                     ['From', '=', DB::raw("'{$historical_available->From}'")],
                     ['To', '=', DB::raw("'{$historical_available->To}'")]
                 ])
                 ->whereBetween('Timestamp', [$start, $start + $range - 1])
-                ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
                 ->get();
 
             $result = json_decode($result, true);
 
+            if ($fiat_db == null){
+                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+                $fiat_to = $this->get_fiat_historical($to, $start);
+            }
+            elseif (!($fiat_db->Date >= $start and $fiat_db->Date <= $start + $range - 1)){
+                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+                $fiat_to = $this->get_fiat_historical($to, $start);
+            }
 
             foreach ($result as $res){
-                $y_value = $res['Volume'];
+                $y_value = $res['Volume'] / $fiat_db->Value_USD * $fiat_to->Value_USD;
 
                 Redis::set($redis_key_value, $y_value);
 
