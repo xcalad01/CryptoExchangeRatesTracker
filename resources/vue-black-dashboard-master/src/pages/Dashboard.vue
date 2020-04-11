@@ -23,7 +23,13 @@
           <select v-model="post.range">
             <option disabled value="">Date rang, please select one</option>
             <option>1d</option>
+            <option>12h</option>
+            <option>6h</option>
+            <option>3h</option>
             <option>1h</option>
+            <option>5min</option>
+            <option>1min</option>
+
           </select>
         </div>
       </div>
