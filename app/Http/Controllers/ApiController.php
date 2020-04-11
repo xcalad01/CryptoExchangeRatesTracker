@@ -23,9 +23,20 @@ class ApiController extends Controller
 {
     private $statsd;
 
+    private $time_range_config;
+
     public function __construct()
     {
         $this->statsd = new Stats();
+        $this->time_range_config = array(
+            "1d" => 86400,
+            "12h" => 43200,
+            "6h" => 21600,
+            "3h" => 10800,
+            "1h" => 3600,
+            "5m" => 300,
+            "1m" => 60
+        );
     }
 
     public function ping(){
@@ -481,12 +492,6 @@ class ApiController extends Controller
     }
 
     public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
-        $config = array(
-            "1d" => 86400,
-            "1h" => 3600,
-            "1m" => 60
-        );
-
         $historical_available = null;
 
         try {
@@ -494,10 +499,10 @@ class ApiController extends Controller
 
             $this->check_fiat($to);
 
-            if ($range and !key_exists($range, $config)){
+            if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
             }
-            $range = $config[$range];
+            $range = $this->time_range_config[$range];
 
             if ($start + $range > $end){
                 throw new \Exception('Range not between start and end');
@@ -524,12 +529,6 @@ class ApiController extends Controller
     }
 
     public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
-        $config = array(
-            "1d" => 86400,
-            "1h" => 3600,
-            "6h" => 21600
-        );
-
         $historical_available = null;
 
         try {
@@ -537,11 +536,11 @@ class ApiController extends Controller
 
             $this->check_fiat($to);
 
-            if ($range and !key_exists($range, $config)){
+            if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
             }
 
-            $range = $config[$range];
+            $range = $this->time_range_config[$range];
 
             if ($start + $range > $end){
                 throw new \Exception('Range not between start and end');
@@ -713,13 +712,6 @@ class ApiController extends Controller
 
 
     public function get_crypto_volume_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
-        $config = array(
-            "1d" => 86400,
-            "1h" => 3600,
-            "6h" => 21600,
-            "1m" => 60
-        );
-
         $historical_available = null;
 
         try {
@@ -727,10 +719,10 @@ class ApiController extends Controller
 
             $this->check_fiat($to);
 
-            if ($range and !key_exists($range, $config)){
+            if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
             }
-            $range = $config[$range];
+            $range = $this->time_range_config[$range];
 
             if ($start + $range > $end){
                 throw new \Exception('Range not between start and end');
