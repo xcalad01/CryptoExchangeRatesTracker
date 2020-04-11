@@ -84,6 +84,8 @@ class ApiController extends Controller
     }
 
     public function crypto_add_historical(Request $request) {
+        print_r("Exchange_id: ");
+        print_r($request['Exchange_id']);
         $exchange_id = $request['Exchange_id'];
         $available = Historical_available::where(['Exchange_id' => $exchange_id, 'From' => $request['From'], 'To' => $request['To']])->first();
         if (!$available) {
@@ -527,6 +529,7 @@ class ApiController extends Controller
             if ($range and !key_exists($range, $config)){
                 throw new \Exception('Time range not supported');
             }
+
             $range = $config[$range];
 
             if ($start + $range > $end){
@@ -551,6 +554,8 @@ class ApiController extends Controller
         $fiat_prev_key = "ohlc_fiat_prev_{$range}_{$exchange}_{$from}";
         $fiat_prev_id = Redis::get($fiat_prev_key);
 
+        $fiat_db = null;
+        $fiat_to = null;
         while ($start + $range <= $end){
             $x_value = $start + $range;
             $redis_key_value = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}";
@@ -596,22 +601,34 @@ class ApiController extends Controller
         }
 
             $result = DB::table('historical_available')
-                ->select(DB::raw('(array_agg("Open" * "Value_USD" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High"*"Value_USD") as "High", MIN("Low"*"Value_USD") as "Low", (array_agg("Close" * "Value_USD" ORDER BY "Timestamp" DESC))[1] as "Close"'))
+                ->select(DB::raw('(array_agg("Open" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High") as "High", MIN("Low") as "Low", (array_agg("Close" ORDER BY "Timestamp" DESC))[1] as "Close"'))
                 ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$to}'"))
                 ->where([
                     ['Exchange_id', '=', DB::raw("'{$exchange}'")],
                     ['From', '=', DB::raw("'{$historical_available->From}'")],
                     ['To', '=', DB::raw("'{$historical_available->To}'")]
                 ])
                 ->whereBetween('Timestamp', [$start, $start + $range - 1])
-                ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
                 ->get();
 
             $result = json_decode($result, true);
 
+            if ($fiat_db == null){
+                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+                $fiat_to = $this->get_fiat_historical($to, $start);
+            }
+            elseif (!($fiat_db->Date >= $start and $fiat_db->Date <= $start + $range - 1)){
+                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+                $fiat_to = $this->get_fiat_historical($to, $start);
+            }
+
             foreach ($result as $res){
-                $y_value = array($res["Open"], $res["High"], $res["Low"], $res["Close"]);
+                $y_value = array(
+                    $res["Open"] / $fiat_db->Value_USD *  $fiat_to->Value_USD,
+                    $res["High"] / $fiat_db->Value_USD *  $fiat_to->Value_USD,
+                    $res["Low"]  / $fiat_db->Value_USD *  $fiat_to->Value_USD,
+                    $res["Close"] / $fiat_db->Value_USD *  $fiat_to->Value_USD
+                );
 
                 Redis::hmset($redis_key_value, $y_value);
 
@@ -776,6 +793,7 @@ class ApiController extends Controller
                 ->get();
 
             $result = json_decode($result, true);
+
 
             foreach ($result as $res){
                 $y_value = $res['Volume'];
