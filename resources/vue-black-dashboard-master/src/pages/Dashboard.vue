@@ -330,7 +330,7 @@
               formatter: function(val) {
                 var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
                 var a = new Date(val);
-                return a.getDate() + " " + months[a.getMonth()] + " " + a.getFullYear() + " " + a.getHours() + " " + a.getMinutes();
+                return a.getDate() + " " + months[a.getMonth()] + " " + a.getFullYear() + " " + a.getHours() + ":" + a.getMinutes();
               }
             }
           },
