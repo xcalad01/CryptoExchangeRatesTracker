@@ -328,7 +328,7 @@
             type: 'category',
             labels: {
               formatter: function(val) {
-                return new Date(val).toLocaleString();
+                return new Date(val).setSeconds(0, 0).toLocaleString();
               }
             }
           },
