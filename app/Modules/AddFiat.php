@@ -2,6 +2,7 @@
 
 
 namespace App\Modules;
+use ErrorException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -94,13 +95,18 @@ class AddFiat extends Base
 
             foreach ($data['rates'] as $key => $rates){
                 foreach ($this->config as $item){
-                    $payload = json_encode(array(
-                        "Id"=>$item[0],
-                        "Name"=>$item[1],
-                        "Value"=>$rates[strtoupper($item[0])],
-                        "Key"=>$key
-                    ));
-                    $this->fire_and_forget_post($socket, "http://127.0.0.1:8000/api/fiat", $payload);
+                    try {
+                        $payload = json_encode(array(
+                            "Id"=>$item[0],
+                            "Name"=>$item[1],
+                            "Value"=>$rates[strtoupper($item[0])],
+                            "Key"=>$key
+                        ));
+                        $this->fire_and_forget_post($socket, "http://127.0.0.1:8000/api/fiat", $payload);
+                    }
+                    catch (ErrorException $e){
+                        continue;
+                    }
                 }
             }
             return 0;
