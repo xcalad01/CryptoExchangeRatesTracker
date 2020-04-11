@@ -2,6 +2,7 @@
 
 
 namespace App\Modules;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AddFiat extends Base
@@ -72,5 +73,43 @@ class AddFiat extends Base
         if ($data){
             $this->send_post($data, $data["date"]);
         }
+    }
+
+    public function run_init_db_task(){
+        $endpointParts = parse_url("http://127.0.0.1:8000/api/fiat");
+        $socket = fsockopen($endpointParts['host'], $endpointParts['port']);
+
+        $min_timestamp = DB::table("crypto_historical")->select(DB::raw('min("Timestamp")'))->get();
+
+        if ($min_timestamp){
+            $min_timestamp = $min_timestamp[0]->min;
+            $min_timestamp = date("Y-m-d", $min_timestamp);
+
+            print_r($min_timestamp);
+            $today = date("Y-m-d");
+
+            $url = "https://api.exchangeratesapi.io/history?start_at={$min_timestamp}&end_at={$today}&base=USD";
+            print_r($url);
+            $this->set_curl_url($url);
+
+            $data = $this->send_get();
+
+            foreach ($data['rates'] as $key => $rates){
+                foreach ($this->config as $item){
+                    $payload = json_encode(array(
+                        "Id"=>$item[0],
+                        "Name"=>$item[1],
+                        "Value"=>$rates[strtoupper($item[0])],
+                        "Key"=>$key
+                    ));
+                    $this->fire_and_forget_post($socket, "http://127.0.0.1:8000/api/fiat", $payload);
+                }
+            }
+            return 0;
+        }
+
+        print_r("Something went worng.");
+        return -1;
+
     }
 }
