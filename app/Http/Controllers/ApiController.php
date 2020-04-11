@@ -357,6 +357,9 @@ class ApiController extends Controller
     }
 
     private function do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available){
+        $start = $start - ($start % $range); // Allign to right offset
+        $end = $end - ($end % $end); // Allign to right offset
+
         $values = array();
         $fiat_actual = null;
         $fiat_prev  =  null;
@@ -558,6 +561,9 @@ class ApiController extends Controller
             ], 404);
         }
 
+        $start = $start - ($start % $range); // Allign to right offset
+        $end = $end - ($end % $end); // Allign to right offset
+
         $ohlc_chart = array();
         $fiat_actual = null;
         $fiat_prev  =  null;
@@ -739,6 +745,9 @@ class ApiController extends Controller
                 "message" => $e->getMessage()
             ], 404);
         }
+
+        $start = $start - ($start % $range); // Allign to right offset
+        $end = $end - ($end % $end); // Allign to right offset
 
         $volume_data = array();
         $fiat_actual = null;
