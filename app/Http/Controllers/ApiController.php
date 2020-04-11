@@ -399,7 +399,6 @@ class ApiController extends Controller
                     ['To', '=', DB::raw("'{$historical_available->To}'")]
                 ])
                 ->whereBetween('Timestamp', [$start, $start + $range])
-                ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
                 ->groupBy(['Exchange_id'])->get();
 
             $result = json_decode($result, true);
