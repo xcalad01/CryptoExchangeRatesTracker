@@ -352,6 +352,9 @@ class ApiController extends Controller
         $fiat_prev_key = "value_fiat_prev_{$range}_{$exchange}_{$from}";
         $fiat_prev_id = Redis::get($fiat_prev_key);
 
+        $fiat_db = null;
+        $fiat_to = null;
+
         while ($start + $range <= $end){
             $x_value = $start + $range;
             $redis_key = "crypto_value_{$x_value}_{$range}_{$exchange}_{$from}";
@@ -388,9 +391,8 @@ class ApiController extends Controller
             }
 
             $result = DB::table('historical_available')
-                ->select(DB::raw('AVG(("Open"+"Close")/2*"Value_USD") as value'))
+                ->select(DB::raw('AVG(("Open"+"Close")/2) as value'))
                 ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$to}'"))
                 ->where([
                     ['Exchange_id', '=', DB::raw("'{$exchange}'")],
                     ['From', '=', DB::raw("'{$historical_available->From}'")],
@@ -398,15 +400,25 @@ class ApiController extends Controller
                 ])
                 ->whereBetween('Timestamp', [$start, $start + $range])
                 ->whereBetween('Timestamp', [ DB::raw('"Date"'), DB::raw('"Date" + 86399')])
-                ->groupBy(['Exchange_id', 'Fiat_id'])->get();
+                ->groupBy(['Exchange_id'])->get();
 
             $result = json_decode($result, true);
+
+            if ($fiat_db == null){
+                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+                $fiat_to = $this->get_fiat_historical($to, $start);
+            }
+            elseif (!($fiat_db->Date >= $start and $fiat_db->Date <= $start + $range - 1)){
+                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+                $fiat_to = $this->get_fiat_historical($to, $start);
+            }
+
             foreach ($result as $res){
                 Redis::set($redis_key, $res['value']);
 
                 array_push($values, array(
                     $start,
-                    $res['value']
+                    $res['value'] / $fiat_db->Value_USD * $fiat_to->Value_USD
                 ));
             }
             $start += $range;
