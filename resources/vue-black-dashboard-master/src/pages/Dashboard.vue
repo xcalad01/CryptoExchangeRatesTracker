@@ -307,7 +307,7 @@
 
       create_update_ohlc_chart(data){
         this.ohlc_chart_data = data['data'].map(function (item) {
-          return {x:(item['x'] - 3600) * 1000, y:item["y"]}
+          return {x:(item['x']) * 1000, y:item["y"]}
         });
 
         if (this.ohlc_chart != null){

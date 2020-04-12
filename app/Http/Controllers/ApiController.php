@@ -568,7 +568,7 @@ class ApiController extends Controller
         $fiat_db = null;
         $fiat_to = null;
         while ($start + $range <= $end){
-            $x_value = $start + $range;
+            $x_value = $start;
             $redis_key_value = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}";
             $result = Redis::hgetall($redis_key_value);
             if ($result){
@@ -619,7 +619,7 @@ class ApiController extends Controller
                     ['From', '=', DB::raw("'{$historical_available->From}'")],
                     ['To', '=', DB::raw("'{$historical_available->To}'")]
                 ])
-                ->whereBetween('Timestamp', [$start, $start + $range - 1])
+                ->whereBetween('Timestamp', [$start, $start + $range])
                 ->get();
 
             $result = json_decode($result, true);
@@ -644,7 +644,7 @@ class ApiController extends Controller
                 Redis::hmset($redis_key_value, $y_value);
 
                 array_push($ohlc_chart, array(
-                    "x" => $start + $range,
+                    "x" => $start,
                     "y" => $y_value
                 ));
             }
