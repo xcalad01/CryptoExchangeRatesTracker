@@ -343,14 +343,8 @@ class ApiController extends Controller
         }
         else{
             if (!$fiat_prev or !($fiat_prev->Date >= $start && $fiat_prev->Date <= $start + $range)){
-                if ($fiat_prev_id != "usd"){
-                    $fiat_actual = null;
-                    $fiat_prev = $this->get_fiat_historical($fiat_prev_id, $start);
-                }
-                else{
-                    $fiat_actual = null;
-                    $fiat_prev = null;
-                }
+                $fiat_actual = $this->get_fiat_historical($fiat_to_id, $start);;
+                $fiat_prev = $this->get_fiat_historical($fiat_prev_id, $start);
             }
         }
         return array($fiat_actual, $fiat_prev);
