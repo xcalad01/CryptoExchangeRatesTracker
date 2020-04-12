@@ -246,7 +246,7 @@ class ApiController extends Controller
     }
 
     private function get_today_timestamp($time){
-        return strtotime($time);
+        return "1586621100";
     }
 
     private function insert_fiat($item){
@@ -257,13 +257,13 @@ class ApiController extends Controller
             $fiat->Name = $item["Name"];
         }
 
-	$fiat_hist = Fiat_historical::where(["Date" => $this->get_timestamp($item["Key"]), "Fiat_id" => $item['Id']])->first();
-	if ($fiat_hist){
-            $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_special_day"));
+        $fiat_hist = Fiat_historical::where(["Date" => $this->get_timestamp($item["Key"]), "Fiat_id" => $item['Id']])->first();
+        if ($fiat_hist){
+            $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_special_day: {$this->get_timestamp($item["Key"])}"));
             $date = $this->get_today_timestamp("16:05");
         }
         else{
-            $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_normal_day"));
+            $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_normal_day: {$this->get_timestamp($item["Key"])}"));
             $date = $this->get_timestamp($item["Key"]);
         }
 
