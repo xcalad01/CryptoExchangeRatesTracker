@@ -360,7 +360,7 @@
 
       create_update_value_chart(data){
         this.value_chart_data = data['data'].map(function (item) {
-          return [new Date(item[0] * 1000), item[1]]
+          return [new Date((item[0] + 2 * 3600) * 1000), item[1]]
         });
 
         if (this.value_chart != null){
@@ -418,14 +418,7 @@
             },
           },
           xaxis: {
-            type: 'category',
-            labels: {
-              formatter: function(val) {
-                var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                var a = new Date(val);
-                return a.getDate() + " " + months[a.getMonth()] + " " + a.getFullYear() + " " + a.getHours() + ":" + a.getMinutes();
-              }
-            }
+            type: 'datetime',
           },
           tooltip: {
             shared: false,
