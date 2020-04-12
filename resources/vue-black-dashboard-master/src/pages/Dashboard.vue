@@ -424,7 +424,7 @@
             shared: false,
             y: {
               formatter: function (val) {
-                return (val / 1).toFixed(0)
+                return (val / 1).toFixed(2)
               }
             }
           }
