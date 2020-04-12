@@ -360,7 +360,7 @@
 
       create_update_value_chart(data){
         this.value_chart_data = data['data'].map(function (item) {
-          return [new Date(item[0] * 1000 -  3600 * 1000), item[1]]
+          return [new Date(item[0] * 1000), item[1]]
         });
 
         if (this.value_chart != null){
