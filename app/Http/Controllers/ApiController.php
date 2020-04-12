@@ -462,22 +462,23 @@ class ApiController extends Controller
         }
         else{
             $result = DB::table('historical_available')
-                ->select(DB::raw('("Open"+"Close")/2*"Value_USD" as value'))
+                ->select(DB::raw('("Open"+"Close")/2 as value'))
                 ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->join('fiat_historicals', 'Fiat_id', '=', DB::raw("'{$to}'"))
                 ->where([
                     ['Exchange_id', '=', DB::raw("'{$exchange}'")],
                     ['From', '=', DB::raw("'{$historical_available->From}'")],
                     ['To', '=', DB::raw("'{$historical_available->To}'")],
                     ['Timestamp', '=', DB::raw("'{$timestamp}'")]
                 ])
-                ->whereBetween('Date', [ DB::raw('"Timestamp" - 86399'), DB::raw('"Timestamp"')])
-                ->groupBy(['Exchange_id', 'Fiat_id', 'Open', 'Close', 'Value_USD'])->get();
+                ->groupBy(['Exchange_id', 'Open', 'Close'])->get();
 
             $result = json_decode($result, true);
 
+            $fiat_db = $this->get_fiat_historical($historical_available->To, $timestamp);
+            $fiat_to = $this->get_fiat_historical($to, $timestamp);
+
             if (!empty($result)){
-                $result = $result[0]['value'];
+                $result = $result[0]['value'] / $fiat_db->Value_USD * $fiat_to->Value_USD;
             }
             else{
                 $result = null;
