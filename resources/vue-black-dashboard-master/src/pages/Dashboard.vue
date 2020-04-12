@@ -426,7 +426,7 @@
                 return a.getDate() + " " + months[a.getMonth()] + " " + a.getFullYear() + " " + a.getHours() + ":" + a.getMinutes();
               }
             }
-          }
+          },
           tooltip: {
             shared: false,
             y: {
