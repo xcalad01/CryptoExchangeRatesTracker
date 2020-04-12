@@ -2,18 +2,18 @@
   <div class="wrapper">
     <side-bar>
       <template slot="links">
-        <sidebar-link to="/kraken" :name="$t('kraken')" icon="https://assets.coingecko.com/markets/images/23/small/fe290a14-ac8f-4c90-9aed-5e72abf271f0.jpeg?1527171545"/>
-        <sidebar-link to="/gdax" :name="$t('gdax')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/bitfinex" :name="$t('bitfinex')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/gemini" :name="$t('gemini')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/bitstamp" :name="$t('bitstamp')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/poloniex" :name="$t('poloniex')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/binance" :name="$t('binance')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/bittrex" :name="$t('bittrex')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/hitbtc" :name="$t('hitbtc')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/bitbay" :name="$t('bitbay')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/okcoin" :name="$t('okcoin')" icon="tim-icons icon-gdax"/>
-        <sidebar-link to="/okex" :name="$t('okex')" icon="tim-icons icon-gdax"/>
+        <sidebar-link to="/kraken" :name="$t('kraken')" icon="icon-custom-kraken"/>
+        <sidebar-link to="/gdax" :name="$t('gdax')" icon="icon-custom-gdax"/>
+        <sidebar-link to="/bitfinex" :name="$t('bitfinex')" icon="icon-custom-bitfinex"/>
+        <sidebar-link to="/gemini" :name="$t('gemini')" icon="icon-custom-gemini"/>
+        <sidebar-link to="/bitstamp" :name="$t('bitstamp')" icon="icon-custom-bitstamp"/>
+        <sidebar-link to="/poloniex" :name="$t('poloniex')" icon="icon-custom-poloniex"/>
+        <sidebar-link to="/binance" :name="$t('binance')" icon="icon-custom-binance"/>
+        <sidebar-link to="/bittrex" :name="$t('bittrex')" icon="icon-custom-bittrex"/>
+        <sidebar-link to="/hitbtc" :name="$t('hitbtc')" icon="icon-custom-hitbtc"/>
+        <sidebar-link to="/bitbay" :name="$t('bitbay')" icon="icon-custom-bitbay"/>
+        <sidebar-link to="/okcoin" :name="$t('okcoin')" icon="icon-custom-okcoin"/>
+        <sidebar-link to="/okex" :name="$t('okex')" icon="icon-custom-okex"/>
       </template>
     </side-bar>
     <div class="main-panel">
