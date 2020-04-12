@@ -656,7 +656,9 @@
         var old_fiat = data['data']['old_fiat'];
 
         var new_data = this.real_time_data.map(function (item) {
-          return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
+          if (item["y"] != null) {
+            return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
+          }
         });
         this.realtime_chart.updateSeries([{
           data: new_data
@@ -665,7 +667,9 @@
         this.last_realtime_value = new_data.slice(-1)[0]['y'];
 
         new_data = this.real_time_volume_data.map(function (item) {
-          return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
+          if (item["y"] != null){
+            return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
+          }
         });
         this.volume_chart.updateSeries([{
           data: new_data
