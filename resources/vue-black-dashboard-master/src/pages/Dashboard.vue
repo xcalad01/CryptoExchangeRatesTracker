@@ -338,9 +338,14 @@
             enabled: true,
           },
           yaxis: {
-            tooltip: {
-              enabled: true
-            }
+            labels: {
+              formatter: function (val) {
+                return (val / 1).toFixed(2);
+              },
+            },
+            title: {
+              text: 'Ohlc'
+            },
           },
           series: [{
             data: this.ohlc_chart_data
@@ -389,7 +394,7 @@
             size: 0,
           },
           title: {
-            text: 'Stock Price Movement',
+            text: 'Price Movement',
             align: 'left'
           },
           fill: {
@@ -405,7 +410,7 @@
           yaxis: {
             labels: {
               formatter: function (val) {
-                return (val / 1).toFixed(0);
+                return (val / 1).toFixed(2);
               },
             },
             title: {
