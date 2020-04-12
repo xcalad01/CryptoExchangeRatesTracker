@@ -129,7 +129,7 @@ return [
         'default' => [
             'url' => env('REDIS_URL'),
             'host' => env('167.86.75.179', '167.86.75.179'),
-            'password' => env('canorfuj9u', 'canorfuj9u'),
+            'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
         ],
