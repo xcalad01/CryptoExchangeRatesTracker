@@ -364,7 +364,7 @@ class ApiController extends Controller
         $fiat_to = null;
 
         while ($start + $range <= $end){
-            $x_value = $start + $range;
+            $x_value = $start;
             $redis_key = "crypto_value_{$x_value}_{$range}_{$exchange}_{$from}";
 
             $result = Redis::get($redis_key);
@@ -372,6 +372,8 @@ class ApiController extends Controller
                 $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
                 $fiat_actual = $fiat_data[0];
                 $fiat_prev = $fiat_data[1];
+
+
 
                 if ($fiat_prev){
                     $value1 = $fiat_prev->Value_USD;
@@ -421,7 +423,7 @@ class ApiController extends Controller
             }
 
             foreach ($result as $res){
-                Redis::set($redis_key, $res['value']);
+                Redis::set($redis_key, $res['value'] / $fiat_db->Value_USD * $fiat_to->Value_USD);
 
                 array_push($values, array(
                     $start,
