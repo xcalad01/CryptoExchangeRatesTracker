@@ -544,3 +544,112 @@ Created using IcoMoon - icomoon.io
 .icon-components::before {
   content: "\ea65";
 }
+
+.icon-custom-kraken {
+  background: url('https://assets.coingecko.com/markets/images/29/small/kraken.jpg?1519460351');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-gdax {
+  background: url('https://assets.coingecko.com/markets/images/23/small/fe290a14-ac8f-4c90-9aed-5e72abf271f0.jpeg?1527171545');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-bitfinex {
+  background: url('https://assets.coingecko.com/markets/images/4/small/bitfinex.jpg?1519355988');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-gemini {
+  background: url('https://assets.coingecko.com/markets/images/50/small/gemini.jpg?1519701179');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+
+.icon-custom-bitstamp {
+  background: url('https://assets.coingecko.com/markets/images/9/small/bitstamp.jpg?1519627979');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-poloniex {
+  background: url('https://assets.coingecko.com/markets/images/37/small/poloniex.jpg?1519639007');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-binance {
+  background: url('https://assets.coingecko.com/markets/images/52/small/binance.jpg?1519353250');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-bittrex {
+  background: url('https://assets.coingecko.com/markets/images/10/small/bittrex.png?1519545190');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-hitbtc {
+  background: url('https://assets.coingecko.com/markets/images/24/small/hitbtc.png?1568217824');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-bitbay {
+  background: url('https://assets.coingecko.com/markets/images/2/small/BitBay-exchange.jpg?1537765063');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-okcoin {
+  background: url('https://assets.coingecko.com/markets/images/415/small/okcoin.png?1559105547');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
+
+.icon-custom-okex {
+  background: url('https://assets.coingecko.com/markets/images/96/small/okEX.jpg?1519349636');
+  height: 35px;
+  width: 10px;
+  border-radius: 50%;
+  background-size: 100%;
+  display: inline-block;
+}
