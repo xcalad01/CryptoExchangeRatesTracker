@@ -63,8 +63,6 @@ class AddFiat extends Base
                 "Value"=>$rates['rates'][strtoupper($item[0])],
                 "Key"=>$date
             ));
-            print_r($payload);
-            exit(0);
             $this->do_send_post($payload);
         }
 
