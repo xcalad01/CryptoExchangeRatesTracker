@@ -246,7 +246,7 @@ class ApiController extends Controller
     }
 
     private function get_today_timestamp($time){
-        return "1586621100";
+        return strtotime($time);
     }
 
     private function insert_fiat($item){
