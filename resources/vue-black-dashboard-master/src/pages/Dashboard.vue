@@ -52,7 +52,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <card type="chart">
+        <card type="chart" id="chart_ohlc_cart">
           <div class="chart-area">
             <div id="chart_view_ohlc">
               <div ref="chart_ohlc" class="chart"></div>
@@ -63,16 +63,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <card type="chart">
-          <template slot="header">
-            <div class="row">
-              <div class="row">
-                <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-<!--                  <h3 class="card-title">Value</h3>-->
-                </div>
-              </div>
-            </div>
-          </template>
+        <card type="chart" id="chart_value_cart">
           <div class="chart-area">
             <div id="chart_view_value">
               <div ref="chart_value" class="chart"></div>
@@ -82,20 +73,20 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
+      <div class="col-lg-4">
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">Realtime Value</h5>
             <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i>{{last_realtime_value}} {{post.to}}</h3>
           </template>
-          <div class="chart-area">
+          <div class="chart-area" id="realtime_value_cart">
             <div id="realtime">
               <div ref="chart_realtime" class="chart"></div>
             </div>
           </div>
         </card>
       </div>
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
+      <div class="col-lg-4">
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">Realtime Volume</h5>
@@ -108,6 +99,9 @@
           </div>
         </card>
       </div>
+      <div class="col-lg-4" :class="{'text-right': isRTL}">
+        <div id="highchart"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -115,16 +109,217 @@
   import LineChart from '../components/Charts/LineChart';
   import BarChart from '../components/Charts/BarChart';
   import Ohlcchart from '../components/Charts/Ohlc';
-  import * as chartConfigs from '../components/Charts/config';
   import TaskList from './Dashboard/TaskList';
   import UserTable from './Dashboard/UserTable';
-  import config from '../config';
 
   import { axios } from '../plugins/axios';
-  import ApexCharts from "apexcharts";
   import { Datetime } from 'vue-datetime';
-
+  import Highcharts from 'highcharts';
+  import Highstock from 'highcharts/highstock'
   var global_component_instance = null;
+
+  Highcharts.createElement('link', {
+    href: 'https://fonts.googleapis.com/css?family=Unica+One',
+    rel: 'stylesheet',
+    type: 'text/css'
+  }, null, document.getElementsByTagName('head')[0]);
+  Highcharts.theme = {
+    colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+      '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
+    chart: {
+      backgroundColor: {
+        linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
+        stops: [
+          [0, '#2a2a2b'],
+          [1, '#3e3e40']
+        ]
+      },
+      style: {
+        fontFamily: '\'Unica One\', sans-serif'
+      },
+      plotBorderColor: '#606063'
+    },
+    title: {
+      style: {
+        color: '#E0E0E3',
+        textTransform: 'uppercase',
+        fontSize: '20px'
+      }
+    },
+    subtitle: {
+      style: {
+        color: '#E0E0E3',
+        textTransform: 'uppercase'
+      }
+    },
+    xAxis: {
+      gridLineColor: '#707073',
+      labels: {
+        style: {
+          color: '#E0E0E3'
+        }
+      },
+      lineColor: '#707073',
+      minorGridLineColor: '#505053',
+      tickColor: '#707073',
+      title: {
+        style: {
+          color: '#A0A0A3'
+        }
+      }
+    },
+    yAxis: {
+      gridLineColor: '#707073',
+      labels: {
+        style: {
+          color: '#E0E0E3'
+        }
+      },
+      lineColor: '#707073',
+      minorGridLineColor: '#505053',
+      tickColor: '#707073',
+      tickWidth: 1,
+      title: {
+        style: {
+          color: '#A0A0A3'
+        }
+      }
+    },
+    tooltip: {
+      backgroundColor: 'rgba(0, 0, 0, 0.85)',
+      style: {
+        color: '#F0F0F0'
+      }
+    },
+    plotOptions: {
+      series: {
+        dataLabels: {
+          color: '#F0F0F3',
+          style: {
+            fontSize: '13px'
+          }
+        },
+        marker: {
+          lineColor: '#333'
+        }
+      },
+      boxplot: {
+        fillColor: '#505053'
+      },
+      candlestick: {
+        lineColor: 'white'
+      },
+      errorbar: {
+        color: 'white'
+      }
+    },
+    legend: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      itemStyle: {
+        color: '#E0E0E3'
+      },
+      itemHoverStyle: {
+        color: '#FFF'
+      },
+      itemHiddenStyle: {
+        color: '#606063'
+      },
+      title: {
+        style: {
+          color: '#C0C0C0'
+        }
+      }
+    },
+    credits: {
+      style: {
+        color: '#666'
+      }
+    },
+    labels: {
+      style: {
+        color: '#707073'
+      }
+    },
+    drilldown: {
+      activeAxisLabelStyle: {
+        color: '#F0F0F3'
+      },
+      activeDataLabelStyle: {
+        color: '#F0F0F3'
+      }
+    },
+    navigation: {
+      buttonOptions: {
+        symbolStroke: '#DDDDDD',
+        theme: {
+          fill: '#505053'
+        }
+      }
+    },
+    // scroll charts
+    rangeSelector: {
+      buttonTheme: {
+        fill: '#505053',
+        stroke: '#000000',
+        style: {
+          color: '#CCC'
+        },
+        states: {
+          hover: {
+            fill: '#707073',
+            stroke: '#000000',
+            style: {
+              color: 'white'
+            }
+          },
+          select: {
+            fill: '#000003',
+            stroke: '#000000',
+            style: {
+              color: 'white'
+            }
+          }
+        }
+      },
+      inputBoxBorderColor: '#505053',
+      inputStyle: {
+        backgroundColor: '#333',
+        color: 'silver'
+      },
+      labelStyle: {
+        color: 'silver'
+      }
+    },
+    navigator: {
+      handles: {
+        backgroundColor: '#666',
+        borderColor: '#AAA'
+      },
+      outlineColor: '#CCC',
+      maskFill: 'rgba(255,255,255,0.1)',
+      series: {
+        color: '#7798BF',
+        lineColor: '#A6C7ED'
+      },
+      xAxis: {
+        gridLineColor: '#505053'
+      }
+    },
+    scrollbar: {
+      barBackgroundColor: '#808083',
+      barBorderColor: '#808083',
+      buttonArrowColor: '#CCC',
+      buttonBackgroundColor: '#606063',
+      buttonBorderColor: '#606063',
+      rifleColor: '#FFF',
+      trackBackgroundColor: '#404043',
+      trackBorderColor: '#404043'
+    }
+  };
+  // Apply the theme
+  Highcharts.setOptions(Highcharts.theme);
+  Highstock.setOptions(Highcharts.theme);
+
 
   export default {
     components: {
@@ -137,85 +332,13 @@
     },
     data() {
       return {
-        bigLineChart: {
-          allData: [],
-          activeIndex: 0,
-          chartData: null,
-          extraOptions: chartConfigs.purpleChartOptions,
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
-          categories: [],
-        },
-        purpleLineChart: {
-          extraOptions: chartConfigs.purpleChartOptions,
-          chartData: {
-            labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-            datasets: [{
-              label: "Data",
-              fill: true,
-              borderColor: config.colors.primary,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.primary,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.primary,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [80, 100, 70, 80, 120, 80],
-            }]
-          },
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.2, 0],
-        },
-        greenLineChart: {
-          extraOptions: chartConfigs.greenChartOptions,
-          chartData: {
-            labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
-            datasets: [{
-              label: "My First dataset",
-              fill: true,
-              borderColor: config.colors.danger,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.danger,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.danger,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [90, 27, 60, 12, 80],
-            }]
-          },
-          gradientColors: ['rgba(66,134,121,0.15)', 'rgba(66,134,121,0.0)', 'rgba(66,134,121,0)'],
-          gradientStops: [1, 0.4, 0],
-        },
-        blueBarChart: {
-          extraOptions: chartConfigs.barChartOptions,
-          chartData: {
-            labels: ['USA', 'GER', 'AUS', 'UK', 'RO', 'BR'],
-            datasets: [{
-              label: "Countries",
-              fill: true,
-              borderColor: config.colors.info,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45],
-            }]
-          },
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
-        },
         ohlc_chart:null,
         value_chart: null,
         realtime_chart:null,
         volume_chart:null,
+
         post:{},
+
         axios: axios,
         hist_available: [],
 
@@ -251,42 +374,8 @@
         end_date: null
       }
     },
-    computed: {
-      enableRTL() {
-        return this.$route.query.enableRTL;
-      },
-      isRTL() {
-        return this.$rtl.isRTL;
-      },
-      bigLineChartCategories() {
-        return this.$t('dashboard.chartCategories');
-      }
-    },
-    methods: {
-      initBigChart(index) {
-        let chartData = {
-          datasets: [{
-            fill: true,
-            borderColor: config.colors.primary,
-            borderWidth: 2,
-            borderDash: [],
-            borderDashOffset: 0.0,
-            pointBackgroundColor: config.colors.primary,
-            pointBorderColor: 'rgba(255,255,255,0)',
-            pointHoverBackgroundColor: config.colors.primary,
-            pointBorderWidth: 20,
-            pointHoverRadius: 4,
-            pointHoverBorderWidth: 15,
-            pointRadius: 4,
-            data: this.bigLineChart.allData[index]
-          }],
-          labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-        };
-        this.$refs.bigChart.updateGradients(chartData);
-        this.bigLineChart.chartData = chartData;
-        this.bigLineChart.activeIndex = index;
-      },
 
+    methods: {
       ohlc_value_chart(init){
         if (init){
           this.post.start = new Date() / 1000 - 86400;
@@ -307,183 +396,138 @@
 
       create_update_ohlc_chart(data){
         this.ohlc_chart_data = data['data'].map(function (item) {
-          return {x:(item['x']) * 1000, y:item["y"]}
+          return [(item['x']) * 1000].concat(item["y"])
         });
 
         if (this.ohlc_chart != null){
-          this.ohlc_chart.updateSeries([{data: this.ohlc_chart_data}]);
+          this.ohlc_chart.series[0].setData(this.ohlc_chart_data);
           return
         }
-        var chartOptions = {
-          chart: {
-            type: 'candlestick',
-            height: 250,
-            foreColor: '#ffffff'
-          },
-          title: {
-            text: 'CandleStick Chart',
-            align: 'left'
-          },
-          xaxis: {
-            type: 'category',
-            labels: {
-              formatter: function(val) {
-                var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                var a = new Date(val);
-                return a.getDate() + " " + months[a.getMonth()] + " " + a.getFullYear() + " " + a.getHours() + ":" + a.getMinutes();
-              }
-            }
-          },
-          tooltip: {
-            enabled: true,
-          },
-          yaxis: {
-            labels: {
-              formatter: function (val) {
-                return (val / 1).toFixed(2);
-              },
-            },
-            title: {
-              text: 'Ohlc'
-            },
-          },
-          series: [{
-            data: this.ohlc_chart_data
-          }],
-        };
 
-        if (this.$refs.chart_ohlc) {
-          this.ohlc_chart = new ApexCharts(this.$refs.chart_ohlc, chartOptions);
-          this.ohlc_chart.render();
-        }
+        const card = document.getElementById('chart_ohlc_cart');
+
+        var options = {
+          chart: {
+            zoomType: 'x',
+            renderTo: this.$refs.chart_ohlc,
+            height: card.offsetHeight,
+            width: card.offsetWidth
+          },
+
+          rangeSelector: {
+            selected: 1
+          },
+
+          title: {
+            text: this.post.from + " vs. " + this.post.to
+          },
+
+          xAxis: {
+            type: 'datetime'
+          },
+
+          series: [{
+            type: 'candlestick',
+            name: 'Price',
+            data: this.ohlc_chart_data,
+            dataGrouping: {
+              units: [
+                [
+                  'week', // unit name
+                  [1] // allowed multiples
+                ], [
+                  'month',
+                  [1, 2, 3, 4, 6]
+                ]
+              ]
+            }
+          }]};
+
+        this.ohlc_chart = new Highstock.Chart(options);
       },
 
       create_update_value_chart(data){
         this.value_chart_data = data['data'].map(function (item) {
-          return [new Date((item[0] + 2 * 3600) * 1000), item[1]]
+          return [(item[0] + 2 * 3600) * 1000, item[1]]
         });
 
         if (this.value_chart != null){
-          this.value_chart.updateSeries([{name: "Price", "data": this.value_chart_data}]);
+          this.value_chart.series[0].setData(this.value_chart_data);
           return
         }
 
+        const card = document.getElementById('chart_value_cart');
+
         var options = {
+          chart: {
+            zoomType: 'x',
+            renderTo: this.$refs.chart_value,
+            height: card.offsetHeight,
+            width: card.offsetWidth
+          },
+
+          rangeSelector: {
+            selected: 1
+          },
+
+          title: {
+            text: this.post.from + " vs. " + this.post.to
+          },
+
+          xAxis: {
+            type: 'datetime'
+          },
+
           series: [{
             name: 'Price',
             data: this.value_chart_data,
-          }],
-          chart: {
-            type: 'area',
-            stacked: false,
-            height: 200,
-            zoom: {
-              type: 'x',
+            marker: {
               enabled: true,
-              autoScaleYaxis: true
+              radius: 3
             },
-            toolbar: {
-              autoSelected: 'zoom'
-            },
-            foreColor: '#ffffff'
-          },
-          dataLabels: {
-            enabled: false
-          },
-          markers: {
-            size: 0,
-          },
-          title: {
-            text: 'Price Movement',
-            align: 'left'
-          },
-          fill: {
-            type: 'gradient',
-            gradient: {
-              shadeIntensity: 1,
-              inverseColors: false,
-              opacityFrom: 0.5,
-              opacityTo: 0,
-              stops: [0, 90, 100]
-            },
-          },
-          yaxis: {
-            labels: {
-              formatter: function (val) {
-                return (val / 1).toFixed(2);
-              },
-            },
-            title: {
-              text: 'Price'
-            },
-          },
-          xaxis: {
-            type: 'datetime',
-          },
-          tooltip: {
-            shared: false,
-            y: {
-              formatter: function (val) {
-                return (val / 1).toFixed(2)
-              }
+            shadow: true,
+            tooltip: {
+              valueDecimals: 2
             }
-          }
-        };
+          }]};
 
-        if (this.$refs.chart_value) {
-          this.value_chart = new ApexCharts(this.$refs.chart_value, options);
-          this.value_chart.render();
-        }
+        this.value_chart = new Highcharts.Chart(options);
+
       },
 
       create_update_realtime_value(){
+        const card = document.getElementById('realtime_value_cart');
+
         var options = {
-          series: [{
-            data: this.real_time_data,
-          }],
           chart: {
-            id: 'realtime',
-            height: 180,
-            type: 'line',
-            animations: {
-              enabled: true,
-              easing: 'linear',
-              dynamicAnimation: {
-                speed: 1000
-              }
-            },
-            toolbar: {
-              show: false
-            },
-            zoom: {
-              enabled: false
-            },
-            foreColor: '#ffffff'
+            renderTo: this.$refs.chart_realtime,
+            height: card.offsetHeight,
+            width: card.offsetWidth
           },
-          dataLabels: {
+
+          time: {
+            useUTC: false
+          },
+
+          title: {
+            text: 'Realtime 1m value'
+          },
+
+          xAxis: {
+            type: 'datetime'
+          },
+
+          exporting: {
             enabled: false
           },
-          stroke: {
-            curve: 'smooth'
-          },
-          markers: {
-            size: 0
-          },
-          xaxis: {
-            type: 'datetime',
-            range: 900000,
-          },
-          yaxis: {
-            forceNiceScale: true,
-          },
-          legend: {
-            show: false
-          },
+
+          series: [{
+            name: 'Volume',
+            data: []
+          }]
         };
-        if (this.$refs.chart_realtime) {
-          this.realtime_chart = new ApexCharts(this.$refs.chart_realtime, options);
-          this.realtime_chart.render();
-        }
+
+        this.realtime_chart = new Highcharts.Chart(options);
 
         this.getNewSeriesValue(true);
 
@@ -496,54 +540,39 @@
       },
 
       create_update_realtime_volume(){
+        const card = document.getElementById('realtime_value_cart');
+
         var options = {
-          series: [{
-            data: this.real_time_data
-          }],
           chart: {
-            id: 'realtime',
-            foreColor: '#ffffff',
-            height: 180,
-            type: 'bar',
-            animations: {
-              enabled: true,
-              easing: 'linear',
-              dynamicAnimation: {
-                speed: 1000
-              }
-            },
-            toolbar: {
-              show: false
-            },
-            zoom: {
-              enabled: false
-            }
+            renderTo: this.$refs.chart_volume,
+            height: card.offsetHeight,
+            width: card.offsetWidth
           },
-          dataLabels: {
+
+          time: {
+            useUTC: false
+          },
+
+          title: {
+            text: 'Realtime 1m volume'
+          },
+
+          xAxis: {
+            type: 'datetime'
+          },
+
+          exporting: {
             enabled: false
           },
-          stroke: {
-            curve: 'smooth'
-          },
-          markers: {
-            size: 0
-          },
-          xaxis: {
-            type: 'datetime',
-            range: 900000,
-          },
-          yaxis: {
-            forceNiceScale: true,
-          },
-          legend: {
-            show: false
-          },
-        };
-        if (this.$refs.chart_volume) {
-          this.volume_chart = new ApexCharts(this.$refs.chart_volume, options);
-          this.volume_chart.render();
-        }
 
+          series: [{
+            type: 'column',
+            name: 'Price',
+            data: []
+          }]
+        };
+
+        this.volume_chart = new Highcharts.Chart(options);
         this.getNewSeriesVolume(true);
 
         this.timeout_id_volume = setTimeout(function () {
@@ -557,18 +586,14 @@
       save_realtime_response_data_value(data, init, date){
         if (init){
           this.real_time_data = data['data'].map(function (item) {
-            return {x:item[0] * 1000, y: item[1]}
+            return [item[0] * 1000, item[1]]
           });
           this.last_realtime_value = this.real_time_data.slice(-1)[0]['y'];
-          this.realtime_chart.updateSeries([{
-            data: this.real_time_data
-          }]);
+          this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
-          this.real_time_data.push({x: date * 1000, y: data['data']});
-          this.realtime_chart.updateSeries([{
-            data: this.real_time_data
-          }]);
+          this.real_time_data.push([date * 1000, data['data']]);
+          this.realtime_chart.series[0].addPoint(this.real_time_data[this.real_time_data.length - 1]);
           if (data['data']){
             this.last_realtime_value = data['data'];
           }
@@ -577,18 +602,21 @@
         }
       },
 
-      save_realtime_response_data_volume(data){
+      save_realtime_response_data_volume(data, init, lastDateVolume){
         var last_value = this.last_realtime_volume;
         this.real_time_volume_data.push(...data['data'].map(function (item) {
           if(item['y']){
             last_value = item['y'];
           }
-          return {x:item['x'] * 1000, y: item['y']}
+          return [item['x'] * 1000, item['y']]
         }));
 
-        this.volume_chart.updateSeries([{
-          data: this.real_time_volume_data
-        }]);
+        if (init){
+          this.volume_chart.series[0].setData(this.real_time_volume_data)
+        }
+        else{
+          this.volume_chart.series[0].addPoint(this.real_time_volume_data[this.real_time_volume_data.length - 1], true, true)
+        }
 
         this.last_realtime_volume = last_value;
       },
@@ -656,43 +684,39 @@
         var old_fiat = data['data']['old_fiat'];
 
         var new_data = this.real_time_data.map(function (item) {
-          if (item["y"] != null) {
-            return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
+          if (item[1] != null) {
+            return [item[0], item[1] / old_fiat * new_fiat]
           }
         });
-        this.realtime_chart.updateSeries([{
-          data: new_data
-        }]);
+        this.realtime_chart.series[0].setData(new_data);
         this.real_time_data= new_data;
         this.last_realtime_value = new_data.slice(-1)[0]['y'];
 
         new_data = this.real_time_volume_data.map(function (item) {
-          if (item["y"] != null){
-            return {x:item['x'], y:item["y"] / old_fiat * new_fiat}
+          if (item[1] != null){
+            return [item[0], item[1] / old_fiat * new_fiat]
           }
         });
-        this.volume_chart.updateSeries([{
-          data: new_data
-        }]);
+        this.volume_chart.series[0].setData(new_data);
         this.real_time_volume_data = new_data;
         this.last_realtime_volume = this.last_realtime_volume / old_fiat * new_fiat;
 
         new_data = this.ohlc_chart_data.map(function (item) {
-          return {x:item['x'], y:item["y"].map(function (item_y) {
-            return item_y / old_fiat * new_fiat
-            })}
+          return [
+            item[0],
+            item[1] / old_fiat * new_fiat,
+            item[2] / old_fiat * new_fiat,
+            item[3] / old_fiat * new_fiat,
+            item[4] / old_fiat * new_fiat
+          ]
         });
-        this.ohlc_chart.updateSeries([{
-          data: new_data
-        }]);
+        this.ohlc_chart.series[0].setData(new_data);
         this.ohlc_chart_data = new_data;
 
         new_data = this.value_chart_data.map(function (item) {
           return [item[0], item[1] / old_fiat * new_fiat]
         });
-        this.value_chart.updateSeries([{
-          data: new_data
-        }]);
+        this.value_chart.series[0].setData(new_data);
         this.value_chart_data = new_data;
 
       },
