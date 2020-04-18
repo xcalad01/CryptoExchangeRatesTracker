@@ -467,7 +467,7 @@ class ApiController extends Controller
         foreach ($result as $data){
             array_push($values, array(
                 strtotime($data->start_date),
-               $data->value
+               floatval($data->value)
             ));
         }
 
