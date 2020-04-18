@@ -466,8 +466,8 @@ class ApiController extends Controller
 
         foreach ($result as $data){
             array_push($values, array(
-               $data['value'],
-                $data['start_date']
+               $data->value,
+                $data->start_date
             ));
         }
 
