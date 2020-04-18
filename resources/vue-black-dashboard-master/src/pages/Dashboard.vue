@@ -378,8 +378,8 @@
     methods: {
       ohlc_value_chart(init){
         if (init){
-          this.post.start = new Date() / 1000 - 86400;
-          this.post.end = new Date() / 1000;
+          this.post.start = new Date().setSeconds(0, 0) / 1000 - 86400;
+          this.post.end = new Date().setSeconds(0, 0) / 1000;
           this.post.range = '1h';
         }
         else{
@@ -390,7 +390,7 @@
         let url_value = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + "ohlc" + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
         this.axios.get(url_value).then(response => (this.create_update_ohlc_chart(response.data)));
 
-        let url_volume = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + "value" + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
+        let url_volume = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto_historical/" + "value_v2" + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
         this.axios.get(url_volume).then(response => (this.create_update_value_chart(response.data)));
       },
 
