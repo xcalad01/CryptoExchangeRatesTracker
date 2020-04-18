@@ -464,9 +464,7 @@ class ApiController extends Controller
             ->whereBetween('fh2.Date', [DB::raw('"Timestamp" - 86400'), DB::raw('"Timestamp"')])
             ->groupBy('start_date')->get();
 
-        return response()->json([
-            "data" => $result
-        ], 200);
+        return $result;
 //        foreach ($result->data as $data){
 //            array_push($values, array(
 //               $data['value'],
