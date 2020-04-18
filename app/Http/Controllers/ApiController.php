@@ -452,7 +452,7 @@ class ApiController extends Controller
             to_timestamp(floor((extract(\'epoch\' from to_timestamp("Timestamp")) / 3600 )) * 3600)
             AT TIME ZONE \'UTC\' as "start_date"'))
             ->join(DB::raw('"fiat_historicals" AS "fh1"'), 'historical_available.To', '=', 'fh1.Fiat_id')
-            ->join(DB::raw('"fiat_historicals" AS "fh2"'), DB::raw("'eur'"), '=', 'fh2.Fiat_id')
+            ->join(DB::raw('"fiat_historicals" AS "fh2"'), DB::raw("'{$to}'"), '=', 'fh2.Fiat_id')
             ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
             ->where([
                 ['Exchange_id', '=', DB::raw("'{$exchange}'")],
