@@ -440,6 +440,41 @@ class ApiController extends Controller
         return $values;
     }
 
+
+    private function do_get_value_time_range_v2($start, $end, $exchange, $range, $from, $to, $historical_available){
+        $start = $start - ($start % $range); // Allign to right offset
+        $end = $end - ($end % $end); // Allign to right offset
+
+        $values = array();
+
+        $result = DB::table('historical_available')
+            ->select(DB::raw('AVG(("Open"+"Close")/2 / "fh1"."Value_USD" * "fh2"."Value_USD") as value,
+            to_timestamp(floor((extract(\'epoch\' from to_timestamp("Timestamp")) / 3600 )) * 3600)
+            AT TIME ZONE \'UTC\' as "start_date"'))
+            ->join(DB::raw('"fiat_historicals" AS "fh1"'), 'historical_available.To', '=', 'fh1.Fiat_id')
+            ->join(DB::raw('"fiat_historicals" AS "fh2"'), DB::raw("'eur'"), '=', 'fh2.Fiat_id')
+            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+            ->where([
+                ['Exchange_id', '=', DB::raw("'{$exchange}'")],
+                ['From', '=', DB::raw("'{$historical_available->From}'")],
+                ['To', '=', DB::raw("'{$historical_available->To}'")]
+            ])
+            ->whereBetween('Timestamp', [$start, $end - 1])
+            ->whereBetween('fh1.Date', [DB::raw('"Timestamp" - 86400'), DB::raw('"Timestamp"')])
+            ->whereBetween('fh2.Date', [DB::raw('"Timestamp" - 86400'), DB::raw('"Timestamp"')])
+            ->groupBy('start_date')->get();
+
+        foreach ($result['data'] as $data){
+            array_push($values, array(
+               $data['value'],
+                $data['start_date']
+            ));
+        }
+        return response()->json([
+            "data" => $values
+        ], 200);
+    }
+
     public function get_crypto_value_timestamp(Request $request, $timestamp, $exchange, $from, $to, $init){
         $historical_available = null;
 
@@ -520,6 +555,43 @@ class ApiController extends Controller
         }
 
         $values = $this->do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available);
+
+        return response()->json([
+            "data" => $values
+        ], 200);
+
+
+    }
+
+    public function get_crypto_value_time_range_v2(Request $request, $start, $end, $exchange, $range, $from, $to){
+        $historical_available = null;
+
+        try {
+            $this->check_exchange($exchange);
+
+            $this->check_fiat($to);
+
+            if ($range and !key_exists($range, $this->time_range_config)){
+                throw new \Exception('Time range not supported');
+            }
+            $range = $this->time_range_config[$range];
+
+            if ($start + $range > $end){
+                throw new \Exception('Range not between start and end');
+
+            }
+
+            $historical_available = $this->get_historical_available($exchange, $from);
+
+            $start = intval($start);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        $values = $this->do_get_value_time_range_v2($start, $end, $exchange, $range, $from, $to, $historical_available);
 
         return response()->json([
             "data" => $values
