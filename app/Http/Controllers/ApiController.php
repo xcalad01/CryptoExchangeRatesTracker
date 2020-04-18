@@ -464,13 +464,14 @@ class ApiController extends Controller
             ->whereBetween('fh2.Date', [DB::raw('"Timestamp" - 86400'), DB::raw('"Timestamp"')])
             ->groupBy('start_date')->get();
 
-        return $result;
-//        foreach ($result->data as $data){
-//            array_push($values, array(
-//               $data['value'],
-//                $data['start_date']
-//            ));
-//        }
+        foreach ($result as $data){
+            array_push($values, array(
+               $data['value'],
+                $data['start_date']
+            ));
+        }
+
+        return $values;
     }
 
     public function get_crypto_value_timestamp(Request $request, $timestamp, $exchange, $from, $to, $init){
