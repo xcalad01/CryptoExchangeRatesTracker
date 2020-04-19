@@ -447,30 +447,32 @@ class ApiController extends Controller
 
         $values = array();
 
-        $result = DB::table('historical_available')
-            ->select(DB::raw('AVG(("Open"+"Close")/2 / "fh1"."Value_USD" * "fh2"."Value_USD") as value,
-            to_timestamp(floor((extract(\'epoch\' from to_timestamp("Timestamp")) / 3600 )) * 3600)
-            AT TIME ZONE \'UTC\' as "start_date"'))
-            ->join(DB::raw('"fiat_historicals" AS "fh1"'), 'historical_available.To', '=', 'fh1.Fiat_id')
-            ->join(DB::raw('"fiat_historicals" AS "fh2"'), DB::raw("'{$to}'"), '=', 'fh2.Fiat_id')
-            ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-            ->where([
-                ['Exchange_id', '=', DB::raw("'{$exchange}'")],
-                ['From', '=', DB::raw("'{$historical_available->From}'")],
-                ['To', '=', DB::raw("'{$historical_available->To}'")]
-            ])
-            ->whereBetween('Timestamp', [$start, $end - 1])
-            ->whereBetween('fh1.Date', [DB::raw('"Timestamp" - 86400'), DB::raw('"Timestamp"')])
-            ->whereBetween('fh2.Date', [DB::raw('"Timestamp" - 86400'), DB::raw('"Timestamp"')])
-            ->groupBy('start_date')->get();
+        $result = DB::select(DB::raw("SELECT
+	AVG((\"Open\" + \"Close\") / 2 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
+	to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / 3600)) * 3600) AT TIME ZONE 'UTC' AS \"interval_alias\"
+FROM
+	\"crypto_historical\" AS \"ch\"
+	 JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+	 JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+	 JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
+WHERE
+	\"ha\".\"Exchange_id\" = '{$exchange}'
+	AND \"ha\".\"From\" = '{$historical_available->From}'
+	AND \"ha\".\"To\" = '{$historical_available->To}'
+	AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
+	AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+	AND \"ch\".\"Timestamp\"
+	AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+	AND \"ch\".\"Timestamp\"
+GROUP BY
+	\"interval_alias\""));
 
         foreach ($result as $data){
             array_push($values, array(
-                strtotime($data->start_date),
+                strtotime($data->interval_alias),
                floatval($data->value)
             ));
         }
-
         return $values;
     }
 
