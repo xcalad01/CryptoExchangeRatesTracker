@@ -350,98 +350,98 @@ class ApiController extends Controller
         return array($fiat_actual, $fiat_prev);
     }
 
+//    private function do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available){
+//        $start = $start - ($start % $range); // Allign to right offset
+//        $end = $end - ($end % $end); // Allign to right offset
+//
+//        $values = array();
+//        $fiat_actual = null;
+//        $fiat_prev  =  null;
+//        $fiat_prev_key = "value_fiat_prev_{$range}_{$exchange}_{$from}";
+//        $fiat_prev_id = Redis::get($fiat_prev_key);
+//
+//        $fiat_db = null;
+//        $fiat_to = null;
+//
+//        while ($start + $range <= $end){
+//            $x_value = $start;
+//            $redis_key = "crypto_value_{$x_value}_{$range}_{$exchange}_{$from}";
+//
+//            $result = Redis::get($redis_key);
+//            if ($result){
+//                $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
+//                $fiat_actual = $fiat_data[0];
+//                $fiat_prev = $fiat_data[1];
+//
+//
+//
+//                if ($fiat_prev){
+//                    $value1 = $fiat_prev->Value_USD;
+//                }
+//                else{
+//                    $value1 = 1;
+//                }
+//
+//                if ($fiat_actual){
+//                    $value2 = $fiat_actual->Value_USD;
+//                }
+//                else{
+//                    $value2 = 1;
+//                }
+//
+//                array_push($values, array(
+//                    $start,
+//                    $result / $value1 * $value2
+//                ));
+//
+//                Redis::set($redis_key, $result / $value1 * $value2);
+//
+//                $start += $range;
+//                continue;
+//            }
+//
+//            $result = DB::table('historical_available')
+//                ->select(DB::raw('AVG(("Open"+"Close")/2) as value'))
+//                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+//                ->where([
+//                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
+//                    ['From', '=', DB::raw("'{$historical_available->From}'")],
+//                    ['To', '=', DB::raw("'{$historical_available->To}'")]
+//                ])
+//                ->whereBetween('Timestamp', [$start, $start + $range])
+//                ->groupBy(['Exchange_id'])->get();
+//
+//            $result = json_decode($result, true);
+//
+//            if ($fiat_db == null){
+//                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+//                $fiat_to = $this->get_fiat_historical($to, $start);
+//            }
+//            elseif (!($fiat_db->Date >= $start and $fiat_db->Date <= $start + $range - 1)){
+//                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+//                $fiat_to = $this->get_fiat_historical($to, $start);
+//            }
+//
+//            foreach ($result as $res){
+//                Redis::set($redis_key, $res['value'] / $fiat_db->Value_USD * $fiat_to->Value_USD);
+//
+//                array_push($values, array(
+//                    $start,
+//                    $res['value'] / $fiat_db->Value_USD * $fiat_to->Value_USD
+//                ));
+//            }
+//            $start += $range;
+//        }
+//
+//        if (!empty($values)){
+//            Redis::set($fiat_prev_key, $to);
+//        }
+//
+//        return $values;
+//    }
+
+
     private function do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available){
-        $start = $start - ($start % $range); // Allign to right offset
-        $end = $end - ($end % $end); // Allign to right offset
-
-        $values = array();
-        $fiat_actual = null;
-        $fiat_prev  =  null;
-        $fiat_prev_key = "value_fiat_prev_{$range}_{$exchange}_{$from}";
-        $fiat_prev_id = Redis::get($fiat_prev_key);
-
-        $fiat_db = null;
-        $fiat_to = null;
-
-        while ($start + $range <= $end){
-            $x_value = $start;
-            $redis_key = "crypto_value_{$x_value}_{$range}_{$exchange}_{$from}";
-
-            $result = Redis::get($redis_key);
-            if ($result){
-                $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
-                $fiat_actual = $fiat_data[0];
-                $fiat_prev = $fiat_data[1];
-
-
-
-                if ($fiat_prev){
-                    $value1 = $fiat_prev->Value_USD;
-                }
-                else{
-                    $value1 = 1;
-                }
-
-                if ($fiat_actual){
-                    $value2 = $fiat_actual->Value_USD;
-                }
-                else{
-                    $value2 = 1;
-                }
-
-                array_push($values, array(
-                    $start,
-                    $result / $value1 * $value2
-                ));
-
-                Redis::set($redis_key, $result / $value1 * $value2);
-
-                $start += $range;
-                continue;
-            }
-
-            $result = DB::table('historical_available')
-                ->select(DB::raw('AVG(("Open"+"Close")/2) as value'))
-                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->where([
-                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
-                    ['From', '=', DB::raw("'{$historical_available->From}'")],
-                    ['To', '=', DB::raw("'{$historical_available->To}'")]
-                ])
-                ->whereBetween('Timestamp', [$start, $start + $range])
-                ->groupBy(['Exchange_id'])->get();
-
-            $result = json_decode($result, true);
-
-            if ($fiat_db == null){
-                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
-                $fiat_to = $this->get_fiat_historical($to, $start);
-            }
-            elseif (!($fiat_db->Date >= $start and $fiat_db->Date <= $start + $range - 1)){
-                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
-                $fiat_to = $this->get_fiat_historical($to, $start);
-            }
-
-            foreach ($result as $res){
-                Redis::set($redis_key, $res['value'] / $fiat_db->Value_USD * $fiat_to->Value_USD);
-
-                array_push($values, array(
-                    $start,
-                    $res['value'] / $fiat_db->Value_USD * $fiat_to->Value_USD
-                ));
-            }
-            $start += $range;
-        }
-
-        if (!empty($values)){
-            Redis::set($fiat_prev_key, $to);
-        }
-
-        return $values;
-    }
-
-
-    private function do_get_value_time_range_v2($start, $end, $exchange, $range, $from, $to, $historical_available){
         $start = $start - ($start % $range); // Allign to right offset
         $end = $end - ($end % $end); // Allign to right offset
 
@@ -477,6 +477,7 @@ class ApiController extends Controller
         }
         return $values;
     }
+
 
     public function get_crypto_value_timestamp(Request $request, $timestamp, $exchange, $from, $to, $init){
         $historical_available = null;
@@ -566,45 +567,7 @@ class ApiController extends Controller
 
     }
 
-    public function get_crypto_value_time_range_v2(Request $request, $start, $end, $exchange, $range, $from, $to){
-        $historical_available = null;
-
-        try {
-            $this->check_exchange($exchange);
-
-            $this->check_fiat($to);
-
-            if ($range and !key_exists($range, $this->time_range_config)){
-                throw new \Exception('Time range not supported');
-            }
-            $range = $this->time_range_config[$range];
-
-            if ($start + $range > $end){
-                throw new \Exception('Range not between start and end');
-
-            }
-
-            $historical_available = $this->get_historical_available($exchange, $from);
-
-            $start = intval($start);
-        }
-        catch (\Exception $e){
-            return response()->json([
-                "message" => $e->getMessage()
-            ], 404);
-        }
-
-        $values = $this->do_get_value_time_range_v2($start, $end, $exchange, $range, $from, $to, $historical_available);
-
-        return response()->json([
-            "data" => $values
-        ], 200);
-
-
-    }
-
-
-    public function get_crypto_ohlc_time__v2_range(Request $request, $start, $end, $exchange, $range, $from, $to){
+    public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
         $historical_available = null;
 
         try {
@@ -679,141 +642,141 @@ class ApiController extends Controller
         ], 200);
     }
 
-    public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
-        $historical_available = null;
-
-        try {
-            $this->check_exchange($exchange);
-
-            $this->check_fiat($to);
-
-            if ($range and !key_exists($range, $this->time_range_config)){
-                throw new \Exception('Time range not supported');
-            }
-
-            $range = $this->time_range_config[$range];
-
-            if ($start + $range > $end){
-                throw new \Exception('Range not between start and end');
-            }
-
-            $historical_available = $this->get_historical_available($exchange, $from);
-
-
-	        $start = intval($start);
-
-        }
-        catch (\Exception $e){
-            return response()->json([
-                "message" => $e->getMessage()
-            ], 404);
-        }
-
-        $start = $start - ($start % $range); // Allign to right offset
-        $end = $end - ($end % $end); // Allign to right offset
-
-        $ohlc_chart = array();
-        $fiat_actual = null;
-        $fiat_prev  =  null;
-        $fiat_prev_key = "ohlc_fiat_prev_{$range}_{$exchange}_{$from}";
-        $fiat_prev_id = Redis::get($fiat_prev_key);
-
-        $fiat_db = null;
-        $fiat_to = null;
-        while ($start + $range <= $end){
-            $x_value = $start;
-            $redis_key_value = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}";
-            $result = Redis::hgetall($redis_key_value);
-            if ($result){
-                $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
-                $fiat_actual = $fiat_data[0];
-                $fiat_prev = $fiat_data[1];
-
-                if ($fiat_prev){
-                    $value1 = $fiat_prev->Value_USD;
-                }
-                else{
-                    $value1 = 1;
-                }
-
-                if ($fiat_actual){
-                    $value2 = $fiat_actual->Value_USD;
-                }
-                else{
-                    $value2 = 1;
-                }
-
-                array_push($ohlc_chart, array(
-                    "x" => $start,
-                    "y" => array(
-                        $result[0] / $value1 * $value2,
-                        $result[1] / $value1 * $value2,
-                        $result[2] / $value1 * $value2,
-                        $result[3] / $value1 * $value2,
-                    )
-                ));
-
-                Redis::hmset($redis_key_value, array(
-                    $result[0] / $value1 * $value2,
-                    $result[1] / $value1 * $value2,
-                    $result[2] / $value1 * $value2,
-                    $result[3] / $value1 * $value2,
-                ));
-
-                $start += $range;
-                continue;
-        }
-
-            $result = DB::table('historical_available')
-                ->select(DB::raw('(array_agg("Open" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High") as "High", MIN("Low") as "Low", (array_agg("Close" ORDER BY "Timestamp" DESC))[1] as "Close"'))
-                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->where([
-                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
-                    ['From', '=', DB::raw("'{$historical_available->From}'")],
-                    ['To', '=', DB::raw("'{$historical_available->To}'")]
-                ])
-                ->whereBetween('Timestamp', [$start, $start + $range])
-                ->get();
-
-            $result = json_decode($result, true);
-
-            if ($fiat_db == null){
-                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
-                $fiat_to = $this->get_fiat_historical($to, $start);
-            }
-            elseif (!($fiat_db->Date >= $start and $fiat_db->Date <= $start + $range - 1)){
-                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
-                $fiat_to = $this->get_fiat_historical($to, $start);
-            }
-
-            foreach ($result as $res){
-                $y_value = array(
-                    $res["Open"] / $fiat_db->Value_USD *  $fiat_to->Value_USD,
-                    $res["High"] / $fiat_db->Value_USD *  $fiat_to->Value_USD,
-                    $res["Low"]  / $fiat_db->Value_USD *  $fiat_to->Value_USD,
-                    $res["Close"] / $fiat_db->Value_USD *  $fiat_to->Value_USD
-                );
-
-                Redis::hmset($redis_key_value, $y_value);
-
-                array_push($ohlc_chart, array(
-                    "x" => $start,
-                    "y" => $y_value
-                ));
-            }
-
-                $start += $range;
-        }
-
-        if (!empty($ohlc_chart)){
-            Redis::set($fiat_prev_key, $to);
-        }
-
-        return response()->json([
-            "data" => $ohlc_chart
-        ], 200);
-
-    }
+//    public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
+//        $historical_available = null;
+//
+//        try {
+//            $this->check_exchange($exchange);
+//
+//            $this->check_fiat($to);
+//
+//            if ($range and !key_exists($range, $this->time_range_config)){
+//                throw new \Exception('Time range not supported');
+//            }
+//
+//            $range = $this->time_range_config[$range];
+//
+//            if ($start + $range > $end){
+//                throw new \Exception('Range not between start and end');
+//            }
+//
+//            $historical_available = $this->get_historical_available($exchange, $from);
+//
+//
+//	        $start = intval($start);
+//
+//        }
+//        catch (\Exception $e){
+//            return response()->json([
+//                "message" => $e->getMessage()
+//            ], 404);
+//        }
+//
+//        $start = $start - ($start % $range); // Allign to right offset
+//        $end = $end - ($end % $end); // Allign to right offset
+//
+//        $ohlc_chart = array();
+//        $fiat_actual = null;
+//        $fiat_prev  =  null;
+//        $fiat_prev_key = "ohlc_fiat_prev_{$range}_{$exchange}_{$from}";
+//        $fiat_prev_id = Redis::get($fiat_prev_key);
+//
+//        $fiat_db = null;
+//        $fiat_to = null;
+//        while ($start + $range <= $end){
+//            $x_value = $start;
+//            $redis_key_value = "ohlc_{$x_value}_{$range}_{$exchange}_{$from}";
+//            $result = Redis::hgetall($redis_key_value);
+//            if ($result){
+//                $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
+//                $fiat_actual = $fiat_data[0];
+//                $fiat_prev = $fiat_data[1];
+//
+//                if ($fiat_prev){
+//                    $value1 = $fiat_prev->Value_USD;
+//                }
+//                else{
+//                    $value1 = 1;
+//                }
+//
+//                if ($fiat_actual){
+//                    $value2 = $fiat_actual->Value_USD;
+//                }
+//                else{
+//                    $value2 = 1;
+//                }
+//
+//                array_push($ohlc_chart, array(
+//                    "x" => $start,
+//                    "y" => array(
+//                        $result[0] / $value1 * $value2,
+//                        $result[1] / $value1 * $value2,
+//                        $result[2] / $value1 * $value2,
+//                        $result[3] / $value1 * $value2,
+//                    )
+//                ));
+//
+//                Redis::hmset($redis_key_value, array(
+//                    $result[0] / $value1 * $value2,
+//                    $result[1] / $value1 * $value2,
+//                    $result[2] / $value1 * $value2,
+//                    $result[3] / $value1 * $value2,
+//                ));
+//
+//                $start += $range;
+//                continue;
+//        }
+//
+//            $result = DB::table('historical_available')
+//                ->select(DB::raw('(array_agg("Open" ORDER BY "Timestamp" ASC))[1] as "Open", MAX("High") as "High", MIN("Low") as "Low", (array_agg("Close" ORDER BY "Timestamp" DESC))[1] as "Close"'))
+//                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
+//                ->where([
+//                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
+//                    ['From', '=', DB::raw("'{$historical_available->From}'")],
+//                    ['To', '=', DB::raw("'{$historical_available->To}'")]
+//                ])
+//                ->whereBetween('Timestamp', [$start, $start + $range])
+//                ->get();
+//
+//            $result = json_decode($result, true);
+//
+//            if ($fiat_db == null){
+//                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+//                $fiat_to = $this->get_fiat_historical($to, $start);
+//            }
+//            elseif (!($fiat_db->Date >= $start and $fiat_db->Date <= $start + $range - 1)){
+//                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
+//                $fiat_to = $this->get_fiat_historical($to, $start);
+//            }
+//
+//            foreach ($result as $res){
+//                $y_value = array(
+//                    $res["Open"] / $fiat_db->Value_USD *  $fiat_to->Value_USD,
+//                    $res["High"] / $fiat_db->Value_USD *  $fiat_to->Value_USD,
+//                    $res["Low"]  / $fiat_db->Value_USD *  $fiat_to->Value_USD,
+//                    $res["Close"] / $fiat_db->Value_USD *  $fiat_to->Value_USD
+//                );
+//
+//                Redis::hmset($redis_key_value, $y_value);
+//
+//                array_push($ohlc_chart, array(
+//                    "x" => $start,
+//                    "y" => $y_value
+//                ));
+//            }
+//
+//                $start += $range;
+//        }
+//
+//        if (!empty($ohlc_chart)){
+//            Redis::set($fiat_prev_key, $to);
+//        }
+//
+//        return response()->json([
+//            "data" => $ohlc_chart
+//        ], 200);
+//
+//    }
 
     public function get_all_hist_avail(Request $request, $exchange){
         try {
