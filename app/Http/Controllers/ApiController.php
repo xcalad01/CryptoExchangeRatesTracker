@@ -622,7 +622,7 @@ class ApiController extends Controller
                 AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
                 AND \"ch\".\"Timestamp\"
             GROUP BY
-	            \"interval_alias\";
+	            \"interval_alias\"
         "));
 
         $values = array();
