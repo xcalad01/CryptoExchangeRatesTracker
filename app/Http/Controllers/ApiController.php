@@ -305,7 +305,7 @@ class ApiController extends Controller
     private function check_coin($coin){
         $supported = DB::select(DB::raw("
             SELECT
-	            \"fiats_cryptos\".\"Coins\"
+	            *
                 FROM(
 	                SELECT
 		                \"Fiat_id\" AS \"Coins\", 'fiat' as \"Type\"
