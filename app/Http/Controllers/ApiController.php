@@ -303,9 +303,9 @@ class ApiController extends Controller
     }
 
     private function check_coin($coin){
-        $cryptos = DB::table('cryptocurrencies');
-        $supported = DB::table('fiats as coins')->union($cryptos)->get();
-        if (!in_array($coin, $supported->coins)){
+        $cryptos = DB::table('cryptocurrencies')->select("Crypto_id");
+        $supported = DB::table('fiats')->select("Fiat_id as Coins")->union($cryptos)->get();
+        if (!in_array($coin, $supported->Coins)){
             throw new \Exception("Coin {$coin} is not supported");
         }
     }
