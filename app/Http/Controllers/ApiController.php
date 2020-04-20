@@ -447,25 +447,27 @@ class ApiController extends Controller
 
         $values = array();
 
-        $result = DB::select(DB::raw("SELECT
-	AVG((\"Open\" + \"Close\") / 2 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
-	to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / 3600)) * 3600) AT TIME ZONE 'UTC' AS \"interval_alias\"
-FROM
-	\"crypto_historical\" AS \"ch\"
-	 JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
-	 JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
-	 JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
-WHERE
-	\"ha\".\"Exchange_id\" = '{$exchange}'
-	AND \"ha\".\"From\" = '{$historical_available->From}'
-	AND \"ha\".\"To\" = '{$historical_available->To}'
-	AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
-	AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
-	AND \"ch\".\"Timestamp\"
-	AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
-	AND \"ch\".\"Timestamp\"
-GROUP BY
-	\"interval_alias\""));
+        $result = DB::select(DB::raw("
+            SELECT
+                AVG((\"Open\" + \"Close\") / 2 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / 3600)) * 3600) AT TIME ZONE 'UTC' AS \"interval_alias\"
+            FROM
+	            \"crypto_historical\" AS \"ch\"
+	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+	                JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
+                AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+                AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+            GROUP BY
+	            \"interval_alias\""
+        ));
 
         foreach ($result as $data){
             array_push($values, array(
@@ -599,6 +601,82 @@ GROUP BY
         ], 200);
 
 
+    }
+
+
+    public function get_crypto_ohlc_time__v2_range(Request $request, $start, $end, $exchange, $range, $from, $to){
+        $historical_available = null;
+
+        try {
+            $this->check_exchange($exchange);
+
+            $this->check_fiat($to);
+
+            if ($range and !key_exists($range, $this->time_range_config)){
+                throw new \Exception('Time range not supported');
+            }
+
+            $range = $this->time_range_config[$range];
+
+            if ($start + $range > $end){
+                throw new \Exception('Range not between start and end');
+            }
+
+            $historical_available = $this->get_historical_available($exchange, $from);
+
+
+            $start = intval($start);
+
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        $start = $start - ($start % $range); // Allign to right offset
+        $end = $end - ($end % $end); // Allign to right offset
+
+        $result = DB::select(DB::raw("
+            SELECT
+	            (array_agg(\"ch\".\"Open\" ORDER BY \"ch\".\"Timestamp\" ASC)) [1] AS \"Open\",
+	            MAX(\"ch\".\"High\") AS \"High\",
+	            MIN(\"ch\".\"Low\") AS \"Low\",
+	            (array_agg(\"ch\".\"Close\" ORDER BY \"Timestamp\" DESC)) [1] AS \"Close\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / 3600)) * 3600) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
+            FROM
+	            \"historical_available\" AS \"ha\"
+	            JOIN \"crypto_historical\" AS \"ch\" ON \"ha\".\"id\" = \"ch\".\"id\"
+	            JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+	            JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN '{$start}' AND '{$end}'
+                AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+                AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+            GROUP BY
+	            \"interval_alias\";
+        "));
+
+        $values = array();
+        foreach ($result as $data){
+            array_push($values, array(
+                "x" => strtotime($data->interval_alias),
+                "y" => array(
+                    floatval($data->Open),
+                    floatval($data->High),
+                    floatval($data->Low),
+                    floatval($data->Close)
+                )
+            ));
+        }
+        return response()->json([
+            "data" => $values
+        ], 200);
     }
 
     public function get_crypto_ohlc_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){

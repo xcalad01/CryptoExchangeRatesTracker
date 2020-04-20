@@ -27,6 +27,7 @@ Route::get('crypto_historical/value/{start}/{end}/{exchange}/{range}/{from}/{to}
 Route::get('crypto_historical/value_v2/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_value_time_range_v2');
 
 Route::get('crypto_historical/ohlc/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_ohlc_time_range');
+Route::get('crypto_historical/ohlc_v2/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_ohlc_time__v2_range');
 
 Route::get('crypto_historical/volume/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_volume_time_range');
 
