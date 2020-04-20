@@ -466,6 +466,8 @@ class ApiController extends Controller
                 AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
                 AND \"ch\".\"Timestamp\"
             GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
 	            \"interval_alias\""
         ));
 
@@ -622,6 +624,8 @@ class ApiController extends Controller
                 AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
                 AND \"ch\".\"Timestamp\"
             GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
 	            \"interval_alias\"
         "));
 
