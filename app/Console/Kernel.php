@@ -12,11 +12,7 @@ class Kernel extends ConsoleKernel
      *
      * @var array
      */
-    protected $commands = [
-        Commands\CryptoHistFiveMinCommand::class,
-        Commands\CryptoCurrentCommand::class,
-        Commands\FiatCommand::class,
-    ];
+    protected $commands = [];
 
     /**
      * Define the application's command schedule.
@@ -33,7 +29,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('binance:ohlc')->cron('*/1 * * * *')->sendOutputTo('/var/log/bakalarka/binance.log');
         $schedule->command('hitbtc:ohlc')->cron('*/1 * * * *')->sendOutputTo('/var/log/bakalarka/hitbtc.log');
         $schedule->command('okcoin:ohlc')->cron('*/1 * * * *')->sendOutputTo('/var/log/bakalarka/okcoin.log');
-        #$schedule->command('crypto:current')->everyMinute();
         $schedule->command('fiat:current')->dailyAt('16:05')->sendOutputTo('/var/log/bakalarka/fiat_current.log');
     }
 

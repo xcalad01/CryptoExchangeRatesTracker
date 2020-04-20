@@ -17,31 +17,44 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/**
+ * Ping
+ */
 Route::get('ping', 'ApiController@ping');
 
+
+/**
+ * Exchange
+ */
 Route::post('exchange', 'ApiController@create_exchange');
 
-Route::post('crypto_historical', 'ApiController@crypto_add_historical');
 
-Route::get('crypto_historical/value/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_value_time_range');
-Route::get('crypto_historical/value_v2/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_value_time_range_v2');
+/**
+ * Fiat
+ */
+Route::get('fiat/historical/{timestamp}/{fiat}/{old_fiat?}', 'ApiController@fiat_historical');
 
-Route::get('crypto_historical/ohlc/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_ohlc_time_range');
-Route::get('crypto_historical/ohlc_v2/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_ohlc_time__v2_range');
+Route::post('fiat', 'ApiController@create_fiat');
 
-Route::get('crypto_historical/volume/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_volume_time_range');
+
+
+/**
+ * Crypto
+ */
+
+Route::post('crypto', 'ApiController@create_crypto');
+Route::post('crypto/historical', 'ApiController@crypto_add_historical');
+
+Route::get('crypto/historical/value/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_value_time_range');
+Route::get('crypto/historical/ohlc/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_ohlc_time_range');
+Route::get('crypto/historical/volume/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_volume_time_range');
+Route::get('crypto/historical/pairs/{exchange}', 'ApiController@get_all_hist_avail');
 
 Route::get('crypto_current/{timestamp}/{exchange}/{from}/{to}/{init}', 'ApiController@get_crypto_value_timestamp');
 
 Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value');
 
-Route::post('crypto', 'ApiController@create_crypto');
 
-Route::post('fiat', 'ApiController@create_fiat');
-
-Route::get('fiat/historical/{timestamp}/{fiat}/{old_fiat?}', 'ApiController@fiat_historical');
-
-Route::get('all_hist_avail/{exchange}', 'ApiController@get_all_hist_avail');
 
 
 //Route::post('fiat_fix', 'ApiController@fix_fiat_timestamp');
