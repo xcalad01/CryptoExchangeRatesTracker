@@ -308,12 +308,12 @@ class ApiController extends Controller
 	            \"fiats_cryptos\".\"Coins\"
                 FROM(
 	                SELECT
-		                \"Fiat_id\" AS \"Coins\"
+		                \"Fiat_id\" AS \"Coins\", 'fiat' as \"Type\"
 	                FROM
 		                \"fiat_historicals\"
 	                UNION
 	                SELECT
-		                \"Crypto_id\"
+		                \"Crypto_id\", 'crypto'
 	                FROM
 		                \"cryptocurrencies\") AS \"fiats_cryptos\"
                     WHERE
@@ -323,6 +323,8 @@ class ApiController extends Controller
         if (!$supported){
             throw new \Exception("Coin {$coin} is not supported");
         }
+
+        return $supported;
     }
 
     private function get_historical_available($exchange, $from){
@@ -589,7 +591,7 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
-            $this->check_coin($to);
+            $coin_info = $this->check_coin($to);
 
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
@@ -616,32 +618,12 @@ class ApiController extends Controller
         $start = $start - ($start % $range); // Allign to right offset
         $end = $end - ($end % $end); // Allign to right offset
 
-        $result = DB::select(DB::raw("
-            SELECT
-	            (array_agg(\"ch\".\"Open\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ORDER BY \"ch\".\"Timestamp\" ASC)) [1] AS \"Open\",
-	            MAX(\"ch\".\"High\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" )  AS \"High\",
-	            MIN(\"ch\".\"Low\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"Low\",
-	            (array_agg(\"ch\".\"Close\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ORDER BY \"Timestamp\" DESC)) [1] AS \"Close\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
-            FROM
-	            \"historical_available\" AS \"ha\"
-	            JOIN \"crypto_historical\" AS \"ch\" ON \"ha\".\"id\" = \"ch\".\"id\"
-	            JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
-	            JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
-            WHERE
-	            \"ha\".\"Exchange_id\" = '{$exchange}'
-                AND \"ha\".\"From\" = '{$historical_available->From}'
-                AND \"ha\".\"To\" = '{$historical_available->To}'
-                AND \"ch\".\"Timestamp\" BETWEEN '{$start}' AND '{$end}'
-                AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
-                AND \"ch\".\"Timestamp\"
-                AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
-                AND \"ch\".\"Timestamp\"
-            GROUP BY
-	            \"interval_alias\"
-	        ORDER BY
-	            \"interval_alias\"
-        "));
+        if ($coin_info->Type){
+            $result = $this->ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
+        }
+        else{
+            $result = $this->ohlc_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
+        }
 
         $values = array();
         foreach ($result as $data){
@@ -987,6 +969,62 @@ class ApiController extends Controller
             )
         ], 200);
 
+
+    }
+
+
+    private function ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
+    {
+        return DB::select(DB::raw("
+            SELECT
+	            (array_agg(\"ch\".\"Open\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ORDER BY \"ch\".\"Timestamp\" ASC)) [1] AS \"Open\",
+	            MAX(\"ch\".\"High\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" )  AS \"High\",
+	            MIN(\"ch\".\"Low\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"Low\",
+	            (array_agg(\"ch\".\"Close\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ORDER BY \"Timestamp\" DESC)) [1] AS \"Close\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
+            FROM
+	            \"historical_available\" AS \"ha\"
+	            JOIN \"crypto_historical\" AS \"ch\" ON \"ha\".\"id\" = \"ch\".\"id\"
+	            JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+	            JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN '{$start}' AND '{$end}'
+                AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+                AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+            GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
+	            \"interval_alias\"
+        "));
+    }
+
+    private function ohlc_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
+    {
+        return DB::select(DB::raw("
+            SELECT
+	            (array_agg(\"ch\".\"Open\" ORDER BY \"ch\".\"Timestamp\" ASC)) [1] AS \"Open\",
+	            MAX(\"ch\".\"High\")  AS \"High\",
+	            MIN(\"ch\".\"Low\") AS \"Low\",
+	            (array_agg(\"ch\".\"Close\" ORDER BY \"Timestamp\" DESC)) [1] AS \"Close\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
+            FROM
+	            \"historical_available\" AS \"ha\"
+	            JOIN \"crypto_historical\" AS \"ch\" ON \"ha\".\"id\" = \"ch\".\"id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN '{$start}' AND '{$end}'
+            GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
+	            \"interval_alias\"
+        "));
 
     }
 }
