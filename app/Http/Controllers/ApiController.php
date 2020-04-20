@@ -302,13 +302,12 @@ class ApiController extends Controller
         return $exchange;
     }
 
-    private function check_fiat($fiat){
-        $fiat = DB::table('fiats')->where('Fiat_id', $fiat)->first();
-        if (!$fiat){
-            throw new \Exception('Fiat is not supported');
+    private function check_coin($coin){
+        $cryptos = DB::table('cryptocurrencies');
+        $supported = DB::table('fiats as coins')->union($cryptos)->get();
+        if (!in_array($coin, $supported->coins)){
+            throw new \Exception("Coin {$coin} is not supported");
         }
-
-        return $fiat;
     }
 
     private function get_historical_available($exchange, $from){
@@ -486,7 +485,7 @@ class ApiController extends Controller
 
         try {
             $this->check_exchange($exchange);
-            $this->check_fiat($to);
+            $this->check_coin($to);
 
             $historical_available = $this->get_historical_available($exchange, $from);
 
@@ -538,7 +537,7 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
-            $this->check_fiat($to);
+            $this->check_coin($to);
 
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
@@ -575,7 +574,7 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
-            $this->check_fiat($to);
+            $this->check_coin($to);
 
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
@@ -838,7 +837,7 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
-            $this->check_fiat($to);
+            $this->check_coin($to);
 
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
