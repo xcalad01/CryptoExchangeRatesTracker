@@ -324,7 +324,7 @@ class ApiController extends Controller
             throw new \Exception("Coin {$coin} is not supported");
         }
 
-        return $supported;
+        return $supported[0];
     }
 
     private function get_historical_available($exchange, $from){
