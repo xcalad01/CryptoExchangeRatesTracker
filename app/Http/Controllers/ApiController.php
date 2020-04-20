@@ -618,7 +618,7 @@ class ApiController extends Controller
         $start = $start - ($start % $range); // Allign to right offset
         $end = $end - ($end % $end); // Allign to right offset
 
-        if ($coin_info->Type){
+        if ($coin_info->Type == "Fiat"){
             $result = $this->ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
         else{
