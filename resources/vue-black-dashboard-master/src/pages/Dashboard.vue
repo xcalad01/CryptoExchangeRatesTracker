@@ -737,11 +737,15 @@
 
     },
     mounted() {
+      this.init_available();
+
+      const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin"];
+      // const usdt_exchange = ["poloniex", "binance", "bittrex", "hitbtc", "okex"];
       this.exchange = this.$route.name;
       this.post.from = 'btc';
-      this.post.to = 'usd';
-      this.old_to ='usd';
-      this.init_available();
+      this.post.to = usd_exchanges.includes(this.exchange) ? 'usd' : 'usdt';
+      this.old_to = this.post.to;
+
 
       global_component_instance = this;
       this.ohlc_value_chart(true);
