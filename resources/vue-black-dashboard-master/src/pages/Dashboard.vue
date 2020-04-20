@@ -668,7 +668,7 @@
       },
 
       init_available(){
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/all_hist_avail/" + this.exchange;
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/pairs/" + this.exchange;
         this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
       },
 
