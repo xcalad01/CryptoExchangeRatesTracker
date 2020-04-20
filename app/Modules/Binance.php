@@ -74,7 +74,7 @@ class Binance extends Base
 
     private function send_post($payload){
         $this->set_curl_post();
-        $this->set_curl_url('http://127.0.0.1:8000/api/crypto_historical');
+        $this->set_curl_url('http://127.0.0.1:8000/api/crypto/historical');
 
         foreach ($payload as $item) {
             $payload = json_encode($item);
@@ -92,7 +92,7 @@ class Binance extends Base
     }
 
     public function run_init_db_task(){
-        $endpointParts = parse_url("http://127.0.0.1:8000/api/crypto_historical");
+        $endpointParts = parse_url("http://127.0.0.1:8000/api/crypto/historical");
         $socket = fsockopen($endpointParts['host'], $endpointParts['port']);
 
         foreach ($this->config as $config_item){
@@ -132,7 +132,7 @@ class Binance extends Base
                         )
                     );
                     $body = json_encode($body);
-                    $this->fire_and_forget_post($socket,"http://127.0.0.1:8000/api/crypto_historical", $body);
+                    $this->fire_and_forget_post($socket,"http://127.0.0.1:8000/api/crypto/historical", $body);
                 }
 
                 if ($do_break) {
