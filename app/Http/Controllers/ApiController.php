@@ -450,7 +450,7 @@ class ApiController extends Controller
         $result = DB::select(DB::raw("
             SELECT
                 AVG((\"Open\" + \"Close\") / 2 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / 3600)) * 3600) AT TIME ZONE 'UTC' AS \"interval_alias\"
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
 	            \"crypto_historical\" AS \"ch\"
 	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
@@ -606,7 +606,7 @@ class ApiController extends Controller
 	            MAX(\"ch\".\"High\") AS \"High\",
 	            MIN(\"ch\".\"Low\") AS \"Low\",
 	            (array_agg(\"ch\".\"Close\" ORDER BY \"Timestamp\" DESC)) [1] AS \"Close\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / 3600)) * 3600) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
             FROM
 	            \"historical_available\" AS \"ha\"
 	            JOIN \"crypto_historical\" AS \"ch\" ON \"ha\".\"id\" = \"ch\".\"id\"
