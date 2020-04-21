@@ -601,7 +601,7 @@ class ApiController extends Controller
         $start = $start - ($start % $range); // Allign to right offset
         $end = $end - ($end % $end); // Allign to right offset
 
-        if ($coin_info->Type == "Fiat"){
+        if ($coin_info->Type == "fiat"){
             $result = $this->ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
         else{
@@ -842,7 +842,7 @@ class ApiController extends Controller
 
         $volume_data = array();
 
-        if ($coin_info->Type = 'fiat'){
+        if ($coin_info->Type == 'fiat'){
             $result = $this->volume_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
         else{
@@ -992,6 +992,7 @@ class ApiController extends Controller
 
     private function volume_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
+        print_r("bbb");
         return DB::select(DB::raw("
             SELECT
                 AVG(\"Volume\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Volume\",
