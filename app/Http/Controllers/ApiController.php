@@ -971,7 +971,6 @@ class ApiController extends Controller
 
     private function value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
-        print_r("value_no_fiat_time_range_query");
         return DB::select(DB::raw("
             SELECT
                 AVG((\"Open\" + \"Close\") / 2) AS \"value\",
