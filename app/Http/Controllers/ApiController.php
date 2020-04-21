@@ -817,7 +817,7 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
-            $this->check_coin($to);
+            $coin_info = $this->check_coin($to);
 
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
@@ -830,9 +830,6 @@ class ApiController extends Controller
 
             $historical_available = $this->get_historical_available($exchange, $from);
 
-
-            $start = intval($start);
-
         }
         catch (\Exception $e){
             return response()->json([
@@ -844,87 +841,21 @@ class ApiController extends Controller
         $end = $end - ($end % $end); // Allign to right offset
 
         $volume_data = array();
-        $fiat_actual = null;
-        $fiat_prev  =  null;
-        $fiat_prev_key = "volume_fiat_prev_{$range}_{$exchange}_{$from}";
-        $fiat_prev_id = Redis::get($fiat_prev_key);
 
-        $fiat_db = null;
-        $fiat_to = null;
-
-        while ($start + $range <= $end){
-            $x_value = $start + $range;
-            $redis_key_value = "volume_{$x_value}_{$range}_{$exchange}_{$from}";
-            $result = Redis::get($redis_key_value);
-            if ($result){
-                $fiat_data = $this->get_fiat_values_for_cached($historical_available, $to, $fiat_prev_id, $fiat_actual, $fiat_prev, $start, $range);
-                $fiat_actual = $fiat_data[0];
-                $fiat_prev = $fiat_data[1];
-
-                if ($fiat_prev){
-                    $value1 = $fiat_prev->Value_USD;
-                }
-                else{
-                    $value1 = 1;
-                }
-
-                if ($fiat_actual){
-                    $value2 = $fiat_actual->Value_USD;
-                }
-                else{
-                    $value2 = 1;
-                }
-
-                array_push($volume_data, array(
-                    "x" => $start,
-                    "y" => $result / $value1 * $value2
-                ));
-
-                Redis::set($redis_key_value, $result / $value1 * $value2);
-
-                $start += $range;
-                continue;
-            }
-
-            $result = DB::table('historical_available')
-                ->select(DB::raw('AVG("Volume") as "Volume"'))
-                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->where([
-                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
-                    ['From', '=', DB::raw("'{$historical_available->From}'")],
-                    ['To', '=', DB::raw("'{$historical_available->To}'")]
-                ])
-                ->whereBetween('Timestamp', [$start, $start + $range - 1])
-                ->get();
-
-            $result = json_decode($result, true);
-
-            if ($fiat_db == null){
-                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
-                $fiat_to = $this->get_fiat_historical($to, $start);
-            }
-            elseif (!($fiat_db->Date >= $start and $fiat_db->Date <= $start + $range - 1)){
-                $fiat_db = $this->get_fiat_historical($historical_available->To, $start);
-                $fiat_to = $this->get_fiat_historical($to, $start);
-            }
-
-            foreach ($result as $res){
-                $y_value = $res['Volume'] / $fiat_db->Value_USD * $fiat_to->Value_USD;
-
-                Redis::set($redis_key_value, $y_value);
-
-                array_push($volume_data, array(
-                    "x" => $start + $range,
-                    "y" => $y_value
-                ));
-            }
-
-            $start += $range;
+        if ($coin_info->Type = 'Fiat'){
+            $result = $this->volume_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
+        }
+        else{
+            $result = $this->volume_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
 
-        if (!empty($volume_data)){
-            Redis::set($fiat_prev_key, $to);
+        foreach ($result as $res){
+            array_push($volume_data, array(
+                "x" => $start + $range,
+                "y" => $res->Volume
+            ));
         }
+
 
         return response()->json([
             "data" => $volume_data
@@ -1059,5 +990,57 @@ class ApiController extends Controller
 	        ORDER BY
 	            \"interval_alias\""
         ));
+    }
+
+    private function volume_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
+    {
+        return DB::select(DB::raw("
+            SELECT
+                AVG(\"Volume\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Volume\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+            FROM
+	            \"crypto_historical\" AS \"ch\"
+	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+	                JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
+                AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+                AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+            GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
+	            \"interval_alias\""
+        ));
+
+    }
+
+    private function volume_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
+    {
+        return DB::select(DB::raw("
+            SELECT
+                AVG(\"Volume\") AS \"Volume\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+            FROM
+	            \"crypto_historical\" AS \"ch\"
+	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+	                JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
+            GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
+	            \"interval_alias\""
+        ));
+
     }
 }
