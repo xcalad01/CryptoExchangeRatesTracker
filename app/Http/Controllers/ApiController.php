@@ -842,7 +842,7 @@ class ApiController extends Controller
 
         $volume_data = array();
 
-        if ($coin_info->Type = 'Fiat'){
+        if ($coin_info->Type = 'fiat'){
             $result = $this->volume_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
         else{
