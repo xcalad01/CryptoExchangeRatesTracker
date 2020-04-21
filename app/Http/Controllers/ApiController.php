@@ -6,7 +6,6 @@ require __DIR__ . "/../../Modules/Stats.php";
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 
 use App\Exchange;
 use App\Historical_available;
@@ -463,7 +462,7 @@ class ApiController extends Controller
 
         $values = array();
 
-        if ($coin_info->Type == 'Fiat'){
+        if ($coin_info->Type == 'fiat'){
             $result = $this->value_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
         else{
@@ -558,6 +557,7 @@ class ApiController extends Controller
                 "message" => $e->getMessage()
             ], 404);
         }
+
 
         $values = $this->do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available, $coin_info);
 
