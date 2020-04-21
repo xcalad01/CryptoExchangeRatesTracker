@@ -971,6 +971,7 @@ class ApiController extends Controller
 
     private function value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
+        print_r("value_no_fiat_time_range_query");
         return DB::select(DB::raw("
             SELECT
                 AVG((\"Open\" + \"Close\") / 2) AS \"value\",
@@ -978,8 +979,6 @@ class ApiController extends Controller
             FROM
 	            \"crypto_historical\" AS \"ch\"
 	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
-	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
-	                JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
             WHERE
 	            \"ha\".\"Exchange_id\" = '{$exchange}'
                 AND \"ha\".\"From\" = '{$historical_available->From}'
@@ -1029,8 +1028,6 @@ class ApiController extends Controller
             FROM
 	            \"crypto_historical\" AS \"ch\"
 	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
-	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
-	                JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
             WHERE
 	            \"ha\".\"Exchange_id\" = '{$exchange}'
                 AND \"ha\".\"From\" = '{$historical_available->From}'
