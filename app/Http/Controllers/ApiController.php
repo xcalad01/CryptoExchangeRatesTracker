@@ -457,12 +457,18 @@ class ApiController extends Controller
 //    }
 
 
-    private function do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available){
+    private function do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available, $coin_info){
         $start = $start - ($start % $range); // Allign to right offset
         $end = $end - ($end % $end); // Allign to right offset
 
         $values = array();
 
+        if ($coin_info->Type == 'Fiat'){
+            $result = $this->value_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
+        }
+        else{
+            $result = $this->value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
+        }
         $result = DB::select(DB::raw("
             SELECT
                 AVG((\"Open\" + \"Close\") / 2 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
@@ -502,7 +508,7 @@ class ApiController extends Controller
 
         try {
             $this->check_exchange($exchange);
-            $this->check_coin($to);
+            $coin_info = $this->check_coin($to);
 
             $historical_available = $this->get_historical_available($exchange, $from);
 
@@ -514,7 +520,7 @@ class ApiController extends Controller
         }
 
         if($init == "true"){
-            $result = $this->do_get_value_time_range($timestamp - 1080, $timestamp + 60, $exchange, 60, $from, $to, $historical_available);
+            $result = $this->do_get_value_time_range($timestamp - 1080, $timestamp + 60, $exchange, 60, $from, $to, $historical_available, $coin_info);
             return response()->json([
                 "data" => $result
             ], 200);
@@ -554,7 +560,7 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
-            $this->check_coin($to);
+            $coin_info = $this->check_coin($to);
 
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
@@ -576,7 +582,7 @@ class ApiController extends Controller
             ], 404);
         }
 
-        $values = $this->do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available);
+        $values = $this->do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available, $coin_info);
 
         return response()->json([
             "data" => $values
@@ -1026,5 +1032,55 @@ class ApiController extends Controller
 	            \"interval_alias\"
         "));
 
+    }
+
+    private function value_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
+    {
+        return DB::select(DB::raw("
+            SELECT
+                AVG((\"Open\" + \"Close\") / 2 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+            FROM
+	            \"crypto_historical\" AS \"ch\"
+	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+	                JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
+                AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+                AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+            GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
+	            \"interval_alias\""
+        ));
+    }
+
+    private function value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
+    {
+        return DB::select(DB::raw("
+            SELECT
+                AVG((\"Open\" + \"Close\") / 2) AS \"value\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+            FROM
+	            \"crypto_historical\" AS \"ch\"
+	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+	                JOIN \"fiat_historicals\" AS \"fh2\" ON '{$to}' = \"fh2\".\"Fiat_id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
+            GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
+	            \"interval_alias\""
+        ));
     }
 }
