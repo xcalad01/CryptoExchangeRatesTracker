@@ -851,7 +851,7 @@ class ApiController extends Controller
 
         foreach ($result as $res){
             array_push($volume_data, array(
-                "x" => $res->interval_alias,
+                "x" => strtotime($res->interval_alias),
                 "y" => floatval($res->Volume)
             ));
         }
