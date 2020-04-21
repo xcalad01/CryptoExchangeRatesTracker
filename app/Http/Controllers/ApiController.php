@@ -851,7 +851,7 @@ class ApiController extends Controller
 
         foreach ($result as $res){
             array_push($volume_data, array(
-                "x" => $start + $range,
+                "x" => $res->interval_alias,
                 "y" => floatval($res->Volume)
             ));
         }
@@ -992,7 +992,6 @@ class ApiController extends Controller
 
     private function volume_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
-        print_r("bbb");
         return DB::select(DB::raw("
             SELECT
                 AVG(\"Volume\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Volume\",
