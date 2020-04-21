@@ -852,7 +852,7 @@ class ApiController extends Controller
         foreach ($result as $res){
             array_push($volume_data, array(
                 "x" => $start + $range,
-                "y" => $res->Volume
+                "y" => floatval($res->Volume)
             ));
         }
 
