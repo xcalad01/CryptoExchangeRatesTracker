@@ -946,7 +946,7 @@ class ApiController extends Controller
     {
         return DB::select(DB::raw("
             SELECT
-                AVG((\"Open\" + \"Close\") / 2 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
+                AVG((\"Open\" + \"Close\" + \"High\") / 3 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
 	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
 	            \"crypto_historical\" AS \"ch\"
@@ -973,7 +973,7 @@ class ApiController extends Controller
     {
         return DB::select(DB::raw("
             SELECT
-                AVG((\"Open\" + \"Close\") / 2) AS \"value\",
+                AVG((\"Open\" + \"Close\" + \"High\") / 3) AS \"value\",
 	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
 	            \"crypto_historical\" AS \"ch\"
