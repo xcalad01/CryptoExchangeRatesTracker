@@ -457,9 +457,6 @@ class ApiController extends Controller
 
 
     private function do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available, $coin_info){
-        $start = $start - ($start % $range); // Allign to right offset
-        $end = $end - ($end % $end); // Allign to right offset
-
         $values = array();
 
         if ($coin_info->Type == 'fiat'){
@@ -597,9 +594,6 @@ class ApiController extends Controller
                 "message" => $e->getMessage()
             ], 404);
         }
-
-        $start = $start - ($start % $range); // Allign to right offset
-        $end = $end - ($end % $end); // Allign to right offset
 
         if ($coin_info->Type == "fiat"){
             $result = $this->ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
@@ -837,9 +831,6 @@ class ApiController extends Controller
             ], 404);
         }
 
-        $start = $start - ($start % $range); // Allign to right offset
-        $end = $end - ($end % $end); // Allign to right offset
-
         $volume_data = array();
 
         if ($coin_info->Type == 'fiat'){
@@ -886,17 +877,68 @@ class ApiController extends Controller
 
     }
 
+    public function crypto_asset_value(Request $request, $crypto_id, $convert_to_id, $start, $end, $range=null)
+    {
+        try {
+            $this->check_coin($crypto_id);
+            $convert_to_info = $this->check_coin($convert_to_id);
+
+            if ($range){
+                if (!key_exists($range, $this->time_range_config)){
+                    throw new \Exception('Time range not supported');
+                }
+                $range = $this->time_range_config[$range];
+            }
+            else{
+                $range = $end - $start;
+            }
+
+            if ($start + $range > $end){
+                throw new \Exception('Range not between start and end');
+            }
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        if ($convert_to_info->Type == 'fiat'){
+            $result = $this->value_crypto_asset_fiat($range, $crypto_id, $convert_to_id, $start, $end);
+        }
+        else{
+            $result = $this->value_crypto_asset_no_fiat($range, $crypto_id, $convert_to_id, $start, $end);
+        }
+
+        $values = array();
+        foreach ($result as $data){
+            array_push($values, array(
+                strtotime($data->interval_alias),
+                floatval($data->sum)
+            ));
+        }
+
+        return response()->json([
+            "data" => $values
+        ], 200);
+    }
+
 
     private function ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
         return DB::select(DB::raw("
+            WITH offset_value(offset_val) as (
+	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            )
+
             SELECT
 	            (array_agg(\"ch\".\"Open\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ORDER BY \"ch\".\"Timestamp\" ASC)) [1] AS \"Open\",
 	            MAX(\"ch\".\"High\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" )  AS \"High\",
 	            MIN(\"ch\".\"Low\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"Low\",
 	            (array_agg(\"ch\".\"Close\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ORDER BY \"Timestamp\" DESC)) [1] AS \"Close\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + offset_val) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
             FROM
+                offset_value,
 	            \"historical_available\" AS \"ha\"
 	            JOIN \"crypto_historical\" AS \"ch\" ON \"ha\".\"id\" = \"ch\".\"id\"
 	            JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
@@ -920,13 +962,18 @@ class ApiController extends Controller
     private function ohlc_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
         return DB::select(DB::raw("
+            WITH offset_value(offset_val) as (
+	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            )
+
             SELECT
 	            (array_agg(\"ch\".\"Open\" ORDER BY \"ch\".\"Timestamp\" ASC)) [1] AS \"Open\",
 	            MAX(\"ch\".\"High\")  AS \"High\",
 	            MIN(\"ch\".\"Low\") AS \"Low\",
 	            (array_agg(\"ch\".\"Close\" ORDER BY \"Timestamp\" DESC)) [1] AS \"Close\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + \"ov\".offset_val) AT TIME ZONE 'UTC' AS 	\"interval_alias\"
             FROM
+                \"offset_value\" AS \"ov\",
 	            \"historical_available\" AS \"ha\"
 	            JOIN \"crypto_historical\" AS \"ch\" ON \"ha\".\"id\" = \"ch\".\"id\"
             WHERE
@@ -945,10 +992,15 @@ class ApiController extends Controller
     private function value_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
         return DB::select(DB::raw("
+            WITH offset_value(offset_val) as (
+	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            )
+
             SELECT
                 AVG((\"Open\" + \"Close\" + \"High\") / 3 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"value\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
+                offset_value,
 	            \"crypto_historical\" AS \"ch\"
 	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
 	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
@@ -972,10 +1024,14 @@ class ApiController extends Controller
     private function value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
         return DB::select(DB::raw("
+            WITH offset_value(offset_val) as (
+	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            )
             SELECT
                 AVG((\"Open\" + \"Close\" + \"High\") / 3) AS \"value\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + \"ov\".offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
+                \"offset_value\" AS \"ov\",
 	            \"crypto_historical\" AS \"ch\"
 	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
             WHERE
@@ -993,10 +1049,14 @@ class ApiController extends Controller
     private function volume_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
         return DB::select(DB::raw("
+            WITH offset_value(offset_val) as (
+	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            )
             SELECT
                 AVG(\"Volume\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Volume\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
+                offset_value,
 	            \"crypto_historical\" AS \"ch\"
 	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
 	                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
@@ -1021,12 +1081,16 @@ class ApiController extends Controller
     private function volume_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
         return DB::select(DB::raw("
+            WITH offset_value(offset_val) as (
+	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            )
             SELECT
                 AVG(\"Volume\") AS \"Volume\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
+                offset_value,
 	            \"crypto_historical\" AS \"ch\"
-	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+	            JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
             WHERE
 	            \"ha\".\"Exchange_id\" = '{$exchange}'
                 AND \"ha\".\"From\" = '{$historical_available->From}'
@@ -1038,5 +1102,107 @@ class ApiController extends Controller
 	            \"interval_alias\""
         ));
 
+    }
+
+    private function value_crypto_asset_fiat($range, $crypto_id, $convert_to, int $start, int $end)
+    {
+        return DB::select(DB::raw("
+            WITH offset_value(offset_val) as (
+	            values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            ),
+            main_table AS (
+	            SELECT
+		        SUM(\"ch\".\"Volume\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Volume_Exchange\",
+		        AVG((\"ch\".\"Open\" + \"ch\".\"Close\" + \"ch\".\"High\") / 3 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Price\",
+		        to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + \"ov\".offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
+	        FROM
+	            \"offset_value\" AS \"ov\",
+		        \"crypto_historical\" AS \"ch\"
+		        JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+                JOIN \"fiat_historicals\" AS \"fh1\" ON \"ha\".\"To\" = \"fh1\".\"Fiat_id\"
+                JOIN \"fiat_historicals\" AS \"fh2\" ON '{$convert_to}' = \"fh2\".\"Fiat_id\"
+	        WHERE
+                \"ha\".\"From\" = '{$crypto_id}'
+                AND \"ha\".\"To\" IN('usd','eur')
+                AND \"ch\".\"Timestamp\" BETWEEN '{$start}'
+                AND '{$end}' - 1
+                AND \"fh1\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+                AND \"ch\".\"Timestamp\"
+                AND \"fh2\".\"Date\" BETWEEN \"ch\".\"Timestamp\" - 86400
+		        AND \"ch\".\"Timestamp\"
+	        GROUP BY
+                \"interval_alias\",
+                \"Exchange_id\"
+        ),
+        sum_table AS (
+	        SELECT
+                \"interval_alias\",
+                SUM(\"Volume_Exchange\") AS \"Volume_Sum\"
+	        FROM
+		        main_table
+            GROUP BY
+                \"interval_alias\"
+        )
+        SELECT
+            SUM(\"Volume_Exchange\" / \"Volume_Sum\" * \"Price\"),
+            \"st\".\"interval_alias\"
+        FROM
+            main_table AS \"mt\",
+            sum_table AS \"st\"
+        WHERE
+            \"mt\".\"interval_alias\" = \"st\".\"interval_alias\"
+        GROUP BY
+            \"st\".\"interval_alias\"
+        ORDER BY \"st\".\"interval_alias\";
+
+        "));
+
+    }
+
+    private function value_crypto_asset_no_fiat($range, $crypto_id, $convert_to, int $start, int $end){
+        return DB::select(DB::raw("
+            WITH offset_value(offset_val) as (
+	            values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            ),
+            main_table AS (
+                SELECT
+                    SUM(\"ch\".\"Volume\") AS \"Volume_Exchange\",
+                    AVG((\"ch\".\"Open\" + \"ch\".\"Close\" + \"ch\".\"High\") / 3) AS \"Price\",
+                    to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + \"ov\".\"offset_val\") AT TIME ZONE 'UTC' AS \"interval_alias\"
+                FROM
+                    \"offset_value\" AS \"ov\",
+                    \"crypto_historical\" AS \"ch\"
+                    JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+                WHERE
+                    \"ha\".\"From\" = '{$crypto_id}'
+                    AND \"ha\".\"To\" = '{$convert_to}'
+                    AND \"ch\".\"Timestamp\" BETWEEN '{$start}'
+                    AND '{$end}' - 1
+                GROUP BY
+                    \"interval_alias\",
+                    \"Exchange_id\"
+                ),
+            sum_table AS (
+                    SELECT
+                        \"interval_alias\",
+                        SUM(\"Volume_Exchange\") AS \"Volume_Sum\"
+                    FROM
+                        main_table
+                    GROUP BY
+                        \"interval_alias\"
+                )
+                SELECT
+                    SUM(\"Volume_Exchange\" / \"Volume_Sum\" * \"Price\"),
+                    \"st\".\"interval_alias\"
+                FROM
+                    main_table AS \"mt\",
+                    sum_table AS \"st\"
+                WHERE
+                    \"mt\".\"interval_alias\" = \"st\".\"interval_alias\"
+                GROUP BY
+                    \"st\".\"interval_alias\"
+                ORDER BY \"st\".\"interval_alias\";
+
+        "));
     }
 }
