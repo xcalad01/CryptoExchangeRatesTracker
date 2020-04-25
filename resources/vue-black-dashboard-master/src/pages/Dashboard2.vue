@@ -99,20 +99,14 @@
         }
 
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + "usd" + "/" + this.post.start + "/" + this.post.end + "/" + this.post.range;
-        console.log(url);
+        if (this.awvp_chart == null){
+          this.init_awvp_chart();
+        }
+        this.awvp_chart.showLoading();
         this.axios.get(url).then(response => (this.create_update_awvp_chart(response.data)));
       },
 
-      create_update_awvp_chart(data){
-        this.awvp_chart_data = data['data'].map(function (item) {
-          return [(item[0]) * 1000, item[1]]
-        });
-
-        if (this.awvp_chart != null){
-          this.awvp_chart.series[0].setData(this.awvp_chart_data);
-          return
-        }
-
+      init_awvp_chart(){
         const card = document.getElementById('chart_awvp_cart');
 
         var options = {
@@ -137,7 +131,7 @@
 
           series: [{
             name: 'Price',
-            data: this.awvp_chart_data,
+            data: null,
             marker: {
               enabled: true,
               radius: 3
@@ -149,6 +143,16 @@
           }]};
 
         this.awvp_chart = new Highcharts.Chart(options);
+      },
+
+      create_update_awvp_chart(data){
+        this.awvp_chart_data = data['data'].map(function (item) {
+          return [(item[0]) * 1000, item[1]]
+        });
+
+        if (this.awvp_chart != null){
+          this.awvp_chart.series[0].setData(this.awvp_chart_data);
+        }
       }
     }
   }
