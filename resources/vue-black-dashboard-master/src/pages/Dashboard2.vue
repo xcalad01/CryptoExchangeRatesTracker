@@ -193,6 +193,10 @@
           this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
           this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000
         }
+        else{
+          this.post.start = Date.parse(this.post.start) / 1000;
+          this.post.end = this.post.start + 86400;
+        }
 
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + "usd" + "/" + this.post.start + "/" + this.post.end;
         this.axios.get(url).then(response => (this.update_value(response.data)));
