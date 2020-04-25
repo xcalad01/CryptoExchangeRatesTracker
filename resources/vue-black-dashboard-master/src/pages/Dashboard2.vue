@@ -82,7 +82,8 @@
     },
 
     mounted() {
-      this.asset = this.$route.path;
+      this.asset = this.$route.name;
+      console.log(this.asset);
       this.query_awvp_chart_data(true);
     },
 
