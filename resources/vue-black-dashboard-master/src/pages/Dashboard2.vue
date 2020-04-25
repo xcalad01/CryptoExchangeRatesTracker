@@ -1,7 +1,39 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-2">
+      <div class="col-lg-8 ml-auto mr-auto">
+        <div class="row">
+          <div class="col-md-4">
+            <label>Day:</label>
+            <datetime type="date" v-model="post.start"></datetime>
+          </div>
+          <div class="col-md-4">
+            <label>Convert to:</label><br>
+            <select v-model=post.to @change="onChangeFrom()">
+              <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <form @submit.prevent="asset_value(false)">
+              <div class="form-group">
+                <button class="btn btn-primary">Query Day Value</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-8 ml-auto mr-auto">
+        <div class="row">
+          <span style="width: 100%;text-align: center;font-size: 250%">{{day_price}}</span>
+        </div>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-2" style="horiz-align:center;">
         <label>Convert to:</label><br>
         <select v-model=post.to @change="onChangeFrom()">
           <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
@@ -55,8 +87,6 @@
 <script>
   import { Datetime } from 'vue-datetime';
   import Highcharts from 'highcharts';
-  import Highstock from 'highcharts/highstock';
-
   import { axios } from '../plugins/axios';
 
   export default {
@@ -78,12 +108,14 @@
         awvp_chart_data: null,
         awvp_chart: null,
 
+        day_price: null
+
       }
     },
 
     mounted() {
       this.asset = this.$route.name;
-      console.log(this.asset);
+      this.asset_value(true);
       this.query_awvp_chart_data(true);
     },
 
@@ -154,6 +186,22 @@
           this.awvp_chart.hideLoading();
           this.awvp_chart.series[0].setData(this.awvp_chart_data);
         }
+      },
+
+      asset_value(init){
+        if (init){
+          this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
+          this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000
+        }
+
+        let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + "usd" + "/" + this.post.start + "/" + this.post.end;
+        this.axios.get(url).then(response => (this.update_value(response.data)));
+      },
+
+      update_value(data){
+        this.awvp_chart_data = data['data'].map(function (item) {
+          this.day_price = item[1];
+        });
       }
     }
   }
