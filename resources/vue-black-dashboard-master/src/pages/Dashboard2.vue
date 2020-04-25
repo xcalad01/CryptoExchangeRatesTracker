@@ -199,9 +199,7 @@
       },
 
       update_value(data){
-        this.awvp_chart_data = data['data'].map(function (item) {
-          this.day_price = item[1];
-        });
+        this.day_price = data[0][1];
       }
     }
   }
