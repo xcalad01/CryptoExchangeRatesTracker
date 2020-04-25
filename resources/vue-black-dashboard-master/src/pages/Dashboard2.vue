@@ -102,7 +102,7 @@
         this.axios.get(url).then(response => (this.create_update_awvp_chart(response.data)));
       },
 
-      create_update_awvp_chart(){
+      create_update_awvp_chart(data){
         this.awvp_chart_data = data['data'].map(function (item) {
           return [(item[0]) * 1000, item[1]]
         });
