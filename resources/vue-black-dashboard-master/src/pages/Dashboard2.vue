@@ -103,7 +103,7 @@
           this.init_awvp_chart();
         }
         this.awvp_chart.showLoading();
-        this.axios.get(url).then(response => (this.create_update_awvp_chart(response.data)));
+        this.axios.get(url).then(response => (this.update_awvp_chart(response.data)));
       },
 
       init_awvp_chart(){
@@ -145,12 +145,13 @@
         this.awvp_chart = new Highcharts.Chart(options);
       },
 
-      create_update_awvp_chart(data){
+      update_awvp_chart(data){
         this.awvp_chart_data = data['data'].map(function (item) {
           return [(item[0]) * 1000, item[1]]
         });
 
         if (this.awvp_chart != null){
+          this.awvp_chart.hideLoading();
           this.awvp_chart.series[0].setData(this.awvp_chart_data);
         }
       }
