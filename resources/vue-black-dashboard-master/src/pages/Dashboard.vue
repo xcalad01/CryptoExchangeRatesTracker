@@ -108,7 +108,6 @@
 <script>
   import LineChart from '../components/Charts/LineChart';
   import BarChart from '../components/Charts/BarChart';
-  import Ohlcchart from '../components/Charts/Ohlc';
   import TaskList from './Dashboard/TaskList';
   import UserTable from './Dashboard/UserTable';
 
@@ -323,11 +322,6 @@
 
   export default {
     components: {
-      LineChart,
-      BarChart,
-      Ohlcchart,
-      TaskList,
-      UserTable,
       datetime: Datetime
     },
     data() {

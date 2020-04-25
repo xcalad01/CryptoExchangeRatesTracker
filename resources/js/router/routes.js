@@ -4,79 +4,187 @@ import NotFound from "../../vue-black-dashboard-master/src/pages/NotFoundPage.vu
 
 // Admin pages
 const Dashboard = () => import(/* webpackChunkName: "dashboard" */"../../vue-black-dashboard-master/src/pages/Dashboard.vue");
-const Profile = () => import(/* webpackChunkName: "common" */ "../../vue-black-dashboard-master/src/pages/Profile.vue");
-const Notifications = () => import(/* webpackChunkName: "common" */"../../vue-black-dashboard-master/src/pages/Notifications.vue");
-const Icons = () => import(/* webpackChunkName: "common" */ "../../vue-black-dashboard-master/src/pages/Icons.vue");
-const Maps = () => import(/* webpackChunkName: "common" */ "../../vue-black-dashboard-master/src/pages/Maps.vue");
-const Typography = () => import(/* webpackChunkName: "common" */ "../../vue-black-dashboard-master/src/pages/Typography.vue");
-const TableList = () => import(/* webpackChunkName: "common" */ "../../vue-black-dashboard-master/src/pages/TableList.vue");
+const Dashboard2 = () => import(/* webpackChunkName: "dashboard" */"../../vue-black-dashboard-master/src/pages/Dashboard2.vue");
 
 const routes = [
     {
         path: "/",
         component: DashboardLayout,
-        redirect: "gdax",
+        redirect: "/exchange/gdax",
+    },
+    {
+        path: "/exchange",
+        component: DashboardLayout,
+        redirect: "/exchange/gdax",
+        meta: { title: "exchanges" },
         children: [
             {
                 path: "kraken",
                 name: "kraken",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "kraken"},
             },
             {
                 path: "gdax",
                 name: "gdax",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "gdax" },
             },
             {
                 path: "bitfinex",
                 name: "bitfinex",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "bitfinex" },
             },
             {
                 path: "gemini",
                 name: "gemini",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "gemini" },
             },
             {
                 path: "bitstamp",
                 name: "bitstamp",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "bitstamp" },
             },
             {
                 path: "poloniex",
                 name: "poloniex",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "poloniex" },
+
             },
             {
                 path: "binance",
                 name: "binance",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "binance" },
+
             },
             {
                 path: "bittrex",
                 name: "bittrex",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "bittrex" },
+
             },
             {
                 path: "hitbtc",
                 name: "hitbtc",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "hitbtc" },
+
             },
             {
                 path: "bitbay",
                 name: "bitbay",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "bitbay" },
+
             },
             {
                 path: "okcoin",
                 name: "okcoin",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "okcoin" },
+
             },
             {
                 path: "okex",
                 name: "okex",
-                component: Dashboard
+                component: Dashboard,
+                meta: { title: "okex" },
+
+            }
+
+        ]
+    },
+    {
+        path: "/asset",
+        component: DashboardLayout,
+        redirect: "/exchange/gdax",
+        meta: { title: "assets" },
+        children: [
+            {
+                path: "kraken",
+                name: "kraken",
+                component: Dashboard2,
+                meta: { title: "kraken" },
             },
+            {
+                path: "gdax",
+                name: "gdax",
+                component: Dashboard2,
+                meta: { title: "gdax" },
+            },
+            {
+                path: "bitfinex",
+                name: "bitfinex",
+                component: Dashboard2,
+                meta: { title: "bitfinex" },
+            },
+            {
+                path: "gemini",
+                name: "gemini",
+                component: Dashboard2,
+                meta: { title: "gemini" },
+            },
+            {
+                path: "bitstamp",
+                name: "bitstamp",
+                component: Dashboard2,
+                meta: { title: "bitstamp" },
+            },
+            {
+                path: "poloniex",
+                name: "poloniex",
+                component: Dashboard2,
+                meta: { title: "poloniex" },
+
+            },
+            {
+                path: "binance",
+                name: "binance",
+                component: Dashboard2,
+                meta: { title: "binance" },
+
+            },
+            {
+                path: "bittrex",
+                name: "bittrex",
+                component: Dashboard2,
+                meta: { title: "bittrex" },
+
+            },
+            {
+                path: "hitbtc",
+                name: "hitbtc",
+                component: Dashboard2,
+                meta: { title: "hitbtc" },
+
+            },
+            {
+                path: "bitbay",
+                name: "bitbay",
+                component: Dashboard2,
+                meta: { title: "bitbay" },
+
+            },
+            {
+                path: "okcoin",
+                name: "okcoin",
+                component: Dashboard2,
+                meta: { title: "okcoin" },
+
+            },
+            {
+                path: "okex",
+                name: "okex",
+                component: Dashboard2,
+                meta: { title: "okex" },
+
+            }
 
         ]
     },

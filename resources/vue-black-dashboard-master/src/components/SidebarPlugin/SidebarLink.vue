@@ -1,6 +1,5 @@
 <template>
   <component :is="tag"
-             @click.native="hideSidebar"
              class="nav-item"
              v-bind="$attrs"
              tag="li">
@@ -36,11 +35,6 @@ export default {
     }
   },
   methods: {
-    hideSidebar() {
-      if (this.autoClose) {
-        this.$sidebar.displaySidebar(false);
-      }
-    },
     isActive() {
       return this.$el.classList.contains("active");
     }

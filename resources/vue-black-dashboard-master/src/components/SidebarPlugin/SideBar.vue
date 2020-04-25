@@ -7,18 +7,10 @@
         -->
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
-      <div class="logo">
-        <a href="http://www.creative-tim.com"
-           aria-label="sidebar mini logo"
-           class="simple-text logo-mini">
-        </a>
-        <a class="simple-text logo-normal">
-          {{title}}
-        </a>
-      </div>
       <slot>
 
       </slot>
+
       <ul class="nav">
         <!--By default vue-router adds an active class to each route link. This way the links are colored when clicked-->
         <slot name="links">
@@ -30,11 +22,13 @@
           </sidebar-link>
         </slot>
       </ul>
+
     </div>
   </div>
 </template>
 <script>
   import SidebarLink from "./SidebarLink";
+  import SidebarItem from './SidebarItem'
 
   export default {
     props: {
