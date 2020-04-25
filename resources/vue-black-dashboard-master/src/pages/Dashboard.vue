@@ -174,22 +174,21 @@
         }
 
         let url_value = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/" + "ohlc" + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
-        this.axios.get(url_value).then(response => (this.create_update_ohlc_chart(response.data)));
+        if (this.ohlc_chart == null){
+          this.init_ohlc_chart();
+        }
+        this.ohlc_chart.showLoading();
+        this.axios.get(url_value).then(response => (this.update_ohlc_chart(response.data)));
 
         let url_volume = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/" + "value" + "/" + this.post.start + "/" + this.post.end + "/" + this.exchange + "/" + this.post.range + "/" + this.post.from + "/" + this.post.to;
+        if (this.value_chart == null){
+          this.init_value_chart();
+        }
+        this.value_chart.showLoading();
         this.axios.get(url_volume).then(response => (this.create_update_value_chart(response.data)));
       },
 
-      create_update_ohlc_chart(data){
-        this.ohlc_chart_data = data['data'].map(function (item) {
-          return [(item['x']) * 1000].concat(item["y"])
-        });
-
-        if (this.ohlc_chart != null){
-          this.ohlc_chart.series[0].setData(this.ohlc_chart_data);
-          return
-        }
-
+      init_ohlc_chart(){
         const card = document.getElementById('chart_ohlc_cart');
 
         var options = {
@@ -215,7 +214,7 @@
           series: [{
             type: 'candlestick',
             name: 'Price',
-            data: this.ohlc_chart_data,
+            data: null,
             dataGrouping: {
               units: [
                 [
@@ -232,16 +231,7 @@
         this.ohlc_chart = new Highstock.Chart(options);
       },
 
-      create_update_value_chart(data){
-        this.value_chart_data = data['data'].map(function (item) {
-          return [(item[0] + 2 * 3600) * 1000, item[1]]
-        });
-
-        if (this.value_chart != null){
-          this.value_chart.series[0].setData(this.value_chart_data);
-          return
-        }
-
+      init_value_chart(){
         const card = document.getElementById('chart_value_cart');
 
         var options = {
@@ -266,7 +256,7 @@
 
           series: [{
             name: 'Price',
-            data: this.value_chart_data,
+            data: null,
             marker: {
               enabled: true,
               radius: 3
@@ -278,7 +268,28 @@
           }]};
 
         this.value_chart = new Highcharts.Chart(options);
+      },
 
+      update_ohlc_chart(data){
+        this.ohlc_chart_data = data['data'].map(function (item) {
+          return [(item['x']) * 1000].concat(item["y"])
+        });
+
+        if (this.ohlc_chart != null){
+          this.ohlc_chart.hideLoading();
+          this.ohlc_chart.series[0].setData(this.ohlc_chart_data);
+        }
+      },
+
+      create_update_value_chart(data){
+        this.value_chart_data = data['data'].map(function (item) {
+          return [(item[0] + 2 * 3600) * 1000, item[1]]
+        });
+
+        if (this.value_chart != null){
+          this.value_chart.hideLoading();
+          this.value_chart.series[0].setData(this.value_chart_data);
+        }
       },
 
       create_update_realtime_value(){
