@@ -107,47 +107,47 @@ const routes = [
         meta: { title: "assets" },
         children: [
             {
-                path: "kraken",
-                name: "kraken",
+                path: "btc",
+                name: "Bitcoin",
                 component: Dashboard2,
-                meta: { title: "kraken" },
+                meta: { title: "Bitcoin" },
             },
             {
-                path: "gdax",
-                name: "gdax",
+                path: "trx",
+                name: "Trom",
                 component: Dashboard2,
-                meta: { title: "gdax" },
+                meta: { title: "Tron" },
             },
             {
-                path: "bitfinex",
-                name: "bitfinex",
+                path: "xmr",
+                name: "Monero",
                 component: Dashboard2,
-                meta: { title: "bitfinex" },
+                meta: { title: "Monero" },
             },
             {
-                path: "gemini",
-                name: "gemini",
+                path: "bch",
+                name: "Bitcoin Cash",
                 component: Dashboard2,
-                meta: { title: "gemini" },
+                meta: { title: "Bitcoin Cash" },
             },
             {
-                path: "bitstamp",
-                name: "bitstamp",
+                path: "ltc",
+                name: "Litecoin",
                 component: Dashboard2,
-                meta: { title: "bitstamp" },
+                meta: { title: "Litecoin" },
             },
             {
-                path: "poloniex",
-                name: "poloniex",
+                path: "eos",
+                name: "EOS",
                 component: Dashboard2,
-                meta: { title: "poloniex" },
+                meta: { title: "EOS" },
 
             },
             {
-                path: "binance",
-                name: "binance",
+                path: "eth",
+                name: "Ethereum",
                 component: Dashboard2,
-                meta: { title: "binance" },
+                meta: { title: "Ethereum" },
 
             },
             {
@@ -158,10 +158,10 @@ const routes = [
 
             },
             {
-                path: "hitbtc",
-                name: "hitbtc",
+                path: "xrp",
+                name: "XRP",
                 component: Dashboard2,
-                meta: { title: "hitbtc" },
+                meta: { title: "XRP" },
 
             },
             {
@@ -172,19 +172,96 @@ const routes = [
 
             },
             {
-                path: "okcoin",
-                name: "okcoin",
+                path: "ada",
+                name: "Cardano",
                 component: Dashboard2,
-                meta: { title: "okcoin" },
+                meta: { title: "Cardano" },
 
             },
             {
-                path: "okex",
-                name: "okex",
+                path: "xlm",
+                name: "Stellar",
                 component: Dashboard2,
-                meta: { title: "okex" },
+                meta: { title: "Stellar" },
 
-            }
+            },
+            {
+                path: "xtz",
+                name: "Tezos",
+                component: Dashboard2,
+                meta: { title: "Tezos" },
+
+            },
+            {
+                path: "neo",
+                name: "Neo",
+                component: Dashboard2,
+                meta: { title: "Neo" },
+
+            },
+            {
+                path: "dash",
+                name: "Dash",
+                component: Dashboard2,
+                meta: { title: "Dash" },
+
+            },
+            {
+                path: "etc",
+                name: "Ethereum Classis",
+                component: Dashboard2,
+                meta: { title: "Ethereum Classis" },
+
+            },
+            {
+                path: "zec",
+                name: "ZCash",
+                component: Dashboard2,
+                meta: { title: "ZCash" },
+
+            },
+            {
+                path: "xem",
+                name: "Nem",
+                component: Dashboard2,
+                meta: { title: "Nem" },
+
+            },
+            {
+                path: "doge",
+                name: "Dogecoin",
+                component: Dashboard2,
+                meta: { title: "Dogecoin" },
+
+            },
+            {
+                path: "qtum",
+                name: "Qtum",
+                component: Dashboard2,
+                meta: { title: "Qtum" },
+
+            },
+            {
+                path: "btg",
+                name: "Bitcoin Gold",
+                component: Dashboard2,
+                meta: { title: "Bitcoin Gold" },
+
+            },
+            {
+                path: "zrx",
+                name: "0x",
+                component: Dashboard2,
+                meta: { title: "0x" },
+
+            },
+            {
+                path: "usdt",
+                name: "Tether",
+                component: Dashboard2,
+                meta: { title: "Tether" },
+
+            },
 
         ]
     },

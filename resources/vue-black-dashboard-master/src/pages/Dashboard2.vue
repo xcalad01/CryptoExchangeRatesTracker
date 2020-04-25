@@ -82,7 +82,7 @@
     },
 
     mounted() {
-      this.asset = 'bitcoin';
+      this.asset = this.$route.path;
       this.query_awvp_chart_data(true);
     },
 
