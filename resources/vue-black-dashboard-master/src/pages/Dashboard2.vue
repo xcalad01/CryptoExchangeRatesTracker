@@ -97,7 +97,7 @@
           this.post.end = Date.parse(this.post.end) / 1000;
         }
 
-        let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + this.post.range;
+        let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + "btc" + "/" + "usd" + "/" + this.post.start + "/" + this.post.end + "/" + this.post.range;
         console.log(url);
         this.axios.get(url).then(response => (this.create_update_awvp_chart(response.data)));
       },
