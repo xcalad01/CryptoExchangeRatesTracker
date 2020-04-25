@@ -29,7 +29,7 @@
         <datetime type="date" v-model="post.end"></datetime>
       </div>
       <div class="col-md-2">
-        <form @submit.prevent="awvp_chart(false)">
+        <form @submit.prevent="query_awvp_chart_data(false)">
           <div class="form-group">
             <button class="btn btn-primary">Query</button>
           </div>
@@ -122,7 +122,7 @@
           },
 
           title: {
-            text: this.post.from + " vs. " + this.post.to
+            text: "Volume weighted average price"
           },
 
           xAxis: {
