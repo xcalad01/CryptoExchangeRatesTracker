@@ -199,7 +199,7 @@
       },
 
       update_value(data){
-        this.day_price = data[0][1];
+        this.day_price = data['data'][0][1];
       }
     }
   }
