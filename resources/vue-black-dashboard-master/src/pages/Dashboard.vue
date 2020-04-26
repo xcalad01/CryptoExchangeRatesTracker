@@ -383,7 +383,7 @@
           this.real_time_data = data['data'].map(function (item) {
             return [item[0] * 1000, item[1]]
           });
-          this.last_realtime_value = this.real_time_data.slice(-1)[0]['y'];
+          this.last_realtime_value = this.real_time_data[this.real_time_data.length - 1]['y'];
           this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
@@ -525,6 +525,8 @@
 
     computed: {
       currency_symbol: function(){
+        console.log("currency_symbol");
+        console.log(this.post.to);
         if (this.post.to){
           return getSymbolFromCurrency(this.post.to.toUpperCase());
         }
