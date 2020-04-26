@@ -239,7 +239,7 @@
       },
 
       init_available(){
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/list_all_fiat";
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/all_supported";
         this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
       },
     }

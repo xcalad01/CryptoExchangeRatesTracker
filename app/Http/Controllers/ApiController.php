@@ -925,8 +925,12 @@ class ApiController extends Controller
 
     public function list_all_fiat(Request $request){
         $result = DB::select(DB::raw('Select "Fiat_id" from fiats'));
+        $values = array();
+        foreach ($result as $item){
+            array_push($values, $item->Fiat_id);
+        }
         return response()->json([
-            "data"=> $result
+            "data"=> $values
         ], 200);
     }
 
