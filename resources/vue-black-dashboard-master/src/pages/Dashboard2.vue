@@ -233,6 +233,15 @@
         this.old_to = this.post.to;
         this.axios.get(url).then(response => (this.finish_change_to(response.data)));
       },
+
+      finish_init_avail(data){
+        this.to_available = data['to'];
+      },
+
+      init_available(){
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/pairs/" + this.exchange;
+        this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
+      },
     }
   }
 </script>
