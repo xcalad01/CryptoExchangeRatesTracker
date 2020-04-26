@@ -93,7 +93,8 @@
       },
 
       onChangeTo(){
-        if (this.post.start == null){
+        console.log(this.post.start);
+        if (!this.post.start){
           var now = new Date().setSeconds(0, 0) / 1000;
           var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
           this.old_to = this.post.to;
