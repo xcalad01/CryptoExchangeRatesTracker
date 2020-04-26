@@ -93,10 +93,12 @@
       },
 
       onChangeTo(){
-        var now = new Date().setSeconds(0, 0) / 1000;
-        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
-        this.old_to = this.post.to;
-        this.axios.get(url).then(response => (this.finish_change_to(response.data)));
+        if (this.post.start == null){
+          var now = new Date().setSeconds(0, 0) / 1000;
+          var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
+          this.old_to = this.post.to;
+          this.axios.get(url).then(response => (this.finish_change_to(response.data)));
+        }
       },
 
       finish_init_avail(data){
