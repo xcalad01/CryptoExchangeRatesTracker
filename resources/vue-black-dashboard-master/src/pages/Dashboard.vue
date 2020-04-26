@@ -427,12 +427,7 @@
 
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/last" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + this.post.from + "/" + this.post.to + "/" + init;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
-        console.log(this.exchange);
-        console.log("Value");
-        console.log("Old: " + this.lastDateValue);
         this.lastDateValue += 60;
-        console.log("New: " + this.lastDateValue);
-        console.log(new Date());
       },
 
       getNewSeriesVolume(init){
@@ -450,11 +445,7 @@
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + this.post.from + "/" + this.post.to;
         }
         axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, this.lastDateVolume)));
-        console.log("Volume");
-        console.log("Old: " + this.lastDateVolume);
         this.lastDateVolume += 60;
-        console.log("New: " + this.lastDateVolume);
-        console.log(new Date());
       },
 
       finish_init_avail(data){
@@ -533,7 +524,7 @@
     },
 
     computed: {
-      currency_symbol(){
+      currency_symbol: function(){
         if (this.post.to){
           return getSymbolFromCurrency(this.post.to.toUpperCase());
         }
@@ -555,12 +546,6 @@
       this.create_update_realtime_volume();
     },
     beforeDestroy() {
-      console.log(this.exchange);
-      console.log(this.timeout_id_value);
-      console.log(this.timeout_id_volume);
-      console.log(this.interval_id_value);
-      console.log(this.interval_id_volume);
-      console.log("destroy");
       this.clear_all_timeouts_intervals();
 
     }
