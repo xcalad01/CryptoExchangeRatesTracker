@@ -9,7 +9,7 @@
           </div>
           <div class="col-md-3" style="display:grid;justify-content: center">
             <label>Convert to:</label><br>
-            <select v-model=post.to @change="onChangeFrom()">
+            <select v-model=post.to @change="onChangeTo()">
               <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
             </select>
           </div>
@@ -214,7 +214,21 @@
 
       update_value(data){
         this.day_price = data['data'][0][1].toFixed(3);
-      }
+      },
+
+      finish_change_to(data){
+        var new_fiat = data['data']['fiat'];
+        var old_fiat = data['data']['old_fiat'];
+
+        this.day_price = this.day_price / old_fiat * new_fiat;
+      },
+
+      onChangeTo(){
+        var now = new Date().setSeconds(0, 0) / 1000;
+        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
+        this.old_to = this.post.to;
+        this.axios.get(url).then(response => (this.finish_change_to(response.data)));
+      },
     }
   }
 </script>
