@@ -73,6 +73,7 @@
         }
 
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
+        this.post.start = null;
         this.axios.get(url).then(response => (this.update_value(response.data)));
       },
 
