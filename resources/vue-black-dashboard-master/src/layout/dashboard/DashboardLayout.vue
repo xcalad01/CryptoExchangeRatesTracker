@@ -237,6 +237,7 @@ Highcharts.theme = {
 // Apply the theme
 Highcharts.setOptions(Highcharts.theme);
 Highstock.setOptions(Highcharts.theme);
+import TopNavbar from "./TopNavbar.vue";
 
 export default {
   // components: { SidebarItem },
@@ -258,7 +259,8 @@ export default {
 
   components: {
     DashboardContent,
-    MobileMenu
+    MobileMenu,
+    TopNavbar
   },
   methods: {
     toggleSidebar() {

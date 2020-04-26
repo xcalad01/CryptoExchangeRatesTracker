@@ -91,7 +91,7 @@
 
   export default {
     components: {
-      datetime: Datetime
+      datetime: Datetime,
     },
 
     data() {
@@ -108,13 +108,17 @@
         awvp_chart_data: null,
         awvp_chart: null,
 
-        day_price: null
+        day_price: null,
+
+        title: null
 
       }
     },
 
     mounted() {
       this.asset = this.$route.name;
+      this.title = this.$route.meta['title'];
+
       this.asset_value(true);
       this.query_awvp_chart_data(true);
     },
