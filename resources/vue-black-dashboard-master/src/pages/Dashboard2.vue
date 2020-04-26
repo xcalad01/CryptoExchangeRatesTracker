@@ -235,7 +235,10 @@
       },
 
       finish_init_avail(data){
-        this.to_available = data['data'];
+        var formatted = data['data'].map(function (item) {
+            return {value: item, text: item.toUpperCase()}
+        });
+        this.to_available = formatted;
       },
 
       init_available(){
