@@ -155,7 +155,9 @@
         exchange: null,
 
         start_date: null,
-        end_date: null
+        end_date: null,
+
+        currency_symbol: null
       }
     },
 
@@ -523,12 +525,12 @@
 
     },
 
-    computed: {
-      currency_symbol: function(){
+    watch: {
+      old_to: function (){
         console.log("currency_symbol");
         console.log(this.post.to);
         if (this.post.to){
-          return getSymbolFromCurrency(this.post.to.toUpperCase());
+          this.currency_symbol = getSymbolFromCurrency(this.post.to.toUpperCase());
         }
       }
     },
