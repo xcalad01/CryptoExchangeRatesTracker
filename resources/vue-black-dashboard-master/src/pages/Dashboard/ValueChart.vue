@@ -144,7 +144,7 @@
       },
 
       update_chart(data){
-        this.value_chart_data = data['data'].map(function (item) {
+        this.chart_data = data['data'].map(function (item) {
           return [(item[0] + 2 * 3600) * 1000, item[1]]
         });
 
@@ -173,7 +173,7 @@
         var old_fiat = data['data']['old_fiat'];
 
 
-        var new_data = this.value_chart_data.map(function (item) {
+        var new_data = this.chart_data.map(function (item) {
           return [item[0], item[1] / old_fiat * new_fiat]
         });
         this.chart.series[0].setData(new_data);
