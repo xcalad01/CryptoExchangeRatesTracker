@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-2" style="display:grid;justify-content: center">
         <label>Convert to:</label><br>
-        <select v-model=post.to @change="onChangeFrom()">
+        <select v-model=post.to @change="onChangeTo()">
           <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
         </select>
       </div>
