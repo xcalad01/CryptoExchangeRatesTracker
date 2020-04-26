@@ -3,17 +3,17 @@
     <div class="row">
       <div class="col-lg-8 ml-auto mr-auto">
         <div class="row">
-          <div class="col-md-4">
-            <label>Day:</label>
+          <div class="col-md-3" style="display:grid;justify-content: center">
+            <label style="display:grid;justify-content: center">Day:</label><br>
             <datetime type="date" v-model="post.start"></datetime>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3" style="display:grid;justify-content: center">
             <label>Convert to:</label><br>
             <select v-model=post.to @change="onChangeFrom()">
               <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
             </select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4" style="display:grid;justify-content: center">
             <form @submit.prevent="asset_value(false)">
               <div class="form-group">
                 <button class="btn btn-primary">Query Day Value</button>
@@ -33,13 +33,13 @@
     <br>
     <br>
     <div class="row">
-      <div class="col-md-2" style="horiz-align:center;">
+      <div class="col-md-2" style="display:grid;justify-content: center">
         <label>Convert to:</label><br>
         <select v-model=post.to @change="onChangeFrom()">
           <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
         </select>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" style="display:grid;justify-content: center">
         <label>Range:</label><br>
         <select v-model="post.range">
           <option>1d</option>
@@ -52,19 +52,17 @@
 
         </select>
       </div>
-      <div class="col-md-2">
-        <label>Start:</label>
+      <div class="col-md-2" style="display:grid;justify-content: center">
+        <label style="display:grid;justify-content: center">Start:</label><br>
         <datetime type="date" v-model="post.start"></datetime>
       </div>
-      <div class="col-md-2">
-        <label>End:</label>
+      <div class="col-md-2" style="display:grid;justify-content: center">
+        <label style="display:grid;justify-content: center">End:</label><br>
         <datetime type="date" v-model="post.end"></datetime>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2" style="display:grid;justify-content: center">
         <form @submit.prevent="query_awvp_chart_data(false)">
-          <div class="form-group">
-            <button class="btn btn-primary">Query</button>
-          </div>
+          <button class="btn btn-primary">Query</button>
         </form>
       </div>
     </div>
