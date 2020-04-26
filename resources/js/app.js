@@ -27,6 +27,12 @@ import VueAxios from '../vue-black-dashboard-master/src/plugins/axios';
 import { Datetime } from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css';
 
+
+import Cryptoicon from 'vue-cryptoicon';
+import {Btc, Eth, Xrp, Ltc, Bch, Eos, Usdt, Ada, Trx, Zec, Xlm, Xmr, Etc, Xtz, Xem, Doge, Btg, Qtum, Zrx, Neo, Dash} from 'vue-cryptoicon/src/icons';
+Cryptoicon.add([Btc, Eth, Xrp, Ltc, Bch, Eos, Usdt, Ada, Trx, Zec, Xlm, Xmr, Etc, Xtz, Xem, Doge, Btg, Qtum, Zrx, Neo, Dash]);
+
+
 import ElementUI from 'element-ui';
 
 Vue.use(BlackDashboard);
@@ -35,6 +41,7 @@ Vue.use(RouterPrefetch);
 Vue.use(VueAxios);
 Vue.use(Datetime);
 Vue.use(ElementUI);
+Vue.use(Cryptoicon);
 
 /* eslint-disable no-new */
 new Vue({
