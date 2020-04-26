@@ -163,7 +163,11 @@
         var new_fiat = data['data']['fiat'];
         var old_fiat = data['data']['old_fiat'];
 
-        this.day_price = (this.day_price / old_fiat * new_fiat).toFixed(3);
+        var new_data = this.awvp_chart_data.map(function (item) {
+            return [item[0], item[1] / old_fiat * new_fiat];
+        });
+
+        this.awvp_chart_data = new_data;
       },
 
       onChangeTo(){
