@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row" style="justify-content: center">
       <span style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
     </div>
     <br>
