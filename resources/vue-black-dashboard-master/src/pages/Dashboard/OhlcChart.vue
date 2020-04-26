@@ -40,7 +40,7 @@
         <datetime type="datetime" v-model="post.end"></datetime>
       </div>
       <div class="col-md-2"  style="display:grid;justify-content: center">
-        <form @submit.prevent="ohlc_value_chart(false)">
+        <form @submit.prevent="ohlc_chart(false)">
           <div class="form-group">
             <button class="btn btn-primary">Query OHLC</button>
           </div>
@@ -64,10 +64,8 @@
 <script>
   import { axios } from '../../plugins/axios';
   import { Datetime } from 'vue-datetime';
-  import Highcharts from 'highcharts';
   import Highstock from 'highcharts/highstock';
   var global_component_instance = null;
-  import getSymbolFromCurrency from 'currency-symbol-map';
 
   export default {
     components: {
