@@ -185,7 +185,7 @@
         var old_fiat = data['data']['old_fiat'];
 
 
-        new_data = this.chart_data.map(function (item) {
+        var new_data = this.chart_data.map(function (item) {
           return [
             item[0],
             item[1] / old_fiat * new_fiat,

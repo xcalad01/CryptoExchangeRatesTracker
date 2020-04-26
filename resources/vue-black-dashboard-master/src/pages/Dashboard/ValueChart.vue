@@ -164,12 +164,28 @@
         this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
       },
 
-      clear_all_timeouts_intervals(){
-        clearTimeout(this.timeout_id_value);
-        clearTimeout(this.timeout_id_volume);
-        clearInterval(this.interval_id_value);
-        clearInterval(this.interval_id_volume);
-      }
+      onChangeFrom(){
+        this.ohlc_chart(true);
+      },
+
+      finish_change_to(data){
+        var new_fiat = data['data']['fiat'];
+        var old_fiat = data['data']['old_fiat'];
+
+
+        var new_data = this.value_chart_data.map(function (item) {
+          return [item[0], item[1] / old_fiat * new_fiat]
+        });
+        this.chart.series[0].setData(new_data);
+        this.chart_data = new_data;
+      },
+
+      onChangeTo(){
+        var now = new Date().setSeconds(0, 0) / 1000;
+        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
+        this.old_to = this.post.to;
+        this.axios.get(url).then(response => (this.finish_change_to(response.data)));
+      },
     },
 
     mounted() {
@@ -182,11 +198,6 @@
       this.init_available();
 
       this.value_chart(true);
-    },
-
-    beforeDestroy() {
-      this.clear_all_timeouts_intervals();
-
     }
   }
 </script>
