@@ -33,6 +33,8 @@ Route::post('exchange', 'ApiController@create_exchange');
  * Fiat
  */
 Route::get('fiat/historical/{timestamp}/{fiat}/{old_fiat?}', 'ApiController@fiat_historical');
+Route::get('fiat/all_supported', 'ApiController@list_all_fiat');
+
 
 Route::post('fiat', 'ApiController@create_fiat');
 

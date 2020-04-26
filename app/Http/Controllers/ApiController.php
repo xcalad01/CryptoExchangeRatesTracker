@@ -923,6 +923,12 @@ class ApiController extends Controller
         ], 200);
     }
 
+    public function list_all_fiat(Request $request){
+        $result = DB::select(DB::raw('Select "Fiat_id" from fiats'));
+        return response()->json([
+            "data"=> $result
+        ], 200);
+    }
 
     private function ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {

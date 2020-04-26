@@ -235,11 +235,11 @@
       },
 
       finish_init_avail(data){
-        this.to_available = data['to'];
+        this.to_available = data['data'];
       },
 
       init_available(){
-        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/pairs/" + this.exchange;
+        let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/list_all_fiat";
         this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
       },
     }
