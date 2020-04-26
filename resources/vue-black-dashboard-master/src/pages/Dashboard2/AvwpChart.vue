@@ -167,6 +167,7 @@
             return [item[0], item[1] / old_fiat * new_fiat];
         });
 
+        this.awvp_chart.series[0].setData(new_data);
         this.awvp_chart_data = new_data;
       },
 
