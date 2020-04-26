@@ -40,7 +40,7 @@
         <datetime type="datetime" v-model="post.end"></datetime>
       </div>
       <div class="col-md-2"  style="display:grid;justify-content: center">
-        <form @submit.prevent="ohlc_value_chart(false)">
+        <form @submit.prevent="value_chart(false)">
           <div class="form-group">
             <button class="btn btn-primary">Query Value</button>
           </div>
