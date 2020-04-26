@@ -128,6 +128,7 @@
       this.old_to = this.post.to;
       this.title = this.$route.meta['title'];
 
+      this.init_available();
       this.asset_value(true);
       this.query_awvp_chart_data(true);
     },
@@ -223,7 +224,7 @@
         var new_fiat = data['data']['fiat'];
         var old_fiat = data['data']['old_fiat'];
 
-        this.day_price = this.day_price / old_fiat * new_fiat;
+        this.day_price = (this.day_price / old_fiat * new_fiat).toFixed(3);
       },
 
       onChangeTo(){
