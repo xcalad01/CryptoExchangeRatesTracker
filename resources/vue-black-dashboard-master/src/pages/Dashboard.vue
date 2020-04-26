@@ -74,7 +74,7 @@
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">Realtime Value</h5>
-            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i>{{last_realtime_value}} {{post.to}}</h3>
+            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i>{{last_realtime_value}} {{currency_symbol}}</h3>
           </template>
           <div class="chart-area" id="realtime_value_cart">
             <div id="realtime">
@@ -87,7 +87,7 @@
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">Realtime Volume</h5>
-            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i>{{last_realtime_volume}} {{post.to}}</h3>
+            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i>{{last_realtime_volume}} {{currency_symbol}}</h3>
           </template>
           <div class="chart-area">
             <div id="volume">
@@ -108,6 +108,7 @@
   import Highcharts from 'highcharts';
   import Highstock from 'highcharts/highstock';
   var global_component_instance = null;
+  import getSymbolFromCurrency from 'currency-symbol-map'
 
   export default {
     components: {
@@ -530,6 +531,15 @@
       }
 
     },
+
+    computed: {
+      currency_symbol(){
+        if (this.post.to){
+          return getSymbolFromCurrency(this.post.to.toUpperCase());
+        }
+      }
+    },
+
     mounted() {
       const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin"];
       this.exchange = this.$route.name;
