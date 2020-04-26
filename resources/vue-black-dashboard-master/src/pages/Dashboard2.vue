@@ -24,11 +24,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-8 ml-auto mr-auto">
-        <div class="row">
-          <span style="width: 100%;text-align: center;font-size: 250%">{{currency_day_price}}</span>
-        </div>
-      </div>
+      <span style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
     </div>
     <br>
     <br>
