@@ -105,7 +105,9 @@
 
         day_price: null,
 
-        title: null
+        title: null,
+
+        old_to: null,
 
       }
     },
@@ -123,6 +125,7 @@
     mounted() {
       this.asset = this.$route.name;
       this.post.to = 'usd';
+      this.old_to = this.post.to;
       this.title = this.$route.meta['title'];
 
       this.asset_value(true);
