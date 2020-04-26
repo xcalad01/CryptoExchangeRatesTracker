@@ -26,7 +26,7 @@
     <div class="row">
       <div class="col-lg-8 ml-auto mr-auto">
         <div class="row">
-          <span style="width: 100%;text-align: center;font-size: 250%">{{day_price}}</span>
+          <span style="width: 100%;text-align: center;font-size: 250%">{{currency_day_price}}</span>
         </div>
       </div>
     </div>
@@ -86,6 +86,7 @@
   import { Datetime } from 'vue-datetime';
   import Highcharts from 'highcharts';
   import { axios } from '../plugins/axios';
+  import getSymbolFromCurrency from 'currency-symbol-map'
 
   export default {
     components: {
@@ -113,8 +114,19 @@
       }
     },
 
+    computed: {
+      currency_day_price(){
+        if (this.day_price == null){
+          return null;
+        }
+
+        return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.day_price;
+      }
+    },
+
     mounted() {
       this.asset = this.$route.name;
+      this.post.to = 'usd';
       this.title = this.$route.meta['title'];
 
       this.asset_value(true);
@@ -132,7 +144,7 @@
           this.post.end = Date.parse(this.post.end) / 1000;
         }
 
-        let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + "usd" + "/" + this.post.start + "/" + this.post.end + "/" + this.post.range;
+        let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + this.post.range;
         if (this.awvp_chart == null){
           this.init_awvp_chart();
         }
@@ -200,7 +212,7 @@
           this.post.end = this.post.start + 86400;
         }
 
-        let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + "usd" + "/" + this.post.start + "/" + this.post.end;
+        let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
         this.axios.get(url).then(response => (this.update_value(response.data)));
       },
 
