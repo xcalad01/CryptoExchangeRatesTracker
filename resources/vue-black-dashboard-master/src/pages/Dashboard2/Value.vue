@@ -32,13 +32,13 @@
       </div>
     </div>
     <div class="row">
-      <span style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
       <spinner
         v-if="loading_day_price"
         :animation-duration="1000"
         :size="30"
         color="#41b581"
       />
+      <span v-else style="text-align: center;font-size: 250%">{{currency_day_price}}</span
     </div>
   </div>
 </template>
