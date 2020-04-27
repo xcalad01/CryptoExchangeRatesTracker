@@ -5,13 +5,21 @@
         <div class="row">
           <div class="col-md-3" style="display:grid;justify-content: center">
             <label style="display:grid;justify-content: center">Day:</label><br>
-            <datetime type="date" v-model="post.start"></datetime>
+            <datetime class="input-group.no-border" type="date" v-model="post.start"></datetime>
           </div>
           <div class="col-md-3" style="display:grid;justify-content: center">
             <label>Convert to:</label><br>
             <select v-model=post.to @change="onChangeTo()">
               <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
             </select>
+<!--            <div id="app">-->
+<!--              <vueselect class="style-chooser" :options="options" label="title">-->
+<!--                <template slot="option" slot-scope="option">-->
+<!--                  <span class="fa" :class="option.icon"></span>-->
+<!--                  {{ option.title }}-->
+<!--                </template>-->
+<!--              </vueselect>-->
+<!--            </div>-->
           </div>
           <div class="col-md-4" style="display:grid;justify-content: center">
             <form @submit.prevent="asset_value(false)">
@@ -24,7 +32,8 @@
       </div>
     </div>
     <div class="row">
-      <span style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
+      <span v-if="currency_day_price" style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
+      <doublebounce v-else ></doublebounce>
     </div>
   </div>
 </template>
@@ -33,10 +42,15 @@
   import getSymbolFromCurrency from "currency-symbol-map";
   import { axios } from '../../plugins/axios';
   import { Datetime } from 'vue-datetime';
+  import VueSelect from 'vue-select';
+  import 'vue-select/dist/vue-select.css';
+  import { Circle } from  'vue-loading-spinner';
 
   export default {
     components: {
-      datetime: Datetime
+      datetime: Datetime,
+      vueselect: VueSelect,
+      doublebounce: Circle
     },
 
     data () {
@@ -48,6 +62,29 @@
         title: null,
         axios: axios,
         to_available: null,
+        selected: null,
+        options: [
+          {
+            title: 'Read the Docs',
+            icon: 'fa-book',
+            url: 'https://codeclimate.com/github/sagalbot/vue-select'
+          },
+          {
+            title: 'View on GitHub',
+            icon: 'fa-github',
+            url: 'https://codeclimate.com/github/sagalbot/vue-select'
+          },
+          {
+            title: 'View on NPM',
+            icon: 'fa-database',
+            url: 'https://codeclimate.com/github/sagalbot/vue-select'
+          },
+          {
+            title: 'View Codepen Examples',
+            icon: 'fa-pencil',
+            url: 'https://codeclimate.com/github/sagalbot/vue-select'
+          }
+        ]
       }
     },
 
@@ -72,6 +109,7 @@
           this.post.end = this.post.start + 86400;
         }
 
+        this.day_price = null;
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
         this.post.start = null;
         this.axios.get(url).then(response => (this.update_value(response.data)));
@@ -94,8 +132,8 @@
       },
 
       onChangeTo(){
-        console.log(this.post.start);
         if (!this.post.start){
+          this.day_price = null;
           var now = new Date().setSeconds(0, 0) / 1000;
           var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
           this.old_to = this.post.to;
@@ -125,5 +163,19 @@
 </script>
 
 <style>
+  .style-chooser .vs__search::placeholder,
+  .style-chooser .vs__dropdown-toggle,
+  .style-chooser .vs__dropdown-menu {
+    background: #333434;
+    border: none;
+    color: #394066;
+    text-transform: lowercase;
+    font-variant: small-caps;
+  }
+
+  .style-chooser .vs__clear,
+  .style-chooser .vs__open-indicator {
+    fill: #394066;
+  }
 
 </style>
