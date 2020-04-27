@@ -30,6 +30,10 @@
     justify-content: center;
   }
 
+  .row_realtime_charts {
+    @include make-row();
+  }
+
   // Remove the negative margin from default .row, then the horizontal padding
   // from all immediate children columns (to prevent runaway style inheritance).
   .no-gutters {
