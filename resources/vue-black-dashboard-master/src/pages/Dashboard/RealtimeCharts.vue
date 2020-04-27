@@ -27,7 +27,7 @@
             </div>
             <div class="row">
               <h3 class="card-title">
-                {{last_realtime_value}} {{currency_symbol}}
+                {{last_realtime_value}} {{currency_symbol_value}
               </h3>
             </div>
           </template>
@@ -64,7 +64,7 @@
             </div>
             <div class="row">
               <h3 class="card-title">
-                {{last_realtime_volume}} {{currency_symbol}}
+                {{last_realtime_volume}} {{currency_symbol_volume}}
               </h3>
             </div>
           </template>
