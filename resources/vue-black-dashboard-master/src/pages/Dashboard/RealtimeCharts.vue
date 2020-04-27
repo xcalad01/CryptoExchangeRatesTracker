@@ -178,7 +178,7 @@
           this.real_time_data = data['data'].map(function (item) {
             return [item[0] * 1000, item[1]]
           });
-          this.last_realtime_value = (this.real_time_data[this.real_time_data.length - 1][0]).toFixed(3);
+          this.last_realtime_value = (this.real_time_data[this.real_time_data.length - 1][1]).toFixed(3);
           this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
