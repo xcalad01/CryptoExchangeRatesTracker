@@ -324,7 +324,7 @@
         });
         this.realtime_chart.series[0].setData(new_data);
         this.real_time_data= new_data;
-        this.last_realtime_value = new_data.slice(-1)[0]['y'];
+        this.last_realtime_value = (new_data.slice(-1)[0]['y']).toFixed(3);
       },
 
       finish_change_to_volume(data){
@@ -338,7 +338,7 @@
         });
         this.volume_chart.series[0].setData(new_data);
         this.real_time_volume_data = new_data;
-        this.last_realtime_volume = this.last_realtime_volume / old_fiat * new_fiat;
+        this.last_realtime_volume = (this.last_realtime_volume / old_fiat * new_fiat).toFixed(3);
 
       },
 
