@@ -162,7 +162,7 @@
           },
 
           series: [{
-            name: 'Volume',
+            name: 'Price',
             data: []
           }]
         };
@@ -344,14 +344,14 @@
 
       onChangeToValue(){
         var now = new Date().setSeconds(0, 0) / 1000;
-        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to_value;
+        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.value.to + "/" + this.old_to_value;
         this.old_to_value = this.post.value.to;
         this.axios.get(url).then(response => (this.finish_change_to_value(response.data)));
       },
 
       onChangeToVolume(){
         var now = new Date().setSeconds(0, 0) / 1000;
-        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to_volume;
+        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.volume.to + "/" + this.old_to_volume;
         this.old_to_volume = this.post.volume.to;
         this.axios.get(url).then(response => (this.finish_change_to_volume(response.data)));
       },
