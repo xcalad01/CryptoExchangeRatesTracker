@@ -27,7 +27,7 @@
           </div>
         </card>
       </div>
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
+      <div class="col-lg-4">
         <div id="highchart"></div>
       </div>
     </div>
@@ -176,13 +176,13 @@
       save_realtime_response_data_value(data, init, date){
         if (init){
           this.real_time_data = data['data'].map(function (item) {
-            return [item[0] * 1000, item[1].toFixed(3)]
+            return [item[0] * 1000, item[1]]
           });
-          this.last_realtime_value = this.real_time_data[this.real_time_data.length - 1]['y'];
+          this.last_realtime_value = (this.real_time_data[this.real_time_data.length - 1]['y']).toFixed(3);
           this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
-          this.real_time_data.push([date * 1000, data['data'].toFixed(3)]);
+          this.real_time_data.push([date * 1000, data['data']]);
           this.realtime_chart.series[0].addPoint(this.real_time_data[this.real_time_data.length - 1]);
           if (data['data']){
             this.last_realtime_value = data['data'].toFixed(3);
@@ -198,7 +198,7 @@
           if(item['y']){
             last_value = item['y'].toFixed(3);
           }
-          return [item['x'] * 1000, item['y'].toFixed(3)]
+          return [item['x'] * 1000, item['y']]
         }));
 
         if (init){
