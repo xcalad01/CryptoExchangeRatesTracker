@@ -9,17 +9,9 @@
           </div>
           <div class="col-md-3" style="display:grid;justify-content: center">
             <label>Convert to:</label><br>
-            <select v-model=post.to @change="onChangeTo()">
+            <select class="select-css" v-model=post.to @change="onChangeTo()">
               <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
             </select>
-<!--            <div id="app">-->
-<!--              <vueselect class="style-chooser" :options="options" label="title">-->
-<!--                <template slot="option" slot-scope="option">-->
-<!--                  <span class="fa" :class="option.icon"></span>-->
-<!--                  {{ option.title }}-->
-<!--                </template>-->
-<!--              </vueselect>-->
-<!--            </div>-->
           </div>
           <div class="col-md-4" style="display:grid;justify-content: center">
             <form @submit.prevent="asset_value(false)">

@@ -3,13 +3,13 @@
     <div class="row">
       <div class="col-md-2" style="display:grid;justify-content: center">
         <label>Convert to:</label><br>
-        <select v-model=post.to @change="onChangeTo()">
+        <select class="select-css" v-model=post.to @change="onChangeTo()">
           <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
         </select>
       </div>
       <div class="col-md-2" style="display:grid;justify-content: center">
         <label>Range:</label><br>
-        <select v-model="post.range">
+        <select class="select-css" v-model="post.range">
           <option>1d</option>
           <option>12h</option>
           <option>6h</option>
