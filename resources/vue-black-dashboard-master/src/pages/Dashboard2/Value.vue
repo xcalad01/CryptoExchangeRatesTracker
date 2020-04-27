@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="row">
-      <span v-if="currency_day_price" style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
+      <span v-if="loading_day_price" style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
       <spinner
         v-else
         :animation-duration="1000"
@@ -68,6 +68,7 @@
         axios: axios,
         to_available: null,
         selected: null,
+        loading_day_price: true,
         options: [
           {
             title: 'Read the Docs',
@@ -114,7 +115,7 @@
           this.post.end = this.post.start + 86400;
         }
 
-        this.day_price = null;
+        this.loading_day_price = true;
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
         this.post.start = null;
         this.axios.get(url).then(response => (this.update_value(response.data)));
@@ -122,6 +123,7 @@
 
       update_value(data){
         this.day_price = data['data'][0][1].toFixed(3);
+        this.loading_day_price = false;
       },
 
       init_available(){
@@ -138,7 +140,7 @@
 
       onChangeTo(){
         if (!this.post.start){
-          this.day_price = null;
+          this.loading_day_price = true;
           var now = new Date().setSeconds(0, 0) / 1000;
           var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
           this.old_to = this.post.to;
