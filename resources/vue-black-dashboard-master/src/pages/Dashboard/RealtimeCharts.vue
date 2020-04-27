@@ -5,7 +5,29 @@
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">Realtime Value</h5>
-            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i>{{last_realtime_value}} {{currency_symbol}}</h3>
+            <div class="row_realtime_charts">
+              <div class="col-lg-2">
+                <h3 class="card-title">
+                  {{last_realtime_value}} {{currency_symbol}}
+                </h3>
+              </div>
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label>From:</label><br>
+                  <select v-model=post.from @change="onChangeFrom()">
+                    <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label>To:</label><br>
+                  <select v-model=post.to @change="onChangeFrom()">
+                    <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </template>
           <div class="chart-area" id="realtime_value_cart">
             <div id="realtime">
