@@ -14,7 +14,7 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>To:</label><br>
-              <select v-model=post.value.to @change="onChangeFromValue()">
+              <select v-model=post.value.to @change="onChangeToValue()">
                 <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
