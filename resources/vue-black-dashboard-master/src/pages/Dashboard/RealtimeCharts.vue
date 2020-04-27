@@ -2,31 +2,33 @@
   <div>
     <div class="row">
       <div class="col-lg-4">
+        <div class="row">
+          <div class="col-lg-2">
+            <div class="form-group">
+              <label>From:</label><br>
+              <select v-model=post.value.from @change="onChangeFromValue()">
+                <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="form-group">
+              <label>To:</label><br>
+              <select v-model=post.value.to @change="onChangeFromValue()">
+                <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">Realtime Value</h5>
-            <div class="row_realtime_charts">
-              <div class="col-lg-5">
-                <h3 class="card-title">
-                  {{last_realtime_value}} {{currency_symbol}}
-                </h3>
-              </div>
-              <div class="col-lg-2">
-                <div class="form-group">
-                  <label>From:</label><br>
-                  <select v-model=post.from @change="onChangeFrom()">
-                    <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <div class="form-group">
-                  <label>To:</label><br>
-                  <select v-model=post.to @change="onChangeFrom()">
-                    <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
-                  </select>
-                </div>
-              </div>
+            <div class="row">
+              <h5 class="card-category">Realtime Value</h5>
+            </div>
+            <div class="row">
+              <h3 class="card-title">
+                {{last_realtime_value}} {{currency_symbol}}
+              </h3>
             </div>
           </template>
           <div class="chart-area" id="realtime_value_cart">
@@ -37,31 +39,33 @@
         </card>
       </div>
       <div class="col-lg-4">
+        <div class="row">
+          <div class="col-lg-2">
+            <div class="form-group">
+              <label>From:</label><br>
+              <select v-model=post.volume.from @change="onChangeFrom()">
+                <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="form-group">
+              <label>To:</label><br>
+              <select v-model=post.volume.to @change="onChangeFrom()">
+                <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">Realtime Volume</h5>
-            <div class="row_realtime_charts">
-              <div class="col-lg-5">
-                <h3 class="card-title">
-                  {{last_realtime_volume}} {{currency_symbol}}
-                </h3>
-              </div>
-              <div class="col-lg-2">
-                <div class="form-group">
-                  <label>From:</label><br>
-                  <select v-model=post.from @change="onChangeFrom()">
-                    <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <div class="form-group">
-                  <label>To:</label><br>
-                  <select v-model=post.to @change="onChangeFrom()">
-                    <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
-                  </select>
-                </div>
-              </div>
+            <div class="row">
+              <h5 class="card-category">Realtime Volume</h5>
+            </div>
+            <div class="row">
+              <h3 class="card-title">
+                {{last_realtime_volume}} {{currency_symbol}}
+              </h3>
             </div>
           </template>
           <div class="chart-area">
@@ -70,9 +74,6 @@
             </div>
           </div>
         </card>
-      </div>
-      <div class="col-lg-4">
-        <div id="highchart"></div>
       </div>
     </div>
   </div>
@@ -120,11 +121,13 @@
         timeout_id_value: null,
         timeout_id_volume: null,
 
-        old_to: null,
+        old_to_value: null,
+        old_to_volume: null,
 
         exchange: null,
 
-        currency_symbol: null
+        currency_symbol_value: null,
+        currency_symbol_volume: null
       }
     },
 
@@ -297,14 +300,17 @@
         this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
       },
 
-      onChangeFrom(){
-        this.clear_all_timeouts_intervals();
+      onChangeFromValue(){
+        this.clear_value_realtime_timeouts_intervals();
         this.create_update_realtime_value();
-        this.create_update_realtime_volume();
-        this.ohlc_value_chart(true);
       },
 
-      finish_change_to(data){
+      onChangeFromVolume(){
+        this.clear_volume_realtime_timeouts_intervals();
+        this.create_update_realtime_volume();
+      },
+
+      finish_change_to_value(data){
         var new_fiat = data['data']['fiat'];
         var old_fiat = data['data']['old_fiat'];
 
@@ -316,8 +322,13 @@
         this.realtime_chart.series[0].setData(new_data);
         this.real_time_data= new_data;
         this.last_realtime_value = new_data.slice(-1)[0]['y'];
+      },
 
-        new_data = this.real_time_volume_data.map(function (item) {
+      finish_change_to_volume(data){
+        var new_fiat = data['data']['fiat'];
+        var old_fiat = data['data']['old_fiat'];
+
+        var new_data = this.real_time_volume_data.map(function (item) {
           if (item[1] != null){
             return [item[0], item[1] / old_fiat * new_fiat]
           }
@@ -326,31 +337,30 @@
         this.real_time_volume_data = new_data;
         this.last_realtime_volume = this.last_realtime_volume / old_fiat * new_fiat;
 
-        new_data = this.ohlc_chart_data.map(function (item) {
-          return [
-            item[0],
-            item[1] / old_fiat * new_fiat,
-            item[2] / old_fiat * new_fiat,
-            item[3] / old_fiat * new_fiat,
-            item[4] / old_fiat * new_fiat
-          ]
-        });
-        this.ohlc_chart.series[0].setData(new_data);
-        this.ohlc_chart_data = new_data;
-
-        new_data = this.value_chart_data.map(function (item) {
-          return [item[0], item[1] / old_fiat * new_fiat]
-        });
-        this.value_chart.series[0].setData(new_data);
-        this.value_chart_data = new_data;
-
       },
 
-      onChangeTo(){
+      onChangeToValue(){
         var now = new Date().setSeconds(0, 0) / 1000;
         var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
         this.old_to = this.post.to;
-        this.axios.get(url).then(response => (this.finish_change_to(response.data)));
+        this.axios.get(url).then(response => (this.finish_change_to_value(response.data)));
+      },
+
+      onChangeToVolume(){
+        var now = new Date().setSeconds(0, 0) / 1000;
+        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
+        this.old_to = this.post.to;
+        this.axios.get(url).then(response => (this.finish_change_to_volume(response.data)));
+      },
+
+      clear_value_realtime_timeouts_intervals(){
+        clearTimeout(this.timeout_id_value);
+        clearInterval(this.interval_id_value);
+      },
+
+      clear_volume_realtime_timeouts_intervals(){
+        clearTimeout(this.timeout_id_volume);
+        clearInterval(this.interval_id_volume);
       },
 
       clear_all_timeouts_intervals(){
