@@ -33,7 +33,12 @@
     </div>
     <div class="row">
       <span v-if="currency_day_price" style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
-      <doublebounce v-else ></doublebounce>
+      <spinner
+        v-else
+        :animation-duration="1000"
+        :size="30"
+        color="#41b581"
+      />
     </div>
   </div>
 </template>
@@ -44,13 +49,13 @@
   import { Datetime } from 'vue-datetime';
   import VueSelect from 'vue-select';
   import 'vue-select/dist/vue-select.css';
-  import { Circle } from  'vue-loading-spinner';
+  import { HalfCircleSpinner } from 'epic-spinners';
 
   export default {
     components: {
       datetime: Datetime,
       vueselect: VueSelect,
-      doublebounce: Circle
+      spinner: HalfCircleSpinner
     },
 
     data () {
