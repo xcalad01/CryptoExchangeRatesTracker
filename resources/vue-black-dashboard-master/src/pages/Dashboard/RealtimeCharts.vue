@@ -88,7 +88,10 @@
   export default {
     data (){
       return  {
-        post: {},
+        post: {
+          value: {},
+          volume: {}
+        },
 
         realtime_chart:null,
         volume_chart:null,
