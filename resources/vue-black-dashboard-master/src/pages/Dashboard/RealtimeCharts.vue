@@ -267,7 +267,7 @@
           this.real_time_value_interval = (this.lastDateValue + 60 + 50) - now;
         }
 
-        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/last" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + this.post.from + "/" + this.post.to + "/" + init;
+        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/last" + "/" + (this.lastDateValue-60) + "/" + this.exchange + "/" + this.post.value.from + "/" + this.post.value.to + "/" + init;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
         this.lastDateValue += 60;
       },
@@ -281,10 +281,10 @@
         if (init){
           var now = new Date() / 1000;
           this.real_time_volume_interval = (this.lastDateVolume + 60 + 50) - now;
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + this.post.from + "/" + this.post.to;
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/volume" + "/" + (this.lastDateVolume-1080) + "/" + (this.lastDateVolume+60) + "/" + this.exchange + "/" + "1m" + "/" + this.post.volume.from + "/" + this.post.volume.to;
         }
         else{
-          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + this.post.from + "/" + this.post.to;
+          volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + this.post.volume.from + "/" + this.post.volume.to;
         }
         axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, this.lastDateVolume)));
         this.lastDateVolume += 60;
@@ -341,15 +341,15 @@
 
       onChangeToValue(){
         var now = new Date().setSeconds(0, 0) / 1000;
-        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
-        this.old_to = this.post.to;
+        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to_value;
+        this.old_to_value = this.post.value.to;
         this.axios.get(url).then(response => (this.finish_change_to_value(response.data)));
       },
 
       onChangeToVolume(){
         var now = new Date().setSeconds(0, 0) / 1000;
-        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
-        this.old_to = this.post.to;
+        var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to_volume;
+        this.old_to_volume = this.post.volume.to;
         this.axios.get(url).then(response => (this.finish_change_to_volume(response.data)));
       },
 
@@ -374,9 +374,12 @@
     mounted() {
       const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin"];
       this.exchange = this.$route.name;
-      this.post.from = 'btc';
-      this.post.to = usd_exchanges.includes(this.exchange) ? 'usd' : 'usdt';
-      this.old_to = this.post.to;
+      this.post.value.from = 'btc';
+      this.post.volume.from = 'btc';
+      this.post.value.to = usd_exchanges.includes(this.exchange) ? 'usd' : 'usdt';
+      this.post.volume.to = usd_exchanges.includes(this.exchange) ? 'usd' : 'usdt';
+      this.old_to_value = this.post.value.to;
+      this.old_to_volume = this.post.volume.to;
 
       this.init_available();
 
@@ -386,9 +389,14 @@
     },
 
     watch: {
-      old_to: function (){
-        if (this.post.to){
-          this.currency_symbol = getSymbolFromCurrency(this.post.to.toUpperCase());
+      old_to_value: function (){
+        if (this.post.value.to){
+          this.currency_symbol_value = getSymbolFromCurrency(this.post.value.to.toUpperCase());
+        }
+      },
+      old_to_volume: function (){
+        if (this.post.volume.to){
+          this.currency_symbol_volume = getSymbolFromCurrency(this.post.volume.to.toUpperCase());
         }
       }
     },
