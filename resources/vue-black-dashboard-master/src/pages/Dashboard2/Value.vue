@@ -38,7 +38,7 @@
         :size="30"
         color="#41b581"
       />
-      <span v-else style="text-align: center;font-size: 250%">{{currency_day_price}}</span
+      <span v-else style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
     </div>
   </div>
 </template>
