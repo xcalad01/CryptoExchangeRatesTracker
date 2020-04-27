@@ -176,16 +176,16 @@
       save_realtime_response_data_value(data, init, date){
         if (init){
           this.real_time_data = data['data'].map(function (item) {
-            return [item[0] * 1000, item[1]]
+            return [item[0] * 1000, item[1].toFixed(3)]
           });
           this.last_realtime_value = this.real_time_data[this.real_time_data.length - 1]['y'];
           this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
-          this.real_time_data.push([date * 1000, data['data']]);
+          this.real_time_data.push([date * 1000, data['data'].toFixed(3)]);
           this.realtime_chart.series[0].addPoint(this.real_time_data[this.real_time_data.length - 1]);
           if (data['data']){
-            this.last_realtime_value = data['data'];
+            this.last_realtime_value = data['data'].toFixed(3);
           }
 
           this.real_time_value_interval = 60;
@@ -196,9 +196,9 @@
         var last_value = this.last_realtime_volume;
         this.real_time_volume_data.push(...data['data'].map(function (item) {
           if(item['y']){
-            last_value = item['y'];
+            last_value = item['y'].toFixed(3);
           }
-          return [item['x'] * 1000, item['y']]
+          return [item['x'] * 1000, item['y'].toFixed(3)]
         }));
 
         if (init){
