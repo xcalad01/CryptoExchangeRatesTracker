@@ -6,7 +6,7 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>From:</label><br>
-              <select v-model=post.value.from @change="onChangeFromValue()">
+              <select class="select-css" v-model=post.value.from @change="onChangeFromValue()">
                 <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
@@ -14,7 +14,7 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>To:</label><br>
-              <select v-model=post.value.to @change="onChangeToValue()">
+              <select class="select-css" v-model=post.value.to @change="onChangeToValue()">
                 <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
@@ -43,7 +43,7 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>From:</label><br>
-              <select v-model=post.volume.from @change="onChangeFromVolume()">
+              <select class="select-css" v-model=post.volume.from @change="onChangeFromVolume()">
                 <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
@@ -51,7 +51,7 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>To:</label><br>
-              <select v-model=post.volume.to @change="onChangeToVolume()">
+              <select class="select-css" v-model=post.volume.to @change="onChangeToVolume()">
                 <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
