@@ -136,6 +136,7 @@
         var old_fiat = data['data']['old_fiat'];
 
         this.day_price = (this.day_price / old_fiat * new_fiat).toFixed(3);
+        this.loading_day_price = false;
       },
 
       onChangeTo(){
