@@ -6,7 +6,7 @@
           <template slot="header">
             <h5 class="card-category">Realtime Value</h5>
             <div class="row_realtime_charts">
-              <div class="col-lg-2">
+              <div class="col-lg-5">
                 <h3 class="card-title">
                   {{last_realtime_value}} {{currency_symbol}}
                 </h3>
@@ -40,7 +40,29 @@
         <card type="chart">
           <template slot="header">
             <h5 class="card-category">Realtime Volume</h5>
-            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i>{{last_realtime_volume}} {{currency_symbol}}</h3>
+            <div class="row_realtime_charts">
+              <div class="col-lg-5">
+                <h3 class="card-title">
+                  {{last_realtime_volume}} {{currency_symbol}}
+                </h3>
+              </div>
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label>From:</label><br>
+                  <select v-model=post.from @change="onChangeFrom()">
+                    <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label>To:</label><br>
+                  <select v-model=post.to @change="onChangeFrom()">
+                    <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </template>
           <div class="chart-area">
             <div id="volume">
@@ -78,7 +100,7 @@
 
         to_available: null,
 
-        last_realtime_value:null,
+        last_realtime_value:"7000.23",
         last_realtime_volume:null,
 
         real_time_value_interval:null,
