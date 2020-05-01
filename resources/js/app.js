@@ -15,17 +15,24 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import RouterPrefetch from 'vue-router-prefetch'
 import App from "./App.vue";
+
+import "../sass/app.scss";
+
 // TIP: change to import router from "./router/starterRouter"; to start with a clean layout
 import router from "./router";
 
-import BlackDashboard from "../vue-black-dashboard-master/src/plugins/blackDashboard";
-import i18n from "./i18n"
-import '../vue-black-dashboard-master/src/registerServiceWorker'
+import BlackDashboard from "./plugins/blackDashboard";
 
-import VueAxios from '../vue-black-dashboard-master/src/plugins/axios';
+import i18n from "./i18n"
+
+import './registerServiceWorker'
+
+import VueAxios from './plugins/axios';
 
 import { Datetime } from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css';
+
+import 'element-ui/lib/theme-chalk/index.css'
 
 
 import Cryptoicon from 'vue-cryptoicon';
@@ -45,7 +52,8 @@ Vue.use(Cryptoicon);
 
 /* eslint-disable no-new */
 new Vue({
+    el: '#app',
     router,
     i18n,
     render: h => h(App)
-}).$mount("#app");
+});

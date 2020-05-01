@@ -1,99 +1,98 @@
-import DashboardLayout from "../../vue-black-dashboard-master/src/layout/dashboard/DashboardLayout.vue";
-// GeneralViews
-import NotFound from "../../vue-black-dashboard-master/src/pages/NotFoundPage.vue";
+import DashboardLayout from "../components/layout/dashboard/DashboardLayout.vue";
+import NotFound from "../pages/NotFoundPage.vue";
 
-// Admin pages
-const Dashboard = () => import(/* webpackChunkName: "dashboard" */"../../vue-black-dashboard-master/src/pages/Dashboard.vue");
-const Dashboard2 = () => import(/* webpackChunkName: "dashboard" */"../../vue-black-dashboard-master/src/pages/Dashboard2.vue");
+const Exchange_dashboard = () => import("../pages/Exchange_dashboard.vue");
+const Assets_dashboard = () => import("../pages/Assets_dashboard.vue");
 
 const routes = [
     {
         path: "/",
-        component: DashboardLayout,
         redirect: "/exchange/gdax",
+        hidden: true
     },
     {
         path: "/exchange",
         component: DashboardLayout,
         redirect: "/exchange/gdax",
+        name: "Exchanges",
         meta: { title: "exchanges" },
         children: [
             {
                 path: "kraken",
                 name: "kraken",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "kraken"},
             },
             {
                 path: "gdax",
                 name: "gdax",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "gdax" },
             },
             {
                 path: "bitfinex",
                 name: "bitfinex",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "bitfinex" },
             },
             {
                 path: "gemini",
                 name: "gemini",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "gemini" },
             },
             {
                 path: "bitstamp",
                 name: "bitstamp",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "bitstamp" },
             },
             {
                 path: "poloniex",
                 name: "poloniex",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "poloniex" },
 
             },
             {
                 path: "binance",
                 name: "binance",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "binance" },
 
             },
             {
                 path: "bittrex",
                 name: "bittrex",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "bittrex" },
 
             },
             {
                 path: "hitbtc",
                 name: "hitbtc",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "hitbtc" },
 
             },
             {
                 path: "bitbay",
                 name: "bitbay",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "bitbay" },
 
             },
             {
                 path: "okcoin",
                 name: "okcoin",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "okcoin" },
 
             },
             {
                 path: "okex",
                 name: "okex",
-                component: Dashboard,
+                component: Exchange_dashboard,
                 meta: { title: "okex" },
 
             }
@@ -104,126 +103,127 @@ const routes = [
         path: "/asset",
         component: DashboardLayout,
         redirect: "/exchange/gdax",
+        name: "Assets",
         meta: { title: "assets" },
         children: [
             {
                 path: "btc",
                 name: "btc",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Bitcoin" },
             },
             {
                 path: "trx",
                 name: "trx",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Tron" },
             },
             {
                 path: "xmr",
                 name: "xmr",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Monero" },
             },
             {
                 path: "bch",
                 name: "bch",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Bitcoin Cash" },
             },
             {
                 path: "ltc",
                 name: "ltc",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Litecoin" },
             },
             {
                 path: "eos",
                 name: "eos",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "EOS" },
 
             },
             {
                 path: "eth",
                 name: "eth",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Ethereum" },
 
             },
             {
                 path: "xrp",
                 name: "xrp",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "XRP" },
 
             },
             {
                 path: "ada",
                 name: "ada",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Cardano" },
 
             },
             {
                 path: "xlm",
                 name: "xlm",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Stellar" },
 
             },
             {
                 path: "xtz",
                 name: "xtz",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Tezos" },
 
             },
             {
                 path: "neo",
                 name: "neo",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Neo" },
 
             },
             {
                 path: "dash",
                 name: "dash",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Dash" },
 
             },
             {
                 path: "etc",
                 name: "etc",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Ethereum Classis" },
 
             },
             {
                 path: "zec",
                 name: "zec",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "ZCash" },
 
             },
             {
                 path: "xem",
                 name: "xem",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Nem" },
 
             },
             {
                 path: "doge",
                 name: "doge",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Dogecoin" },
 
             },
             {
                 path: "qtum",
                 name: "qtum",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Qtum" },
 
             },
@@ -231,28 +231,28 @@ const routes = [
                 path: "btg",
                 name: "btg",
 
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Bitcoin Gold" },
 
             },
             {
                 path: "zrx",
                 name: "xrz",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "0x" },
 
             },
             {
                 path: "usdt",
                 name: "usdt",
-                component: Dashboard2,
+                component: Assets_dashboard,
                 meta: { title: "Tether" },
 
             },
 
         ]
     },
-    { path: "*", component: NotFound },
+    { path: "*", component: NotFound, hidden: true },
 ];
 
 /**
@@ -260,7 +260,7 @@ const routes = [
  * The specified component must be inside the Views folder
  * @param  {string} name  the filename (basename) of the view to load.
  function view(name) {
-   var res= require('../components/Dashboard/Views/' + name + '.vue');
+   var res= require('../components/Exchange_dashboard/Views/' + name + '.vue');
    return res;
 };**/
 
