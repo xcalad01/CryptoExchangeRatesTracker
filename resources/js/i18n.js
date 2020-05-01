@@ -3,7 +3,7 @@ import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 
 function loadLocaleMessages () {
-  const locales = require.context('../vue-black-dashboard-master/src/locales', true, /[A-Za-z0-9-_,\s]+\.json$/i)
+  const locales = require.context('./locales', true, /[A-Za-z0-9-_,\s]+\.json$/i)
   const messages = {}
   locales.keys().forEach(key => {
     const matched = key.match(/([a-z0-9]+)\./i)
