@@ -25,6 +25,7 @@ Highcharts.createElement('link', {
     rel: 'stylesheet',
     type: 'text/css'
 }, null, document.getElementsByTagName('head')[0]);
+
 Highcharts.theme = {
     colors: ['#7cb5ec', '#f7a35c', '#90ee7e', '#7798BF', '#aaeeee', '#ff0066',
         '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
@@ -55,7 +56,7 @@ Highcharts.theme = {
         }
     },
     xAxis: {
-        gridLineWidth: 1,
+        gridLineWidth: 0,
         labels: {
             style: {
                 fontSize: '12px'
