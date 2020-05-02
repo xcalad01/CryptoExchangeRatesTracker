@@ -13,7 +13,7 @@
                 <div class="card">
                     <span class="title"> 24h Low / High </span>
                     <span class="detail"> 24h AVWP <br /> Low / High Price </span>
-                    <span class="span_value"> $ 7023 / $ 7023 </span>
+                    <span class="span_value"> $ {{h24_min}} / $ {{h24_max}} </span>
                 </div>
             </div>
 
@@ -47,7 +47,10 @@
             return {
                 day_price: null,
                 post: {},
-                axios: axios
+                axios: axios,
+
+                h24_min: null,
+                h24_max: null
             }
         },
 
@@ -74,6 +77,20 @@
             update_value(data){
                 this.day_price = data['data'][0][1].toFixed(3);
             },
+
+            low_high_24h(){
+                this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
+                this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000;
+
+                let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
+
+                this.axios.get(url).then(response => (this.update_24h_value(response.data)));
+            },
+
+            update_24h_value(data){
+                this.h24_min = min(data['data'][0]).toFixed(3);
+                this.h24_max = max(data['data'][0]).toFixed(3);
+            }
         },
 
         mounted() {
