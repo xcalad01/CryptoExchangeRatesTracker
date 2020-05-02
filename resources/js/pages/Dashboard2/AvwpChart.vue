@@ -1,37 +1,47 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-2" style="display:grid;justify-content: center">
-        <label>Convert to:</label><br>
-        <select class="select-css" v-model=post.to @change="onChangeTo()">
-          <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
-        </select>
+      <div class="col-sm" style="display:grid;justify-content: center">
+          <div class="form-group">
+              <label class="label">Convert to:</label>
+              <select class="select-css" v-model=post.to @change="onChangeTo()">
+                  <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+              </select>
+          </div>
       </div>
-      <div class="col-md-2" style="display:grid;justify-content: center">
-        <label>Range:</label><br>
-        <select class="select-css" v-model="post.range">
-          <option>1d</option>
-          <option>12h</option>
-          <option>6h</option>
-          <option>3h</option>
-          <option>1h</option>
-          <option>5m</option>
-          <option>1m</option>
+      <div class="col-sm" style="display:grid;justify-content: center">
+          <div class="form-group">
+              <label class="label">Range:</label>
+              <select class="select-css" v-model="post.range">
+                  <option>1d</option>
+                  <option>12h</option>
+                  <option>6h</option>
+                  <option>3h</option>
+                  <option>1h</option>
+                  <option>5m</option>
+                  <option>1m</option>
 
-        </select>
+              </select>
+          </div>
       </div>
-      <div class="col-md-2" style="display:grid;justify-content: center">
-        <label style="display:grid;justify-content: center">Start:</label><br>
-        <datetime type="date" v-model="post.start"></datetime>
+      <div class="col-sm" style="display:grid;justify-content: center">
+          <div class="form-group">
+              <label class="label">Start:</label><br>
+              <datetime type="date" v-model="post.start"></datetime>
+          </div>
       </div>
+        <div class="col-sm" style="display:grid;justify-content: center">
+            <div class="form-group">
+                <label class="label">End:</label><br>
+                <datetime type="date" v-model="post.start"></datetime>
+            </div>
+        </div>
       <div class="col-md-2" style="display:grid;justify-content: center">
-        <label style="display:grid;justify-content: center">End:</label><br>
-        <datetime type="date" v-model="post.end"></datetime>
-      </div>
-      <div class="col-md-2" style="display:grid;justify-content: center">
-        <form @submit.prevent="query_awvp_chart_data(false)">
-          <button class="btn btn-primary">Query</button>
-        </form>
+          <div class="form-group">
+              <form @submit.prevent="query_awvp_chart_data(false)">
+                  <button class="btn btn-primary">Query</button>
+              </form>
+          </div>
       </div>
     </div>
     <br>

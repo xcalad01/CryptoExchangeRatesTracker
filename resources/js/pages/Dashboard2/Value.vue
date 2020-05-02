@@ -3,22 +3,28 @@
     <div class="row">
       <div class="col-lg-8 ml-auto mr-auto">
         <div class="row">
-          <div class="col-md-3" style="display:grid;justify-content: center">
-            <label style="display:grid;justify-content: center">Day:</label><br>
-            <datetime class="input-group.no-border" type="date" v-model="post.start"></datetime>
-          </div>
-          <div class="col-md-3" style="display:grid;justify-content: center">
-            <label>Convert to:</label><br>
-            <select class="select-css" v-model=post.to @change="onChangeTo()">
-              <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
-            </select>
-          </div>
-          <div class="col-md-4" style="display:grid;justify-content: center">
-            <form @submit.prevent="asset_value(false)">
+          <div class="col-sm" style="display:grid;justify-content: center">
               <div class="form-group">
-                <button class="btn btn-primary">Query Day Value</button>
+                  <label class="label">Day:</label><br>
+                  <datetime class="input-group.no-border" type="date" v-model="post.start"></datetime>
               </div>
-            </form>
+          </div>
+          <div class="col-sm" style="display:grid;justify-content: center">
+              <div class="form-group">
+                  <label class="label">Convert to:</label><br>
+                  <select class="select-css" v-model=post.to @change="onChangeTo()">
+                      <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+                  </select>
+              </div>
+          </div>
+          <div class="col-sm" style="display:grid;justify-content: center">
+              <div class="form-group">
+                  <form @submit.prevent="asset_value(false)">
+                      <div class="form-group">
+                          <button class="btn btn-primary">Query Day Value</button>
+                      </div>
+                  </form>
+              </div>
           </div>
         </div>
       </div>

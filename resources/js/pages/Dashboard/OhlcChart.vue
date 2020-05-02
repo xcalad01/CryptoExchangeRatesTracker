@@ -1,25 +1,25 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-2" style="display:grid;justify-content: center">
+      <div class="col-sm" style="display:grid;justify-content: center">
         <div class="form-group">
-          <label>From:</label><br>
+          <label class="label">From:</label>
           <select class="select-css" v-model=post.from @change="onChangeFrom()">
             <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
           </select>
         </div>
       </div>
-      <div class="col-md-2" style="display:grid;justify-content: center">
+      <div class="col-sm" style="display:grid;justify-content: center">
         <div class="form-group">
-          <label>To:</label><br>
+          <label class="label">To:</label>
           <select class="select-css" v-model=post.to @change="onChangeTo()">
             <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
           </select>
         </div>
       </div>
-      <div class="col-md-2" style="display:grid;justify-content: center">
+      <div class="col-sm" style="display:grid;justify-content: center">
         <div class="form-group">
-          <label>Range:</label><br>
+          <label class="label">Range:</label>
           <select class="select-css" v-model="post.range">
             <option>1d</option>
             <option>12h</option>
@@ -31,15 +31,19 @@
           </select>
         </div>
       </div>
-      <div class="col-md-2" style="display:grid;justify-content: center">
-        <label style="display:grid;justify-content: center">Start:</label>
-        <datetime type="datetime" v-model="post.start"></datetime>
+      <div class="col-sm" style="display:grid;justify-content: center">
+          <div class="form-group">
+              <label class="label">Start:</label>
+              <datetime type="datetime" v-model="post.start"></datetime>
+          </div>
       </div>
-      <div class="col-md-2" style="display:grid;justify-content: center">
-        <label style="display:grid;justify-content: center">End:</label>
-        <datetime type="datetime" v-model="post.end"></datetime>
+      <div class="col-sm" style="display:grid;justify-content: center">
+          <div class="form-group">
+              <label class="label">End:</label>
+              <datetime type="datetime" v-model="post.end"></datetime>
+          </div>
       </div>
-      <div class="col-md-2"  style="display:grid;justify-content: center">
+      <div class="col-sm"  style="display:grid;justify-content: center">
         <form @submit.prevent="ohlc_chart(false)">
           <div class="form-group">
             <button class="btn btn-primary">Query OHLC</button>
