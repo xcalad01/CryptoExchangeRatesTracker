@@ -53,8 +53,8 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <card type="chart" id="chart_ohlc_cart">
-          <div class="chart-area">
+        <card type="chart">
+          <div class="chart-area" id="chart_ohlc_cart">
             <div id="chart_view_ohlc">
               <div ref="chart_ohlc" class="chart"></div>
             </div>

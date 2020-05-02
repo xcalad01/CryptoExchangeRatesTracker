@@ -1,45 +1,81 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-lg-8 ml-auto mr-auto">
-        <div class="row">
-          <div class="col-sm" style="display:grid;justify-content: center">
-              <div class="form-group">
-                  <label class="label">Day:</label><br>
-                  <datetime class="input-group.no-border" type="date" v-model="post.start"></datetime>
-              </div>
-          </div>
-          <div class="col-sm" style="display:grid;justify-content: center">
-              <div class="form-group">
-                  <label class="label">Convert to:</label><br>
-                  <select class="select-css" v-model=post.to @change="onChangeTo()">
-                      <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
-                  </select>
-              </div>
-          </div>
-          <div class="col-sm" style="display:grid;justify-content: center">
-              <div class="form-group">
-                  <form @submit.prevent="asset_value(false)">
-                      <div class="form-group">
-                          <button class="btn btn-primary">Query Day Value</button>
-                      </div>
-                  </form>
-              </div>
-          </div>
+        <div class="card card_custom">
+            <div class="button_row">
+                <div class="btn-group btn-group-toggle float-right">
+                    <label id="0" class="btn btn-sm btn-primary btn-simple">
+                        <input v-on:click="value_click" type="radio" name="options" autocomplete="off"> Value </input>
+                    </label>
+                    <label id="1" class="btn btn-sm btn-primary btn-simple">
+                        <input v-on:click="converter_click" type="radio" name="options" autocomplete="off"> Converter </input>
+                    </label>
+                </div>
+            </div>
+            <div v-if="render_value">
+                <div class="row">
+                    <span class="converter_title"> Average Weighted Volume Price </span>
+                </div>
+                <div class="row value_options_row">
+                    <div class="col-lg-8 ml-auto mr-auto">
+                        <div class="row">
+                            <div class="col-sm" style="display:grid;justify-content: center">
+                                <div class="form-group">
+                                    <label class="label">Day:</label><br>
+                                    <datetime class="input-group.no-border" type="date" v-model="post.start"></datetime>
+                                </div>
+                            </div>
+                            <div class="col-sm" style="display:grid;justify-content: center">
+                                <div class="form-group">
+                                    <label class="label">Convert to:</label><br>
+                                    <select class="select-css" v-model=post.to @change="onChangeTo()">
+                                        <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm" style="display:grid;justify-content: center">
+                                <div class="form-group">
+                                    <form @submit.prevent="asset_value(false)">
+                                        <div class="form-group">
+                                            <button class="btn btn-primary">Query Day Value</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="value_area">
+                        <spinner
+                            v-if="loading_day_price"
+                            :animation-duration="1000"
+                            :size="30"
+                            color="#ffffff"
+                        />
+                        <span v-else class="text_area">{{currency_day_price}}</span>
+                    </div>
+                </div>
+            </div>
+            <div v-else>
+                <div class="row">
+                    <span class="converter_title"> {{asset.toUpperCase()}} vs. USD converter</span>
+                </div>
+                <div class="row converter_inputs">
+                    <div class="col-md-6 pr-md-1">
+                        <div class="form-group">
+                            <input v-model="left_value_converter" aria-describedby="addon-right addon-left" placeholder="BTC" class="form-control converter_input_text" type="number">
+                        </div>
+                    </div>
+                    <div class="col-md-6 pr-md-1">
+                        <div class="form-group">
+                            <input v-model="right_value_converter" aria-describedby="addon-right addon-left" placeholder="USD" class="form-control converter_input_text" type="number">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-        <div class="value_area">
-            <spinner
-                v-if="loading_day_price"
-                :animation-duration="1000"
-                :size="30"
-                color="#ffffff"
-            />
-            <span v-else class="text_area">{{currency_day_price}}</span>
         </div>
-    </div>
   </div>
 </template>
 
@@ -69,28 +105,11 @@
         to_available: null,
         selected: null,
         loading_day_price: true,
-        options: [
-          {
-            title: 'Read the Docs',
-            icon: 'fa-book',
-            url: 'https://codeclimate.com/github/sagalbot/vue-select'
-          },
-          {
-            title: 'View on GitHub',
-            icon: 'fa-github',
-            url: 'https://codeclimate.com/github/sagalbot/vue-select'
-          },
-          {
-            title: 'View on NPM',
-            icon: 'fa-database',
-            url: 'https://codeclimate.com/github/sagalbot/vue-select'
-          },
-          {
-            title: 'View Codepen Examples',
-            icon: 'fa-pencil',
-            url: 'https://codeclimate.com/github/sagalbot/vue-select'
-          }
-        ]
+          render_value: true,
+          left_value_converter: null,
+          right_value_converter: null,
+          fresh_day_price: 7000
+
       }
     },
 
@@ -103,6 +122,17 @@
         return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.day_price;
       }
     },
+
+    watch: {
+        left_value_converter: function () {
+            this.right_value_converter = this.left_value_converter * this.fresh_day_price;
+        },
+
+        right_value_converter: function () {
+            this.left_value_converter = this.right_value_converter / this.fresh_day_price;
+        }
+    },
+
 
     methods: {
       asset_value(init){
@@ -118,12 +148,15 @@
         this.loading_day_price = true;
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
         this.post.start = null;
-        this.axios.get(url).then(response => (this.update_value(response.data)));
+        this.axios.get(url).then(response => (this.update_value(response.data, init)));
       },
 
       update_value(data){
         this.day_price = data['data'][0][1].toFixed(3);
         this.loading_day_price = false;
+        if (init){
+            this.fresh_day_price = this.day_price;
+        }
       },
 
       init_available(){
@@ -155,6 +188,14 @@
         });
         this.to_available = formatted;
       },
+
+      value_click(){
+        this.render_value = true;
+      },
+
+      converter_click(){
+        this.render_value = false;
+      }
     },
 
     mounted() {
@@ -209,5 +250,39 @@
       padding-left: 14px;
 
       border-radius: 3px;
+
+      margin-top: 10px;
   }
+
+  .card_custom {
+      height: 250px;
+  }
+
+    .button_row {
+        display: -webkit-box;
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: -15px;
+        -webkit-box-pack: center;
+        justify-content: right;
+        margin-right: 10px;
+    }
+
+    .value_options_row {
+        margin-top: 30px;
+    }
+    .converter_inputs {
+        margin-top: 40px;
+    }
+
+    .converter_title {
+        font-size: 20px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .converter_input_text {
+        font-size: 15px;
+        text-align: center;
+    }
 </style>

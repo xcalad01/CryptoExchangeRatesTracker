@@ -48,8 +48,8 @@
     <br>
     <div class="row">
       <div class="col-12">
-        <card type="chart" id="chart_awvp_cart">
-          <div class="chart-area">
+        <card type="chart">
+          <div class="chart-area" id="chart_awvp_cart">
             <div id="chart_view_awvp">
               <div ref="chart_awvp" class="chart"></div>
             </div>
