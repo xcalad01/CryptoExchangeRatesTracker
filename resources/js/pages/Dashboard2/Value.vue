@@ -61,7 +61,7 @@
     data () {
       return {
         post: {},
-        day_price: 70023,
+        day_price: null,
         asset: null,
         old_to: null,
         title: null,
@@ -115,7 +115,7 @@
           this.post.end = this.post.start + 86400;
         }
 
-        this.loading_day_price = false;
+        this.loading_day_price = true;
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
         this.post.start = null;
         this.axios.get(url).then(response => (this.update_value(response.data)));
