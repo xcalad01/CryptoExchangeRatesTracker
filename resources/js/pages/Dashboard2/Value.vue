@@ -30,13 +30,15 @@
       </div>
     </div>
     <div class="row">
-      <spinner
-        v-if="loading_day_price"
-        :animation-duration="1000"
-        :size="30"
-        color="#41b581"
-      />
-      <span v-else style="text-align: center;font-size: 250%">{{currency_day_price}}</span>
+        <div class="value_area">
+            <spinner
+                v-if="loading_day_price"
+                :animation-duration="1000"
+                :size="30"
+                color="#ffffff"
+            />
+            <span v-else class="text_area">{{currency_day_price}}</span>
+        </div>
     </div>
   </div>
 </template>
@@ -59,7 +61,7 @@
     data () {
       return {
         post: {},
-        day_price: null,
+        day_price: 70023,
         asset: null,
         old_to: null,
         title: null,
@@ -113,7 +115,7 @@
           this.post.end = this.post.start + 86400;
         }
 
-        this.loading_day_price = true;
+        this.loading_day_price = false;
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
         this.post.start = null;
         this.axios.get(url).then(response => (this.update_value(response.data)));
@@ -162,13 +164,15 @@
       this.title = this.$route.meta['title'];
 
       this.init_available();
-      this.asset_value(true);},
+      this.asset_value(true);
+
+      },
 
 
   }
 </script>
 
-<style>
+<style lang="scss">
   .style-chooser .vs__search::placeholder,
   .style-chooser .vs__dropdown-toggle,
   .style-chooser .vs__dropdown-menu {
@@ -184,4 +188,26 @@
     fill: #394066;
   }
 
+
+
+  .value_area {
+
+      .text_area {
+          text-align: center;
+          font-size: 200%;
+          color: rgb(255, 255, 255);
+      }
+
+      background-color: #66f;
+
+      padding-top: 7px;
+
+      padding-bottom: 7px;
+
+      padding-right: 14px;
+
+      padding-left: 14px;
+
+      border-radius: 3px;
+  }
 </style>
