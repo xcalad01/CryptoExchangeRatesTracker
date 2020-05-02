@@ -21,7 +21,7 @@
                 <div class="card">
                     <span class="title"> 7d Low / High </span>
                     <span class="detail"> 7d AVWP <br /> Low / High Price </span>
-                    <span class="span_value"> $ 7023 / $ 7023 </span>
+                    <span class="span_value"> $ {{d7_min}} / $ {{d7_max}} </span>
                 </div>
             </div>
 
@@ -50,7 +50,10 @@
                 axios: axios,
 
                 h24_min: null,
-                h24_max: null
+                h24_max: null,
+
+                d7_min: null,
+                d7_max: null,
             }
         },
 
@@ -79,8 +82,8 @@
             },
 
             low_high_24h(){
-                this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
-                this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000;
+                this.post.start = (Date.now() + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
+                this.post.end = this.post.start - 86400000;
 
                 let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + "1m";
 
@@ -94,7 +97,26 @@
 
                 this.h24_min = Math.min(...values).toFixed(1);
                 this.h24_max = Math.max(...values).toFixed(1);
-            }
+            },
+
+            low_high_7d(){
+                this.post.start = (Date.now() + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
+                this.post.end = this.post.start - 604800000;
+
+                let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + "1m";
+
+                this.axios.get(url).then(response => (this.update_24h_value(response.data)));
+            },
+
+            update_7d_value(data){
+                var values = data['data'].map(function (item) {
+                    return item[1];
+                });
+
+                this.d7_min = Math.min(...values).toFixed(1);
+                this.d7_max = Math.max(...values).toFixed(1);
+            },
+
         },
 
         mounted() {
@@ -103,6 +125,7 @@
 
             this.day_price_value();
             this.low_high_24h();
+            this.low_high_7d();
         }
     }
 </script>
