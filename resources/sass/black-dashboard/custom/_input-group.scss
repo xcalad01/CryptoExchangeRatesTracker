@@ -131,6 +131,12 @@
 .form-group{
     margin-bottom: 10px;
     position: relative;
+    display: flex;
+    align-items: center;
+
+    .label {
+        padding-right: 10%;
+    }
 
     .form-control-static{
         margin-top: 9px;
