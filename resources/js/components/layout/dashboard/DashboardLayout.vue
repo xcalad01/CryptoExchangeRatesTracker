@@ -64,7 +64,6 @@ Highcharts.theme = {
         }
     },
     yAxis: {
-        minorTickInterval: 'auto',
         title: {
             style: {
                 textTransform: 'uppercase'
