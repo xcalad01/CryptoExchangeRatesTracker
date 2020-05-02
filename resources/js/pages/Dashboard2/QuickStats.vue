@@ -46,7 +46,7 @@
         data () {
             return {
                 day_price: null,
-                post: {}
+                post: {},
                 axios: axios
             }
         },
