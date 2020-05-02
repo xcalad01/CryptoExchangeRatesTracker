@@ -44,7 +44,8 @@
     export default {
         data () {
             return {
-                day_price: null
+                day_price: null,
+                post: {}
             }
         },
 
