@@ -105,7 +105,7 @@
 
                 let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + "1m";
 
-                this.axios.get(url).then(response => (this.update_24h_value(response.data)));
+                this.axios.get(url).then(response => (this.update_7d_value(response.data)));
             },
 
             update_7d_value(data){
