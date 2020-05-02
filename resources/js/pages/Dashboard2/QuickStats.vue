@@ -82,8 +82,8 @@
             },
 
             low_high_24h(){
-                this.post.start = (Date.now() + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
-                this.post.end = this.post.start - 864000;
+                this.post.end = (Date.now() + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
+                this.post.start = this.post.end - 864000;
 
                 let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + "1m";
 
@@ -100,8 +100,8 @@
             },
 
             low_high_7d(){
-                this.post.start = (Date.now() + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
-                this.post.end = this.post.start - 6048000;
+                this.post.end = (Date.now() + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
+                this.post.start = this.post.end - 6048000;
 
                 let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + "1m";
 
