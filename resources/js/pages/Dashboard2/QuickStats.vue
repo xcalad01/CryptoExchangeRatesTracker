@@ -98,6 +98,7 @@
             this.post.to = 'usd';
 
             this.day_price_value();
+            this.low_high_24h();
         }
     }
 </script>
