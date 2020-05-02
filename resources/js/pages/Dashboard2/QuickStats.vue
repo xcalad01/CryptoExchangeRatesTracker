@@ -40,12 +40,14 @@
 
 <script>
     import getSymbolFromCurrency from "currency-symbol-map";
+    import { axios } from '../../plugins/axios';
 
     export default {
         data () {
             return {
                 day_price: null,
                 post: {}
+                axios: axios
             }
         },
 
