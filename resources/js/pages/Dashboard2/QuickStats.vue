@@ -25,14 +25,6 @@
                 </div>
             </div>
 
-            <div class="p-col-12 p-lg-4">
-                <div class="card">
-                    <span class="title"> 24h Trading Volume </span>
-                    <span class="detail">  <br /> 24h Trading Volume </span>
-                    <span class="span_value"> $ 7023 </span>
-                </div>
-            </div>
-
 
         </div>
     </div>
@@ -133,6 +125,6 @@
 <style lang="scss">
     .p-lg-4 {
         padding: 0.5rem !important;
-        width: 25.0%;
+        width: 33.3%;
     }
 </style>
