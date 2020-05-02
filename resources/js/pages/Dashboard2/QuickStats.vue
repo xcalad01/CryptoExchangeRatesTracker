@@ -83,7 +83,7 @@
 
             low_high_24h(){
                 this.post.end = (Date.now() / 1000).toFixed(0);
-                this.post.start = this.end - 86400;
+                this.post.start = this.post.end - 86400;
 
                 let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + "1m";
 
@@ -101,7 +101,7 @@
 
             low_high_7d(){
                 this.post.end = (Date.now() / 1000).toFixed(0);
-                this.post.start = this.end - 604800;
+                this.post.start = this.post.end - 604800;
 
                 let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + "1m";
 
@@ -125,7 +125,7 @@
 
             this.day_price_value();
             this.low_high_24h();
-            this.low_high_7d;
+            this.low_high_7d();
         }
     }
 </script>
