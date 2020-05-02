@@ -88,8 +88,8 @@
             },
 
             update_24h_value(data){
-                this.h24_min = min(data['data'][0]).toFixed(3);
-                this.h24_max = max(data['data'][0]).toFixed(3);
+                this.h24_min = Math.min(data['data'][0]).toFixed(3);
+                this.h24_max = Math.max(data['data'][0]).toFixed(3);
             }
         },
 
