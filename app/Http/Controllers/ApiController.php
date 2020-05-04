@@ -96,7 +96,7 @@ class ApiController extends Controller
         $available->save();
     }
 
-    private function add_crypto_historical_five($data, $exchange_id, $function=null){
+    private function add_crypto_historical_five($data, $exchange_id, $descr=null){
         $historical = new CryptoHistorical;
         $historical->id = $data['id'];
         $historical->Timestamp = $data['timestamp'];
@@ -107,7 +107,7 @@ class ApiController extends Controller
         $historical->Volume = $data['historical'][5];
 
         print_r("add to db");
-        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"{$function}", "exchange_id"=>"{$exchange_id}"));
+        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"add_crypto_historical_five", "exchange_id"=>"{$exchange_id}", "description"=>"{$descr}"));
 
         $historical->save();
     }
@@ -182,7 +182,7 @@ class ApiController extends Controller
             );
 
             try {
-                self::add_crypto_historical_five($data, $exchange_id);
+                self::add_crypto_historical_five($data, $exchange_id, "coincap");
             }
             catch (QueryException $e){
                 return 0;
