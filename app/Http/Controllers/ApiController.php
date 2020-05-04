@@ -747,10 +747,15 @@ class ApiController extends Controller
         }
     }
 
-    public function crypto_asset_value(Request $request, $crypto_id, $convert_to_id, $start, $end, $range=null)
+    public function crypto_asset_value(Request $request, $crypto_id, $convert_to_id, $start, $end, $range=null, $dry=null)
     {
         try {
             $this->check_availability_of_asset_data($crypto_id, $start, $end);
+            if ($dry){
+                return response()->json([
+                    "data" => "Dry completed"
+                ], 200);
+            }
             $this->check_coin($crypto_id);
             $convert_to_info = $this->check_coin($convert_to_id);
 
