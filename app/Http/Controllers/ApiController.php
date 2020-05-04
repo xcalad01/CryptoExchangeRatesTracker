@@ -106,7 +106,6 @@ class ApiController extends Controller
         $historical->Close = $data['historical'][4];
         $historical->Volume = $data['historical'][5];
 
-        print_r("add to db");
         $this->statsd->statsd->increment("db.connections", 1, array("function"=>"add_crypto_historical_five", "exchange_id"=>"{$exchange_id}", "description"=>"{$descr}"));
 
         $historical->save();
