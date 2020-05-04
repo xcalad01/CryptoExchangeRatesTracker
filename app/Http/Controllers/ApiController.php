@@ -723,16 +723,26 @@ class ApiController extends Controller
     }
 
     private function check_availability_of_asset_data($asset, $start, $end){
-        $availability = DB::select(DB::raw("
-            SELECT MIN(\"Timestamp\") as \"timestamp\", \"Exchange_id\", \"From\", \"To\"
-            From historical_available INNER JOIN crypto_historical on historical_available.id = crypto_historical.id
-            WHERE \"From\" = '{$asset}'
-            GROUP BY \"Exchange_id\", \"From\", \"To\";
+        $hist_avail = DB::select(DB::raw("
+            select \"From\", \"To\", \"Exchange_id\", \"id\" from historical_available where \"From\" = '{$asset}';
         "));
 
+        $availability = DB::select(DB::raw("
+            SELECT \"Exchange_id\"
+            From historical_available INNER JOIN crypto_historical on historical_available.id = crypto_historical.id
+            WHERE \"From\" = '{$asset}' and \"Timestamp\" BETWEEN {$start} and {$end}
+            GROUP BY \"Exchange_id\", \"From\", \"To\";
+
+        "));
+
+        $avail_exchanges = array();
         foreach ($availability as $avail){
-            if ($avail->timestamp > $end){
-                $this->coin_cap_candles($avail->Exchange_id, $avail->From,$avail->To, $start, $end);
+            array_push($avail_exchanges, $avail->Exchange_id);
+        }
+
+        foreach ($hist_avail as $avail){
+            if (!in_array($avail->Exchange_id, $avail_exchanges)){
+                $this->coin_cap_candles($avail->Exchange_id, $avail->From, $avail->To, $start, $end);
             }
         }
     }
