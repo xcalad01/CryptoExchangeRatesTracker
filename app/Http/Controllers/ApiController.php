@@ -45,9 +45,28 @@ class ApiController extends Controller
 
         $this->coin_cap_coins_config = array(
             "btc" => "bitcoin",
+            "eth" => "ethereum",
+            "trx" => "tron",
+            "xmr" => "monero",
+            "bch" => "bitcoin-cash",
+            "ltc" => "litecoin",
+            "eos" => "eos",
+            "xrp" => "ripple",
+            "ada" => "cardano",
+            "xlm" => "stellar",
+            "xtz" => "tezos",
+            "neo" => "neo",
+            "dash" => "dash",
+            "etc" => "ethereum-classic",
+            "zec" => "zcash",
+            "doge" => "dogecoin",
+            "usdt" => "tether",
+            "xem" => "nem",
+            "qtum" => "qtum",
+            "btg" => "bitcoin-gold",
+            "zrx" => "0x",
             "usd" => "united-states-dollar",
             "eur" => "euro",
-            "usdt" => "tether"
         );
 
         $this->coin_cap_candles_curl = curl_init();
