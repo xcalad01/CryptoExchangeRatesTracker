@@ -34,11 +34,11 @@ $coins = array(
 print_r("starting\n");
 while ($timestamp < 1588550400){
     print_r(date("%Y-%m-%d\n", $timestamp));
+    $start = $timestamp;
+    $end = $start + 86399;
     foreach ($coins as $coin){
-        $start = $timestamp;
-        $end = $start + 86399;
         $url = "http://167.86.75.179:8001/api/crypto/historical/asset/value/{$coin}/usd/{$start}/{$end}/range/dry";
-
+        print_r($url);
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
