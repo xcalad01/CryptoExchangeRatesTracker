@@ -7,7 +7,7 @@
             <div class="form-group">
               <label class="label">From:</label><br>
               <select class="select-css" v-model=post.value.from @change="onChangeFromValue()">
-                <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
+                <option v-for="item in from_value_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
           </div>
@@ -15,7 +15,7 @@
             <div class="form-group">
               <label class="label">To:</label><br>
               <select class="select-css" v-model=post.value.to @change="onChangeToValue()">
-                <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+                <option v-for="item in to_value_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
           </div>
@@ -44,7 +44,7 @@
             <div class="form-group">
               <label class="label">From:</label><br>
               <select class="select-css" v-model=post.volume.from @change="onChangeFromVolume()">
-                <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
+                <option v-for="item in from_volume_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
           </div>
@@ -52,7 +52,7 @@
             <div class="form-group">
               <label class="label">To:</label><br>
               <select class="select-css" v-model=post.volume.to @change="onChangeToVolume()">
-                <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+                <option v-for="item in to_volume_available" :value="item.value">{{item.text}}</option>
               </select>
             </div>
           </div>
@@ -100,11 +100,13 @@
         axios: axios,
         hist_available: [],
 
-        from_available: null,
+          from_value_available: null,
+          from_volume_available: null,
 
-        to_available: null,
+          to_value_available: null,
+          to_volume_available: null,
 
-        last_realtime_value:"7000.23",
+        last_realtime_value:null,
         last_realtime_volume:null,
 
         real_time_value_interval:null,
@@ -294,8 +296,13 @@
       },
 
       finish_init_avail(data){
-        this.from_available = data['from'];
-        this.to_available = data['to'];
+          this.all_available = data['data'];
+
+          this.from_value_available = Object.keys(this.all_available);
+          this.to_value_available = this.all_available[this.from_value_available[0]];
+
+          this.from_volume_available = Object.keys(this.all_available);
+          this.to_volume_available = this.all_available[this.from_volume_available[0]];
       },
 
       init_available(){
@@ -304,11 +311,15 @@
       },
 
       onChangeFromValue(){
+          this.to_value_available = this.all_available[this.post.value.from];
+          this.post.value.to = this.to_value_available[0];
         this.clear_value_realtime_timeouts_intervals();
         this.create_update_realtime_value();
       },
 
       onChangeFromVolume(){
+          this.to_volume_available = this.all_available[this.post.volume.from];
+          this.post.volume.to = this.to_volume_available[0];
         this.clear_volume_realtime_timeouts_intervals();
         this.create_update_realtime_volume();
       },

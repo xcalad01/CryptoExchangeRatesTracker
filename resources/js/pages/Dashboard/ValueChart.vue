@@ -159,8 +159,9 @@
       },
 
       finish_init_avail(data){
-        this.from_available = data['from'];
-        this.to_available = data['to'];
+          this.all_available = data['data'];
+          this.from_available = Object.keys(this.all_available);
+          this.to_available = this.all_available[this.from_available[0]];
       },
 
       init_available(){
@@ -169,7 +170,8 @@
       },
 
       onChangeFrom(){
-        this.ohlc_chart(true);
+          this.to_available = this.all_available[this.post.from];
+          this.post.to = this.to_available[0];
       },
 
       finish_change_to(data){
