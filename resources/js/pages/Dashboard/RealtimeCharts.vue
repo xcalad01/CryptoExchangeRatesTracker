@@ -276,8 +276,8 @@
           var end = this.lastDateValue;
         }
         else{
-            var start = this.lastDateValue-60;
-            var end = this.lastDateValue;
+            var start = this.lastDateValue-120;
+            var end = this.lastDateValue-60;
         }
 
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/value/" + start + "/" + end + "/" + this.exchange + "/" + "1m" + "/" + this.post.value.from + "/" + this.post.value.to;
