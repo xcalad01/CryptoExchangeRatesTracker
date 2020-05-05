@@ -13,7 +13,7 @@
         <div class="form-group">
           <label class="label">To:</label>
           <select class="select-css" v-model=post.to @change="onChangeTo()">
-            <option v-for="item in to_available" :value="item" v-bind:key="this.post.from">{{item.toUpperCase()}}</option>
+            <option v-for="item in to_available" :value="item">{{item.toUpperCase()}}</option>
           </select>
         </div>
       </div>
