@@ -64,7 +64,7 @@
                 <div class="row converter_inputs">
                     <div class="col-md-6 pr-md-1">
                         <div class="form-group">
-                            <input v-model="left_value_converter" aria-describedby="addon-right addon-left" placeholder={{asset.toUpperCase()}} class="form-control converter_input_text" type="number">
+                            <input v-model="left_value_converter" aria-describedby="addon-right addon-left" v-bind:placeholder=asset.toUpperCase() class="form-control converter_input_text" type="number">
                         </div>
                     </div>
                     <div class="col-md-6 pr-md-1">
