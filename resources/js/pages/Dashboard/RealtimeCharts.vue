@@ -236,10 +236,10 @@
           this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
-          this.real_time_data.push([date * 1000, data['data']]);
+          this.real_time_data.push([date * 1000, data['data'][0][1]]);
           this.realtime_chart.series[0].addPoint(this.real_time_data[this.real_time_data.length - 1]);
           if (data['data']){
-            this.last_realtime_value = data['data'].toFixed(3);
+            this.last_realtime_value = data['data'][0][1].toFixed(3);
           }
 
           this.real_time_value_interval = 60;
