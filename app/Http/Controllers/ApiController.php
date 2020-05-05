@@ -26,8 +26,6 @@ class ApiController extends Controller
 
     private $coin_cap_coins_config;
 
-    private $coin_cap_fiat_config;
-
     private $coin_cap_candles_curl;
 
     public function __construct()
@@ -1055,7 +1053,8 @@ class ApiController extends Controller
             main_table AS \"mt\",
             sum_table AS \"st\"
         WHERE
-            \"mt\".\"interval_alias\" = \"st\".\"interval_alias\"
+            \"mt\".\"interval_alias\" = \"st\".\"interval_alias\" AND
+            \"Volume_Sum\" != 0
         GROUP BY
             \"st\".\"interval_alias\"
         ORDER BY \"st\".\"interval_alias\";
@@ -1103,7 +1102,8 @@ class ApiController extends Controller
                     main_table AS \"mt\",
                     sum_table AS \"st\"
                 WHERE
-                    \"mt\".\"interval_alias\" = \"st\".\"interval_alias\"
+                    \"mt\".\"interval_alias\" = \"st\".\"interval_alias\" AND
+                    \"Volume_Sum\" != 0
                 GROUP BY
                     \"st\".\"interval_alias\"
                 ORDER BY \"st\".\"interval_alias\";
