@@ -274,7 +274,7 @@
           this.real_time_value_interval = (this.lastDateValue + 60 + 50) - now;
         }
 
-        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/value/" + (this.lastDateValue-60) + "/" + this.lastDateValue + "/" + this.exchange + "/" + "60" + "/" + this.post.value.from + "/" + this.post.value.to;
+        let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/value/" + (this.lastDateValue-60) + "/" + this.lastDateValue + "/" + this.exchange + "/" + "1m" + "/" + this.post.value.from + "/" + this.post.value.to;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
         this.lastDateValue += 60;
       },
