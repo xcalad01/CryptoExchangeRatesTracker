@@ -7,7 +7,7 @@
             <div class="form-group">
               <label class="label">From:</label><br>
               <select class="select-css" v-model=post.value.from @change="onChangeFromValue()">
-                <option v-for="item in from_value_available" :value="item.value">{{item.text}}</option>
+                <option v-for="item in from_value_available" :value="item">{{item.toUpperCase()}}</option>
               </select>
             </div>
           </div>
@@ -15,7 +15,7 @@
             <div class="form-group">
               <label class="label">To:</label><br>
               <select class="select-css" v-model=post.value.to @change="onChangeToValue()">
-                <option v-for="item in to_value_available" :value="item.value">{{item.text}}</option>
+                <option v-for="item in to_value_available" :value="item">{{item.toUpperCase()}}</option>
               </select>
             </div>
           </div>
@@ -44,7 +44,7 @@
             <div class="form-group">
               <label class="label">From:</label><br>
               <select class="select-css" v-model=post.volume.from @change="onChangeFromVolume()">
-                <option v-for="item in from_volume_available" :value="item.value">{{item.text}}</option>
+                <option v-for="item in from_volume_available" :value="item">{{item.toUpperCase()}}</option>
               </select>
             </div>
           </div>
@@ -52,7 +52,7 @@
             <div class="form-group">
               <label class="label">To:</label><br>
               <select class="select-css" v-model=post.volume.to @change="onChangeToVolume()">
-                <option v-for="item in to_volume_available" :value="item.value">{{item.text}}</option>
+                <option v-for="item in to_volume_available" :value="item">{{item.toUpperCase()}}</option>
               </select>
             </div>
           </div>

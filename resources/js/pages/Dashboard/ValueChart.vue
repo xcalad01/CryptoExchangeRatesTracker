@@ -5,7 +5,7 @@
         <div class="form-group">
           <label class="label">From:</label>
           <select class="select-css" v-model=post.from @change="onChangeFrom()">
-            <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
+            <option v-for="item in from_available" :value="item">{{item.toUpperCase()}}</option>
           </select>
         </div>
       </div>
@@ -13,7 +13,7 @@
         <div class="form-group">
           <label class="label">To:</label>
           <select class="select-css" v-model=post.to @change="onChangeTo()">
-            <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+            <option v-for="item in to_available" :value="item">{{item.toUpperCase()}}</option>
           </select>
         </div>
       </div>
