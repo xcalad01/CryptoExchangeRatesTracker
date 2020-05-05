@@ -152,7 +152,12 @@
       },
 
       update_value(data, init){
-        this.day_price = data['data'][0][1].toFixed(3);
+        if (data['data']){
+            this.day_price = data['data'][0][1].toFixed(3);
+        }
+        else{
+            this.day_price = "No data available :("
+        }
         this.loading_day_price = false;
         if (init){
             this.fresh_day_price = this.day_price;
