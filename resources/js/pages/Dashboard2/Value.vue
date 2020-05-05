@@ -152,7 +152,8 @@
       },
 
       update_value(data, init){
-        if (data['data']){
+        if (data['data'].length() !== 0 ){
+
             this.day_price = data['data'][0][1].toFixed(3);
         }
         else{
