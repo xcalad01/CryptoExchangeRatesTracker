@@ -196,7 +196,7 @@
     },
 
     mounted() {
-        const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin", "binance"];
+        const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin", "binance", "hitbtc"];
       this.exchange = this.$route.name;
       this.post.from = 'btc';
       this.post.to = usd_exchanges.includes(this.exchange) ? 'usd' : 'usdt';
