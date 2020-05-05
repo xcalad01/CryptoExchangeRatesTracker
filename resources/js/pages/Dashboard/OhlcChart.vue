@@ -5,7 +5,7 @@
         <div class="form-group">
           <label class="label">From:</label>
           <select class="select-css" v-model=post.from @change="onChangeFrom()">
-            <option v-for="item in from_available" :value="item.value">{{item.text}}</option>
+            <option v-for="item in from_available" :value="item">{{item.toUpperCase()}}</option>
           </select>
         </div>
       </div>
@@ -13,7 +13,7 @@
         <div class="form-group">
           <label class="label">To:</label>
           <select class="select-css" v-model=post.to @change="onChangeTo()">
-            <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+            <option v-for="item in to_available" :value="item">{{item.toUpperCase()}}</option>
           </select>
         </div>
       </div>
@@ -164,8 +164,9 @@
       },
 
       finish_init_avail(data){
-        this.from_available = data['from'];
-        this.to_available = data['to'];
+        this.all_available = data['data'];
+        this.from_available = Object.keys(this.all_available);
+        this.to_available = this.all_available[this.from_available[0]];
       },
 
       init_available(){
@@ -181,7 +182,7 @@
       },
 
       onChangeFrom(){
-        this.ohlc_chart(true);
+        this.to_available = this.all_available[this.from_available];
       },
 
       finish_change_to(data){

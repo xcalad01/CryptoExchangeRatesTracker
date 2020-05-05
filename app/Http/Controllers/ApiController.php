@@ -588,42 +588,28 @@ class ApiController extends Controller
             ], 404);
         }
 
+        $fiats = DB::table('fiats')->get("Fiat_id");
+
+        $fiat_values = array();
+        foreach ($fiats as $fiat){
+            array_push($fiat_values, $fiat->Fiat_id);
+        }
+
         $results = DB::table('historical_available')->where('Exchange_id', $exchange)->get();
 
-        $from_data = array();
-        $to_data = array();
-        $already_in = array();
+        $values = array();
         foreach ($results as $result){
-            array_push($from_data, array(
-               'value'=>$result->From,
-                'text'=>strtoupper($result->From)
-            ));
-
-            $item = array(
-                'value'=>$result->To,
-                'text'=>strtoupper($result->To)
-            );
-
-            if (!(in_array($item, $to_data))){
-                array_push($already_in, $result->To);
-                array_push($to_data, $item);
+            if (!key_exists($result->From, $values)){
+                $values[$result->From] = array();
+            }
+            array_push($values[$result->From], $result->To);
+            if (in_array($result->To, array("eur", "usd"))){
+                $values[$result->From] = array_unique(array_merge($values[$result->From], $fiat_values), SORT_REGULAR);
             }
         }
-
-        $fiats = DB::table('fiats')->get("Fiat_id");
-        foreach ($fiats as $fiat){
-            if (!(in_array($fiat->Fiat_id, $already_in))){
-                array_push($to_data, array(
-                    'value'=>$fiat->Fiat_id,
-                    'text'=>strtoupper($fiat->Fiat_id)
-                ));
-            }
-        }
-
 
         return response()->json([
-            "from" => $from_data,
-            "to"=>$to_data
+            "data" => $values
         ], 200);
     }
 
