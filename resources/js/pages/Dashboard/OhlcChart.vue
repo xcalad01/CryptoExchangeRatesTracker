@@ -13,7 +13,7 @@
         <div class="form-group">
           <label class="label">To:</label>
           <select class="select-css" v-model=post.to @change="onChangeTo()">
-            <option v-for="item in to_available[this.post.from]" :value="item">{{item.toUpperCase()}}</option>
+            <option v-for="item in to_available" :value="item" v-bind:key="this.post.from">{{item.toUpperCase()}}</option>
           </select>
         </div>
       </div>
@@ -166,7 +166,7 @@
       finish_init_avail(data){
         this.all_available = data['data'];
         this.from_available = Object.keys(this.all_available);
-        this.to_available = this.all_available;
+        this.to_available = this.all_available[this.from_available[0]];
       },
 
       init_available(){
@@ -182,7 +182,8 @@
       },
 
       onChangeFrom(){
-          this.$set(this.to_available, this.all_available[this.post.from]);
+        this.to_available = this.all_available[this.post.from];
+        this.post.from = this.to_available[0];
       },
 
       finish_change_to(data){
