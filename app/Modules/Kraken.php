@@ -19,10 +19,10 @@ class Kraken extends Base
         'ADAUSD',
         'XLMUSD',
         'XTZUSD',
-        'DASHUSD',
+        'DASH-USD',
         'ETCUSD',
         'ZECUSD',
-        'QTUMUSD',
+        'QTUM-USD',
     );
 
     protected $exchange_id = 'kraken';
@@ -32,6 +32,17 @@ class Kraken extends Base
     private function send_get(){
         $results = array();
         foreach ($this->config as $item){
+            if (strpos($item, '-') !== false) {
+                $from = substr($item,0, strpos($item, '-'));
+                $to = substr($item,strpos($item, '-') + 1, 3);
+                $item = "{$from}{$to}";
+                $from = strtolower($from);
+                $to = strtolower($to);
+            }
+            else{
+                $from = strtolower(substr($item,0, 3));
+                $to = strtolower(substr($item, 3, 3));
+            }
             $url = "https://api.kraken.com/0/public/OHLC?pair={$item}&interval=1&since={$this->timestamp}";
             $this->set_curl_url($url);
             $data = $this->do_send_get();
@@ -41,8 +52,6 @@ class Kraken extends Base
                 return;
             }
 
-            $from = strtolower(substr($item,0, 3));
-            $to = strtolower(substr($item, 3, 3));
             $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $this->exchange_id, 'from' => $from, 'to' => $to));
             $data = $data['result'];
             $keys = array_keys($data);
