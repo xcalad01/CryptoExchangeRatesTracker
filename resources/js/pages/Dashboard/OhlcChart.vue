@@ -182,7 +182,7 @@
       },
 
       onChangeFrom(){
-        this.to_available = this.all_available[this.from_available];
+        this.to_available = this.all_available[this.post.from];
       },
 
       finish_change_to(data){
