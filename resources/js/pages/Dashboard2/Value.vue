@@ -151,7 +151,7 @@
         this.axios.get(url).then(response => (this.update_value(response.data, init)));
       },
 
-      update_value(data){
+      update_value(data, init){
         this.day_price = data['data'][0][1].toFixed(3);
         this.loading_day_price = false;
         if (init){
