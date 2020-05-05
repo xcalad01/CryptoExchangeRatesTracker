@@ -106,6 +106,8 @@
           to_value_available: null,
           to_volume_available: null,
 
+          all_available: null,
+
         last_realtime_value:null,
         last_realtime_volume:null,
 

@@ -85,6 +85,7 @@
         old_to: null,
         from_available: null,
         to_available: null,
+          all_available: null
       }
     },
 
