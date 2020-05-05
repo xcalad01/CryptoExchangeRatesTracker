@@ -388,7 +388,7 @@
     },
 
     mounted() {
-      const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin"];
+      const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin", "binance"];
       this.exchange = this.$route.name;
       this.post.value.from = 'btc';
       this.post.volume.from = 'btc';
