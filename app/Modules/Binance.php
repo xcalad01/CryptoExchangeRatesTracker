@@ -18,15 +18,15 @@ class Binance extends Base
         'XLMBTC',
         'XTZBTC',
         'NEOBTC',
-        'DASHBTC',
+        'DASH-BTC',
         'ETCBTC',
         'ZECBTC',
         'XEMBTC',
-        'DOGEBTC',
-        'QTUMBTC',
+        'DOGE-BTC',
+        'QTUM-BTC',
         'BTGBTC',
         'ZRXBTC',
-        'USDTRUB'
+        'USDT-RUB'
     );
 
     private $exchange_id = "binance";
@@ -41,14 +41,23 @@ class Binance extends Base
         $start_end_timestamp = ($this->timestamp - 60) * 1000;
 
         foreach ($this->config as $item){
+            if (strpos($item, '-') !== false) {
+                $from = substr($item,0, strpos($item, '-'));
+                $to = substr($item,strpos($item, '-') + 1, 3);
+                $item = "{$from}{$to}";
+                $from = strtolower($from);
+                $to = strtolower($to);
+            }
+            else{
+                $from = strtolower(substr($item,0, 3));
+                $to = strtolower(substr($item, 3, 3));
+            }
+
             $url = "https://api.binance.com/api/v3/klines?symbol={$item}&interval=1m&startTime={$start_end_timestamp}&endTime={$start_end_timestamp}";
             $this->set_curl_url($url);
             $data = $this->do_send_get();
 
             if ($data){
-                $from = strtolower(substr($item,0, 3));
-                $to = strtolower(substr($item, 3, 3));
-
                 $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $this->exchange_id, 'from' => $from, 'to' => $to));
 
                 array_push($results, array(
@@ -69,7 +78,7 @@ class Binance extends Base
 
         }
 
-        return $results;
+        print_r($results);
     }
 
     private function send_post($payload){
