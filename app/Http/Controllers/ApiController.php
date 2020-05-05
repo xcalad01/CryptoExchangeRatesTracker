@@ -767,7 +767,9 @@ class ApiController extends Controller
     public function crypto_asset_value(Request $request, $crypto_id, $convert_to_id, $start, $end, $range=null, $dry=null)
     {
         try {
-            $this->check_availability_of_asset_data($crypto_id, $start, $end);
+            if (($end - $start) <= 86400 ){ # TODO: remove, this is temporary
+                $this->check_availability_of_asset_data($crypto_id, $start, $end);
+            }
             if ($dry){
                 return response()->json([
                     "data" => "Dry completed"
