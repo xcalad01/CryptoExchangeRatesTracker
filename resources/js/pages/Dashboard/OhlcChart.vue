@@ -183,7 +183,7 @@
 
       onChangeFrom(){
         this.to_available = this.all_available[this.post.from];
-        this.post.from = this.to_available[0];
+        this.post.to = this.to_available[0];
       },
 
       finish_change_to(data){
