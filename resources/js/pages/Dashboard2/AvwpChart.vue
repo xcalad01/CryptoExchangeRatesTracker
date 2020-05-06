@@ -33,7 +33,7 @@
         <div class="col-sm" style="display:grid;justify-content: center">
             <div class="form-group">
                 <label class="label">End:</label><br>
-                <datetime type="date" v-model="post.start"></datetime>
+                <datetime type="date" v-model="post.end"></datetime>
             </div>
         </div>
       <div class="col-md-2" style="display:grid;justify-content: center">
