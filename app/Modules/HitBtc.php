@@ -108,7 +108,7 @@ class HitBtc extends Base
             }
         }
 
-        return $results
+        return $results;
     }
 
     private function send_post($payload){
