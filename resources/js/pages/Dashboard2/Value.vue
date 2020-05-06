@@ -108,7 +108,7 @@
           render_value: true,
           left_value_converter: null,
           right_value_converter: null,
-          fresh_day_price: 7000
+          fresh_day_price: null
 
       }
     },
