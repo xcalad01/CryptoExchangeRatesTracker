@@ -857,7 +857,7 @@ class ApiController extends Controller
                 "data"=> array(
                     "name" => $crypto->Name,
                     "total_supply" => $total_supply,
-                    "circulating-supply" => $circulating_supply
+                    "circulating_supply" => $circulating_supply
                 )
             ], 200);
         }
