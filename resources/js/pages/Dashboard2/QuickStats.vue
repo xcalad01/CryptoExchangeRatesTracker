@@ -114,7 +114,12 @@
 
             update_supply(data){
                 this.total_supply = data['data']['total_supply'];
-                this.circulating_supply = data['data']['circulating_supply'];
+                if (data['data']['circulating_supply']){
+                    this.circulating_supply = data['data']['circulating_supply'];
+                }
+                else{
+                    this.circulating_supply = "XXX"
+                }
 
             }
 
