@@ -52,6 +52,7 @@ Route::get('crypto/historical/ohlc/{start}/{end}/{exchange}/{range}/{from}/{to}'
 Route::get('crypto/historical/volume/{start}/{end}/{exchange}/{range}/{from}/{to}', 'ApiController@get_crypto_volume_time_range');
 Route::get('crypto/historical/pairs/{exchange}', 'ApiController@get_all_hist_avail');
 
+Route::get('crypto/asset/info/{crypto_id}', 'ApiController@get_crypto_asset_info');
 Route::get('crypto/historical/asset/value/{crypto_id}/{convert_to_id}/{start}/{end}/{range?}/{dry?}', 'ApiController@crypto_asset_value');
 Route::get('crypto/historical/asset/volume/{crypto_id}/{convert_to_id}/{start}/{end}/{range?}', 'ApiController@crypto_asset_volume');
 Route::get('crypto/last/{timestamp}/{exchange}/{from}/{to}/{init}', 'ApiController@get_crypto_value_timestamp');
