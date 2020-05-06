@@ -15,20 +15,20 @@ class HitBtc extends Base
         "LTCUSD",
         "EOSUSD",
         "ETHUSD",
-        "XRPUSDT",
+        "XRP/USDT",
         "ADAUSD",
         "XLMUSD",
         "XTZUSD",
         "NEOUSD",
-        "DASHUSD",
+        "DASH-USD",
         "ETCUSD",
         "ZECUSD",
         "XEMUSD",
-        "DOGEUSD",
-        "QTUMUSD",
+        "DOGE-USD",
+        "QTUM-USD",
         "BTGUSD",
         "ZRXUSD",
-        "USDTUSD"
+        "USDT-USD"
     );
 
     private $end_timestamp;
@@ -43,6 +43,18 @@ class HitBtc extends Base
     private function make_url_symbols(){
         $result = null;
         foreach ($this->config as $item){
+            if (strpos($item, '-') !== false) {
+                $from = substr($item,0, strpos($item, '-'));
+                $to = substr($item,strpos($item, '-') + 1, 3);
+                $item = "{$from}{$to}";
+            }
+            else if (strpos($item, '/') !== false) {
+                $from = substr($item,0, strpos($item, '/'));
+                $to = substr($item,strpos($item, '/') + 1, 4);
+                $item = "{$from}{$to}";
+            }
+
+
             $result .= $item . ",";
         }
 
@@ -56,13 +68,27 @@ class HitBtc extends Base
         $url = "https://api.hitbtc.com/api/2/public/candles?period=M1&from={$this->start_timestamp}&till={$this->end_timestamp}&symbols={$url_symbols}";
         $this->set_curl_url($url);
         $data = $this->do_send_get();
-
+        print_r($data);
         foreach ($this->config as $key){
-            $key_data = $data[$key];
-            if ($key_data){
+            if (strpos($key, '-') !== false) {
+                $from = substr($key,0, strpos($key, '-'));
+                $to = substr($key,strpos($key, '-') + 1, 3);
+                $key = "{$from}{$to}";
+
+            }
+            else if (strpos($key, '/') !== false) {
+                $from = substr($key,0, strpos($key, '/'));
+                $to = substr($key,strpos($key, '/') + 1, 4);
+                $key = "{$from}{$to}";
+            }
+            else{
                 $from = strtolower(substr($key,0, 3));
                 $to = strtolower(substr($key, 3, 3));
-
+            }
+            $from = strtolower($from);
+            $to = strtolower($to);
+            $key_data = $data[$key];
+            if ($key_data){
                 $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $this->exchange_id, 'from' => $from, 'to' => $to));
 
                 array_push($results, array(
@@ -82,7 +108,7 @@ class HitBtc extends Base
             }
         }
 
-        return $results;
+        print_r($results);
     }
 
     private function send_post($payload){
