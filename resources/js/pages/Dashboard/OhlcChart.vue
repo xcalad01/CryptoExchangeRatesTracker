@@ -146,7 +146,11 @@
                   [1, 2, 3, 4, 6]
                 ]
               ]
-            }
+            },
+
+              tooltip: {
+              valueDecimals: 4
+          }
           }]};
 
         this.chart = new Highstock.Chart(options);

@@ -87,8 +87,8 @@
                     return item[1];
                 });
 
-                this.h24_min = Math.min(...values).toFixed(1);
-                this.h24_max = Math.max(...values).toFixed(1);
+                this.h24_min = Math.min(...values).toFixed(3);
+                this.h24_max = Math.max(...values).toFixed(3);
             },
 
             low_high_7d(){
@@ -105,8 +105,8 @@
                     return item[1];
                 });
 
-                this.d7_min = Math.min(...values).toFixed(1);
-                this.d7_max = Math.max(...values).toFixed(1);
+                this.d7_min = Math.min(...values).toFixed(3);
+                this.d7_max = Math.max(...values).toFixed(3);
             },
 
         },

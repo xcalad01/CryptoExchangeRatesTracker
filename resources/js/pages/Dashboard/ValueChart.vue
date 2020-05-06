@@ -141,7 +141,7 @@
             },
             shadow: true,
             tooltip: {
-              valueDecimals: 2
+              valueDecimals: 4
             }
           }]};
 
