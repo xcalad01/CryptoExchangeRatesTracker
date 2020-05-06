@@ -17,6 +17,8 @@ use App\Fiat;
 use App\Fiat_historical;
 use App\Modules\Stats;
 
+use Codenixsv\CoinGeckoApi\CoinGeckoClient;
+
 
 class ApiController extends Controller
 {
@@ -24,9 +26,11 @@ class ApiController extends Controller
 
     private $time_range_config;
 
-    private $coin_cap_coins_config;
+    private $coins_config;
 
     private $coin_cap_candles_curl;
+
+    private $coin_gecko_client;
 
     public function __construct()
     {
@@ -41,7 +45,7 @@ class ApiController extends Controller
             "1m" => 60
         );
 
-        $this->coin_cap_coins_config = array(
+        $this->coins_config = array(
             "btc" => "bitcoin",
             "eth" => "ethereum",
             "trx" => "tron",
@@ -68,6 +72,8 @@ class ApiController extends Controller
         );
 
         $this->coin_cap_candles_curl = curl_init();
+
+        $this->coin_gecko_client = new CoinGeckoClient();
     }
 
     /**
@@ -687,8 +693,8 @@ class ApiController extends Controller
     }
 
     private function coin_cap_candles($exchange, $from, $to, $start, $end){
-        $from_req = $this->coin_cap_coins_config[$from];
-        $to_req = $this->coin_cap_coins_config[$to];
+        $from_req = $this->coins_config[$from];
+        $to_req = $this->coins_config[$to];
 
         $start_req = $start * 1000;
         $end_req = $end * 1000;
@@ -753,6 +759,9 @@ class ApiController extends Controller
     public function crypto_asset_value(Request $request, $crypto_id, $convert_to_id, $start, $end, $range=null, $dry=null)
     {
         try {
+            $this->check_coin($crypto_id);
+            $convert_to_info = $this->check_coin($convert_to_id);
+
             if (($end - $start) <= 86400 ){ # TODO: remove, this is temporary
                 $this->check_availability_of_asset_data($crypto_id, $start, $end);
             }
@@ -761,8 +770,6 @@ class ApiController extends Controller
                     "data" => "Dry completed"
                 ], 200);
             }
-            $this->check_coin($crypto_id);
-            $convert_to_info = $this->check_coin($convert_to_id);
 
             if ($range){
                 if (!key_exists($range, $this->time_range_config)){
@@ -813,6 +820,52 @@ class ApiController extends Controller
         return response()->json([
             "data"=> $values
         ], 200);
+    }
+
+
+    public function get_crypto_asset_info(Request $request, $crypto_id){
+        try {
+            $this->check_coin($crypto_id);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        $crypto = DB::table('cryptocurrencies')->where('Crypto_id', $crypto_id)->first();
+        $total_supply = null;
+        $circulating_supply = null;
+        if ($crypto){
+            $coin_gecko_resp = $this->coin_gecko_client->coins()->getCoin($this->coins_config[$crypto_id]);
+            if ($coin_gecko_resp){
+                $total_supply = $coin_gecko_resp['market_data']['total_supply'];
+                $circulating_supply = $coin_gecko_resp['market_data']['circulating_supply'];
+                if ($crypto->CirculatingCap == -1){
+                    DB::table('cryptocurrencies')->where('Crypto_id', $crypto_id)->update([
+                        'CirculatingCap' => $total_supply ?: -1,
+                        'CirculatingActual' => $circulating_supply
+                        ]);
+                }
+            }
+            else{
+                $total_supply = $crypto->CirculatingCap;
+                $circulating_supply = $crypto->CirculatingActual;
+            }
+
+            return response()->json([
+                "data"=> array(
+                    "name" => $crypto->Name,
+                    "total_supply" => $total_supply,
+                    "circulating-supply" => $circulating_supply
+                )
+            ], 200);
+        }
+
+        return response()->json([
+            "data"=> "Internal server error"
+        ], 501);
+
     }
 
     private function ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)

@@ -19,9 +19,25 @@
 
             <div class="p-col-12 p-lg-4">
                 <div class="card">
-                    <span class="title"> 7d Low / High </span>
-                    <span class="detail"> 7d AVWP <br /> Low / High Price </span>
-                    <span class="span_value"> $ {{d7_min}} / $ {{d7_max}} </span>
+                    <span class="title"> Circulatting supply </span>
+                    <span class="detail"> Publicly available and <br />circulating in the market </span>
+                    <span class="span_value"> {{circulating_supply}} / <br /> {{total_supply}} </span>
+                </div>
+            </div>
+
+            <div class="p-col-12 p-lg-4">
+                <div class="card">
+                    <span class="title"> All Time Low </span>
+                    <span class="detail"> All time lowest price </span>
+                    <span class="span_value"> $ 123 </span>
+                </div>
+            </div>
+
+            <div class="p-col-12 p-lg-4">
+                <div class="card">
+                    <span class="title"> All Time High </span>
+                    <span class="detail"> All time highest price </span>
+                    <span class="span_value"> $ 19000 </span>
                 </div>
             </div>
 
@@ -44,8 +60,8 @@
                 h24_min: null,
                 h24_max: null,
 
-                d7_min: null,
-                d7_max: null,
+                total_supply: null,
+                circulating_supply: null
             }
         },
 
@@ -91,23 +107,17 @@
                 this.h24_max = Math.max(...values).toFixed(3);
             },
 
-            low_high_7d(){
-                this.post.end = (Date.now() / 1000).toFixed(0);
-                this.post.start = this.post.end - 604800;
-
-                let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end + "/" + "1m";
-
-                this.axios.get(url).then(response => (this.update_7d_value(response.data)));
+            supply(){
+                let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/asset/info/trx" + this.asset;
+                this.axios.get(url).then(response => (this.update_supply(response.data)));
             },
 
-            update_7d_value(data){
-                var values = data['data'].map(function (item) {
-                    return item[1];
-                });
+            update_supply(data){
+                this.total_supply = data['data']['total_supply'];
+                this.circulating_supply = data['data']['circulating_supply'];
 
-                this.d7_min = Math.min(...values).toFixed(3);
-                this.d7_max = Math.max(...values).toFixed(3);
-            },
+            }
+
 
         },
 
@@ -115,9 +125,9 @@
             this.asset = this.$route.name;
             this.post.to = 'usd';
 
+            this.supply();
             this.day_price_value();
             this.low_high_24h();
-            this.low_high_7d();
         }
     }
 </script>
