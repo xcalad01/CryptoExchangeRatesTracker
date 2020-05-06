@@ -108,7 +108,7 @@
             },
 
             supply(){
-                let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/asset/info/trx" + this.asset;
+                let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/asset/info/" + this.asset;
                 this.axios.get(url).then(response => (this.update_supply(response.data)));
             },
 
