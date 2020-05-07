@@ -84,7 +84,7 @@
                     return null
                 }
 
-                return (this.all_time_min - this.day_price) / this.all_time_min * 100
+                return ((this.all_time_min - this.day_price) / this.all_time_min) * 100
             },
 
             all_time_max_perc(){
@@ -92,7 +92,7 @@
                     return null
                 }
 
-                return (this.all_time_max - this.day_price) / this.all_time_max * 100
+                return ((this.all_time_max - this.day_price) / this.all_time_max) * 100
             }
         },
 
