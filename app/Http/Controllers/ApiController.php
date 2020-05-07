@@ -289,33 +289,6 @@ class ApiController extends Controller
         ], 200);
     }
 
-//    public function fix_fiat_timestamp(Request $request){
-//        $timestamps = $request["Timestamps"];
-//        foreach ($timestamps as $t){
-//            $fiats = Fiat_historical::where("Date", $t)->get();
-//            foreach ($fiats as $f) {
-//                if ($f->Fiat_id == 'usd'){
-//                    continue;
-//                }
-//                $fiat_hist1 = new Fiat_historical();
-//                $fiat_hist2 = new Fiat_historical();
-//
-//                $fiat_hist1->Fiat_id = $f->Fiat_id;
-//                $fiat_hist2->Fiat_id = $f->Fiat_id;
-//
-//                $fiat_hist1->Value_USD = $f->Value_USD;
-//                $fiat_hist2->Value_USD = $f->Value_USD;
-//
-//
-//                $fiat_hist1->Date = $f->Date + 86400;
-//                $fiat_hist2->Date = $f->Date + (86400*2);
-//
-//                $fiat_hist1->save();
-//                $fiat_hist2->save();
-//            }
-//        }
-//    }
-
     private function get_timestamp($date){
         return strtotime($date . '16:05:00');
     }
@@ -866,6 +839,80 @@ class ApiController extends Controller
             "data"=> "Internal server error"
         ], 501);
 
+    }
+
+    public function crypto_asset_all_time(Request $request, $crypto_id){
+        try {
+            $this->check_coin($crypto_id);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
+
+        $fiat_value = $this->last_fiat_value();
+        if ($fiat_value){
+            $min_max = $this->crypto_asset_min_max($crypto_id, $fiat_value[0]->Value_USD);
+            if ($min_max){
+                return response()->json([
+                    "data" => array(
+                        "min" => $min_max[0]->min,
+                        "max" => $min_max[0]->max
+                    )
+                ], 200);
+            }
+        }
+
+        return response()->json([
+            "message" => "Internal server error"
+        ], 501);
+    }
+
+    private function crypto_asset_min_max($crypto_id, $fiat_value){
+        return DB::select(DB::raw("
+            WITH min_max AS (
+            SELECT
+                CASE WHEN \"To\" = 'eur' THEN
+                    MIN((\"Open\" + \"High\" + \"Low\") / 3 * {$fiat_value})
+                ELSE
+                    MIN((\"Open\" + \"High\" + \"Low\") / 3)
+                END AS \"MIN\",
+                CASE WHEN \"To\" = 'eur' THEN
+                    MAX((\"Open\" + \"High\" + \"Low\") / 3 * {$fiat_value})
+                ELSE
+                    MAX((\"Open\" + \"High\" + \"Low\") / 3)
+                END AS \"MAX\"
+            FROM
+                crypto_historical
+                INNER JOIN historical_available ON crypto_historical.id = historical_available.id
+            WHERE
+                \"From\" = '{$crypto_id}'
+                AND \"To\" IN('usd','eur')
+            GROUP BY
+                \"To\"
+        )
+        SELECT
+            MIN(\"MIN\"),
+            MAX(\"MAX\")
+        FROM
+            min_max;
+        "));
+    }
+
+    private function last_fiat_value(){ # Could be for more values in future
+        return DB::select(DB::raw("
+            SELECT
+                \"Value_USD\"
+            FROM
+                fiat_historicals
+            WHERE
+                \"Fiat_id\" IN ('eur')
+            ORDER BY
+                \"Date\" DESC
+            LIMIT 1;
+
+        "));
     }
 
     private function ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)

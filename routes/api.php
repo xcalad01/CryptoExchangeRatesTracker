@@ -55,11 +55,11 @@ Route::get('crypto/historical/pairs/{exchange}', 'ApiController@get_all_hist_ava
 Route::get('crypto/asset/info/{crypto_id}', 'ApiController@get_crypto_asset_info');
 Route::get('crypto/historical/asset/value/{crypto_id}/{convert_to_id}/{start}/{end}/{range?}/{dry?}', 'ApiController@crypto_asset_value');
 Route::get('crypto/historical/asset/volume/{crypto_id}/{convert_to_id}/{start}/{end}/{range?}', 'ApiController@crypto_asset_volume');
-Route::get('crypto/last/{timestamp}/{exchange}/{from}/{to}/{init}', 'ApiController@get_crypto_value_timestamp');
+Route::get('crypto/historical/asset/all_time/{crypto_id}', 'ApiController@crypto_asset_all_time');
 
 Route::post('update_crypto_pair_value', 'ApiController@update_crypto_pair_value');
 
 
 
-
+//Route::get('crypto/last/{timestamp}/{exchange}/{from}/{to}/{init}', 'ApiController@get_crypto_value_timestamp');
 //Route::post('fiat_fix', 'ApiController@fix_fiat_timestamp');

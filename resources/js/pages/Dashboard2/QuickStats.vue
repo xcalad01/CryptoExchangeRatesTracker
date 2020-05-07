@@ -29,7 +29,7 @@
                 <div class="card">
                     <span class="title"> All Time Low </span>
                     <span class="detail"> All time lowest price </span>
-                    <span class="span_value"> $ 123 </span>
+                    <span class="span_value"> $ {{all_time_min}} </span>
                 </div>
             </div>
 
@@ -37,7 +37,7 @@
                 <div class="card">
                     <span class="title"> All Time High </span>
                     <span class="detail"> All time highest price </span>
-                    <span class="span_value"> $ 19000 </span>
+                    <span class="span_value"> $ {{all_time_max}} </span>
                 </div>
             </div>
 
@@ -61,7 +61,10 @@
                 h24_max: null,
 
                 total_supply: null,
-                circulating_supply: null
+                circulating_supply: null,
+
+                all_time_min: null,
+                all_time_max: null
             }
         },
 
@@ -121,6 +124,17 @@
                     this.circulating_supply = "XXX"
                 }
 
+            },
+
+            all_time_values(){
+                let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/all_time/" + this.asset;
+                this.axios.get(url).then(response => (this.finish_all_time_values(response.data)));
+
+            },
+
+            finish_all_time_values(data){
+                this.all_time_min = data['data']['min'];
+                this.all_time_max = data['data']['max'];
             }
 
 
