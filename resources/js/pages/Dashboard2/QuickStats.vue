@@ -30,8 +30,8 @@
                     <span class="title"> All Time Low </span>
                     <span class="detail"> All time lowest price </span>
                     <span class="span_value"> $ {{all_time_min}} </span>
-                    <span v-if="all_time_min_perc < 0" style="color: red"> {{all_time_min_perc}} % </span>
-                    <span v-if="all_time_min_perc >= 0" style="color: green"> {{all_time_min_perc}} % </span>
+                    <span v-if="all_time_min_perc < 0" class="percentage_red"> {{all_time_min_perc}} % </span>
+                    <span v-if="all_time_min_perc >= 0" class="percentage_green"> {{all_time_min_perc}} % </span>
 
                 </div>
             </div>
@@ -41,8 +41,8 @@
                     <span class="title"> All Time High </span>
                     <span class="detail"> All time highest price </span>
                     <span class="span_value"> $ {{all_time_max}} </span>
-                    <span v-if="all_time_max_perc < 0" style="color: red"> {{all_time_max_perc}} % </span>
-                    <span v-if="all_time_max_perc >= 0" style="color: green"> {{all_time_max_perc}} % </span>
+                    <span v-if="all_time_max_perc < 0" class="percentage_red"> {{all_time_max_perc}} % </span>
+                    <span v-if="all_time_max_perc >= 0" class="percentage_green"> {{all_time_max_perc}} % </span>
                 </div>
             </div>
 
@@ -177,5 +177,43 @@
     .p-lg-4 {
         padding: 0.5rem !important;
         width: 33.3%;
+    }
+
+    .percentage_red {
+        position: absolute;
+        float: right;
+        font-size: 13px;
+        margin-bottom: 10px;
+        color: red;
+        font-stretch: semi-expanded;
+        box-sizing: inherit;
+        border-radius: 3px;
+        top: 10px;
+        right: 10px;
+        padding: inherit;
+        padding-top: 7px;
+        padding-right: 14px;
+        padding-bottom: 7px;
+        padding-left: 14px;
+        margin-top: 37px;
+    }
+
+    .percentage_green {
+        position: absolute;
+        float: right;
+        font-size: 13px;
+        margin-bottom: 10px;
+        color: green;
+        font-stretch: semi-expanded;
+        box-sizing: inherit;
+        border-radius: 3px;
+        top: 10px;
+        right: 10px;
+        padding: inherit;
+        padding-top: 7px;
+        padding-right: 14px;
+        padding-bottom: 7px;
+        padding-left: 14px;
+        margin-top: 37px;
     }
 </style>
