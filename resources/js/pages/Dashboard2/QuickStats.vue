@@ -30,6 +30,7 @@
                     <span class="title"> All Time Low </span>
                     <span class="detail"> All time lowest price </span>
                     <span class="span_value"> $ {{all_time_min}} </span>
+                    <span> {{all_time_max_perc}} % </span>
                 </div>
             </div>
 
@@ -38,6 +39,7 @@
                     <span class="title"> All Time High </span>
                     <span class="detail"> All time highest price </span>
                     <span class="span_value"> $ {{all_time_max}} </span>
+                    <span> {{all_time_min_perc}} % </span>
                 </div>
             </div>
 
@@ -75,6 +77,22 @@
                 }
 
                 return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.day_price;
+            },
+
+            all_time_min_perc(){
+                if (this.day_price == null || this.all_time_min == null){
+                    return null
+                }
+
+                return (this.all_time_min - this.day_price) / this.all_time_min * 100
+            },
+
+            all_time_max_perc(){
+                if (this.day_price == null || this.all_time_max == null){
+                    return null
+                }
+
+                return (this.all_time_max - this.day_price) / this.all_time_max * 100
             }
         },
 
