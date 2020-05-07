@@ -30,7 +30,9 @@
                     <span class="title"> All Time Low </span>
                     <span class="detail"> All time lowest price </span>
                     <span class="span_value"> $ {{all_time_min}} </span>
-                    <span> {{all_time_min_perc}} % </span>
+                    <span v-if="all_time_min_perc < 0" style="color: red"> {{all_time_min_perc}} % </span>
+                    <span v-if="all_time_min_perc >= 0" style="color: green"> {{all_time_min_perc}} % </span>
+
                 </div>
             </div>
 
@@ -39,7 +41,8 @@
                     <span class="title"> All Time High </span>
                     <span class="detail"> All time highest price </span>
                     <span class="span_value"> $ {{all_time_max}} </span>
-                    <span> {{all_time_max_perc}} % </span>
+                    <span v-if="all_time_max_perc < 0" style="color: red"> {{all_time_max_perc}} % </span>
+                    <span v-if="all_time_max_perc >= 0" style="color: green"> {{all_time_max_perc}} % </span>
                 </div>
             </div>
 
