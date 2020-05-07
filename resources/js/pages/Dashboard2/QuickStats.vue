@@ -145,6 +145,7 @@
             this.post.to = 'usd';
 
             this.supply();
+            this.all_time_values();
             this.day_price_value();
             this.low_high_24h();
         }
