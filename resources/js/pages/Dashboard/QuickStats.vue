@@ -38,7 +38,6 @@
 <script>
     import Highcharts from "highcharts";
     import {axios} from "../../plugins/axios";
-    import { Facebook } from 'vue-socialmedia-share';
 
     export default {
         data (){
