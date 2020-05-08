@@ -144,6 +144,7 @@
 
         if (this.realtime_chart){
             this.real_time_volume_data = null;
+            this.volume_chart.series[0].setData([]);
         }
 
         var options = {
@@ -192,6 +193,7 @@
 
           if (this.volume_chart){
               this.real_time_data = null;
+              this.realtime_chart.series[0].setData([]);
           }
 
         var options = {
