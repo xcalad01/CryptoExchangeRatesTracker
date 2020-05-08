@@ -1,7 +1,5 @@
 <template>
   <div>
-    <ohlc_chart></ohlc_chart>
-    <value_chart></value_chart>
     <div class="button_row">
         <div class="btn-group btn-group-toggle float-right">
             <label id="0" class="btn btn-sm btn-primary btn-simple">
@@ -14,7 +12,10 @@
     </div>
     <realtime_charts v-if="render_realtime"></realtime_charts>
     <quick_stats v-else></quick_stats>
-    </div>
+
+      <ohlc_chart></ohlc_chart>
+      <value_chart></value_chart>
+  </div>
 </template>
 <script>
   import OhlcChart from './Dashboard/OhlcChart';
