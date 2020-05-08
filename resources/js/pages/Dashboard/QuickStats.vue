@@ -35,6 +35,7 @@
 
         methods: {
             volume_by_currency(data){
+                console.log(data);
                 var chart_data = data.map(function (item) {
                     return {name: item, y: data[item]}
                 });
@@ -81,6 +82,7 @@
             },
 
             volume_by_pair(data){
+                console.log(data);
                 var chart_data = data.map(function (item) {
                     return {name: item, y: data[item]}
                 });
@@ -132,8 +134,8 @@
             },
 
             finish_quick_stats(data){
-                this.volume_by_currency(data['volume_by_currency']);
-                this.volume_by_pair(data['volume_by_pair']);
+                this.volume_by_currency(data['data']['volume_by_currency']);
+                this.volume_by_pair(data['data']['volume_by_pair']);
             },
         },
 
