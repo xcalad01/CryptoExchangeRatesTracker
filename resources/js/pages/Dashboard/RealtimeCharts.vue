@@ -1,82 +1,80 @@
 <template>
-  <div>
     <div class="row">
-      <div class="col-lg-4">
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="form-group">
-              <label class="label">From:</label><br>
-              <select class="select-css" v-model=post.value.from @change="onChangeFromValue()">
-                <option v-for="item in from_value_available" :value="item">{{item.toUpperCase()}}</option>
-              </select>
+        <div class="col-lg-4">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="label">From:</label><br>
+                        <select class="select-css" v-model=post.value.from @change="onChangeFromValue()">
+                            <option v-for="item in from_value_available" :value="item">{{item.toUpperCase()}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="label">To:</label><br>
+                        <select class="select-css" v-model=post.value.to @change="onChangeToValue()">
+                            <option v-for="item in to_value_available" :value="item">{{item.toUpperCase()}}</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="form-group">
-              <label class="label">To:</label><br>
-              <select class="select-css" v-model=post.value.to @change="onChangeToValue()">
-                <option v-for="item in to_value_available" :value="item">{{item.toUpperCase()}}</option>
-              </select>
-            </div>
-          </div>
+            <card type="chart">
+                <template slot="header">
+                    <div class="row">
+                        <h5 class="card-category">Realtime Value</h5>
+                    </div>
+                    <div class="row">
+                        <h3 class="card-title">
+                            {{currency_symbol_value}} {{last_realtime_value}}
+                        </h3>
+                    </div>
+                </template>
+                <div class="chart-area" id="realtime_value_cart">
+                    <div id="realtime">
+                        <div ref="chart_realtime" class="chart"></div>
+                    </div>
+                </div>
+            </card>
         </div>
-        <card type="chart">
-          <template slot="header">
+        <div class="col-lg-4">
             <div class="row">
-              <h5 class="card-category">Realtime Value</h5>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="label">From:</label><br>
+                        <select class="select-css" v-model=post.volume.from @change="onChangeFromVolume()">
+                            <option v-for="item in from_volume_available" :value="item">{{item.toUpperCase()}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label class="label">To:</label><br>
+                        <select class="select-css" v-model=post.volume.to @change="onChangeToVolume()">
+                            <option v-for="item in to_volume_available" :value="item">{{item.toUpperCase()}}</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-              <h3 class="card-title">
-                {{currency_symbol_value}} {{last_realtime_value}}
-              </h3>
-            </div>
-          </template>
-          <div class="chart-area" id="realtime_value_cart">
-            <div id="realtime">
-              <div ref="chart_realtime" class="chart"></div>
-            </div>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-4">
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="form-group">
-              <label class="label">From:</label><br>
-              <select class="select-css" v-model=post.volume.from @change="onChangeFromVolume()">
-                <option v-for="item in from_volume_available" :value="item">{{item.toUpperCase()}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="form-group">
-              <label class="label">To:</label><br>
-              <select class="select-css" v-model=post.volume.to @change="onChangeToVolume()">
-                <option v-for="item in to_volume_available" :value="item">{{item.toUpperCase()}}</option>
-              </select>
-            </div>
-          </div>
+            <card type="chart">
+                <template slot="header">
+                    <div class="row">
+                        <h5 class="card-category">Realtime Volume</h5>
+                    </div>
+                    <div class="row">
+                        <h3 class="card-title">
+                            {{currency_symbol_volume}} {{last_realtime_volume}}
+                        </h3>
+                    </div>
+                </template>
+                <div class="chart-area">
+                    <div id="volume">
+                        <div ref="chart_volume" class="chart"></div>
+                    </div>
+                </div>
+            </card>
         </div>
-        <card type="chart">
-          <template slot="header">
-            <div class="row">
-              <h5 class="card-category">Realtime Volume</h5>
-            </div>
-            <div class="row">
-              <h3 class="card-title">
-                {{currency_symbol_volume}} {{last_realtime_volume}}
-              </h3>
-            </div>
-          </template>
-          <div class="chart-area">
-            <div id="volume">
-              <div ref="chart_volume" class="chart"></div>
-            </div>
-          </div>
-        </card>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -134,7 +132,11 @@
         exchange: null,
 
         currency_symbol_value: null,
-        currency_symbol_volume: null
+        currency_symbol_volume: null,
+
+        render_realtime: true,
+
+          volume_by_currency_chart: null,
       }
     },
 

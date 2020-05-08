@@ -393,77 +393,6 @@ class ApiController extends Controller
         return $fiat_historical;
     }
 
-    private function do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available, $coin_info){
-        $values = array();
-
-        if ($coin_info->Type == 'fiat'){
-            $result = $this->value_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
-        }
-        else{
-            $result = $this->value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
-        }
-
-        foreach ($result as $data){
-            array_push($values, array(
-                strtotime($data->interval_alias),
-               floatval($data->value)
-            ));
-        }
-        return $values;
-    }
-
-
-    public function get_crypto_value_timestamp(Request $request, $timestamp, $exchange, $from, $to, $init){
-        $historical_available = null;
-
-        try {
-            $this->check_exchange($exchange);
-            $coin_info = $this->check_coin($to);
-
-            $historical_available = $this->get_historical_available($exchange, $from);
-
-        }
-        catch (\Exception $e){
-            return response()->json([
-                "message" => $e->getMessage()
-            ], 404);
-        }
-
-        if($init == "true"){
-            $result = $this->do_get_value_time_range($timestamp - 1080, $timestamp + 60, $exchange, 60, $from, $to, $historical_available, $coin_info);
-            return response()->json([
-                "data" => $result
-            ], 200);
-        }
-        else{
-            $result = DB::table('historical_available')
-                ->select(DB::raw('("Open"+"Close")/2 as value'))
-                ->join('crypto_historical', 'historical_available.id', '=', 'crypto_historical.id')
-                ->where([
-                    ['Exchange_id', '=', DB::raw("'{$exchange}'")],
-                    ['From', '=', DB::raw("'{$historical_available->From}'")],
-                    ['To', '=', DB::raw("'{$historical_available->To}'")],
-                    ['Timestamp', '=', DB::raw("'{$timestamp}'")]
-                ])
-                ->groupBy(['Exchange_id', 'Open', 'Close'])->get();
-
-            $result = json_decode($result, true);
-
-            $fiat_db = $this->get_fiat_historical($historical_available->To, $timestamp);
-            $fiat_to = $this->get_fiat_historical($to, $timestamp);
-
-            if (!empty($result)){
-                $result = $result[0]['value'] / $fiat_db->Value_USD * $fiat_to->Value_USD;
-            }
-            else{
-                $result = null;
-            }
-            return response()->json([
-                "data" => $result
-            ], 200);
-        }
-    }
-
     public function get_crypto_value_time_range(Request $request, $start, $end, $exchange, $range, $from, $to){
         $historical_available = null;
 
@@ -493,7 +422,20 @@ class ApiController extends Controller
         }
 
 
-        $values = $this->do_get_value_time_range($start, $end, $exchange, $range, $from, $to, $historical_available, $coin_info);
+        $values = array();
+        if ($coin_info->Type == 'fiat'){
+            $result = $this->value_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
+        }
+        else{
+            $result = $this->value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
+        }
+
+        foreach ($result as $data){
+            array_push($values, array(
+                strtotime($data->interval_alias),
+                floatval($data->value)
+            ));
+        }
 
         return response()->json([
             "data" => $values
@@ -851,14 +793,15 @@ class ApiController extends Controller
             ], 404);
         }
 
-        $fiat_value = $this->last_fiat_value();
+        $fiat_value = $this->last_fiat_value('eur');
         if ($fiat_value){
             $min_max = $this->crypto_asset_min_max($crypto_id, $fiat_value[0]->Value_USD);
             if ($min_max){
                 return response()->json([
                     "data" => array(
                         "min" => $min_max[0]->min,
-                        "max" => $min_max[0]->max
+                        "max" => $min_max[0]->max,
+                        "currency" => "usd"
                     )
                 ], 200);
             }
@@ -867,6 +810,112 @@ class ApiController extends Controller
         return response()->json([
             "message" => "Internal server error"
         ], 501);
+    }
+
+    public function exchange_stats(Request $request, $exchange_id){
+        $to_coins = DB::select(DB::raw("
+            SELECT DISTINCT \"To\" from historical_available where \"Exchange_id\" = '{$exchange_id}';
+        "));
+
+        $coin_values_usd = array();
+        foreach ($to_coins as $t_c){
+            $info = $this->check_coin($t_c->To);
+            if ($info->Type == 'fiat'){
+                $coin_value_usd = $this->last_fiat_value($t_c->To);
+                $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->Value_USD;
+            }
+            else{
+                $now =strtotime('now');
+                $start = strtotime("today", $now);
+                $end = strtotime("tomorrow", $start) - 1;
+                $coin_value_usd = $this->value_crypto_asset_fiat($end - $start, $t_c->To, 'usd', $start, $end);
+                $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->sum;
+            }
+        }
+
+        $volume_by_currency = $this->exchange_volume_by_currency($exchange_id, $to_coins, $coin_values_usd);
+        $volume_per_pair = $this->exchange_volume_pair($exchange_id, $coin_values_usd);
+        $additional_info = $this->exchange_additional_info($exchange_id);
+
+
+        return response()->json([
+            "data" => array(
+                "volume_by_currency" => $volume_by_currency,
+                "volume_by_pair" => $volume_per_pair,
+                "additional" => $additional_info[0]
+            )
+        ], 200);
+    }
+
+    private function exchange_volume_by_currency($exchange_id, $to_coins, $coin_values_usd){
+        $values_in_usd = array();
+        $sum_volume_usd = 0;
+        foreach ($to_coins as $t_c){
+            $volume_for_coin = DB::select(DB::raw("
+                SELECT
+                    SUM(\"Volume\") AS \"SUM\"
+                FROM
+                    historical_available
+                    JOIN crypto_historical ON historical_available.id = crypto_historical.id
+                WHERE
+                    \"Exchange_id\" = '{$exchange_id}'
+                    AND \"To\" = '{$t_c->To}';
+            "));
+            $values_in_usd[$t_c->To] = $coin_values_usd[$t_c->To] * $volume_for_coin[0]->SUM;
+            $sum_volume_usd += $coin_values_usd[$t_c->To] * $volume_for_coin[0]->SUM;
+        }
+
+        $result = array();
+
+        foreach ($values_in_usd as $key => $value){
+            $result[$key] = $value * 100 / $sum_volume_usd;
+        }
+
+        return $result;
+    }
+
+
+    private function exchange_volume_pair($exchange_id, $coin_values_usd){
+        $coin_pairs_value = DB::select(DB::raw("
+            SELECT
+                SUM(\"Volume\") AS \"SUM\",
+                \"From\",
+                \"To\"
+            FROM
+                historical_available
+                JOIN crypto_historical ON historical_available.id = crypto_historical.id
+            WHERE
+                \"Exchange_id\" = '{$exchange_id}'
+            GROUP BY
+                \"From\",
+                \"To\";
+        "));
+
+        $volume_sum = 0;
+        $volumes_per_pair = array();
+        foreach ($coin_pairs_value as $cpv){
+            $volumes_per_pair["{$cpv->From}/{$cpv->To}"] = $cpv->SUM * $coin_values_usd[$cpv->To];
+            $volume_sum += $cpv->SUM * $coin_values_usd[$cpv->To];
+        }
+
+        $result = array();
+        foreach ($volumes_per_pair as $key => $vpp){
+            $result[$key] = $vpp * 100 / $volume_sum;
+        }
+
+        return $result;
+    }
+
+
+    private function exchange_additional_info($exchange_id){
+        return DB::select(DB::raw("
+            SELECT
+                *
+            FROM
+                exchanges
+            WHERE
+                \"Exchange_id\" = '{$exchange_id}';
+        "));
     }
 
     private function crypto_asset_min_max($crypto_id, $fiat_value){
@@ -900,14 +949,14 @@ class ApiController extends Controller
         "));
     }
 
-    private function last_fiat_value(){ # Could be for more values in future
+    private function last_fiat_value($fiat_id){ # Could be for more values in future
         return DB::select(DB::raw("
             SELECT
                 \"Value_USD\"
             FROM
                 fiat_historicals
             WHERE
-                \"Fiat_id\" IN ('eur')
+                \"Fiat_id\" IN ('{$fiat_id}')
             ORDER BY
                 \"Date\" DESC
             LIMIT 1;

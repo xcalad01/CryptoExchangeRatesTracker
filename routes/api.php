@@ -27,7 +27,7 @@ Route::get('ping', 'ApiController@ping');
  * Exchange
  */
 Route::post('exchange', 'ApiController@create_exchange');
-
+Route::get('exchange/stats/{exchange_id}', 'ApiController@exchange_stats');
 
 /**
  * Fiat
