@@ -43,7 +43,7 @@
                 console.log(chart_data);
                 var options = {
                     chart: {
-                        renderTo: this.$refs.chart_volume_by_pair,
+                        renderTo: this.$refs.chart_volume_by_currency,
                         height: card.offsetHeight,
                         width: card.offsetWidth,
                         plotBackgroundColor: null,
