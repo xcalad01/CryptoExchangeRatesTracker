@@ -86,26 +86,50 @@ class ApiController extends Controller
     }
 
     public function create_exchange(Request $request) {
-        $exchange = new Exchange;
-        $exchange->Exchange_id = $request['Exchange_id'];
-        $exchange->Name = $request['Name'];
-        $exchange->Url = $request['Url'];
-        $exchange->Image = $request['Image'];
-
-
-        $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_exchange"));
         try {
-            $exchange->save();
-            return response()->json([
-                "message" => "Exchange record created"
-            ], 200);
+            $exchange = Exchange::where('Exchange_id', $request['Exchange_id'])->first();
+            if ($exchange){
+                Exchange::where('Exchange_id', $request['Exchange_id'])->update(array(
+                    "Url"=>$request['Name'],
+                    "Image"=>$request['Url'],
+                    "Year"=>$request['Year_established'],
+                    "Country"=>$request['Country'],
+                    "Centralized"=>$request['Centralized'],
+                    "Accepted_payment_methods"=>$request['Accepted_payment_methods'],
+                    "Facebook"=>$request['Facebook_url'],
+                    "Reddit"=>$request['Reddit_url'],
+                    "Twitter"=>$request['Twitter']
+                ));
+                $this->statsd->statsd->increment("db.connections", 1, array("function"=>"update_exchange"));
+                return response()->json([
+                    "message" => "Exchange record updated"
+                ], 200);
+            }
+            else{
+                $exchange = new Exchange;
+                $exchange->Exchange_id = $request['Exchange_id'];
+                $exchange->Name = $request['Name'];
+                $exchange->Url = $request['Url'];
+                $exchange->Image = $request['Image'];
+                $exchange->Year = $request['Year_established'];
+                $exchange->Country = $request['Country'];
+                $exchange->Centralized = $request['Centralized'];
+                $exchange->Accepted_payment_methods = $request['Accepted_payment_methods'];
+                $exchange->Facebook = $request['Facebook_url'];
+                $exchange->Reddit = $request['Reddit_url'];
+                $exchange->Twitter = $request['Twitter'];
+                $exchange->save();
+                $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_exchange"));
+                return response()->json([
+                    "message" => "Exchange record created"
+                ], 200);
+            }
         }
         catch (QueryException $e){
             return response()->json([
                 "message" => $e->getMessage()
             ], 501);
         }
-
     }
 
     private function create_available($data){

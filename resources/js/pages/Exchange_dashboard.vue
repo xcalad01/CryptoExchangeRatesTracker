@@ -8,7 +8,7 @@
                 <input v-on:click="realtime_click" type="radio" name="options" autocomplete="off"> Realtime </input>
             </label>
             <label id="1" class="btn btn-sm btn-primary btn-simple">
-                <input v-on:click="quick_stats_click" type="radio" name="options" autocomplete="off"> Quick Stats </input>
+                <input v-on:click="quick_stats_click" type="radio" name="options" autocomplete="off"> Quick Stats & About</input>
             </label>
         </div>
     </div>

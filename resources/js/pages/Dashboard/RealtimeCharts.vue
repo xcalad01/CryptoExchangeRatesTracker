@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row realtime_margin">
         <div class="col-lg-4">
             <div class="row">
                 <div class="col-lg-4">
@@ -81,6 +81,7 @@
   import Highcharts from "highcharts";
   import {axios} from "../../plugins/axios";
   import getSymbolFromCurrency from "currency-symbol-map";
+
   var global_component_instance = null;
 
   export default {
@@ -450,5 +451,7 @@
 </script>
 
 <style>
-
+    .realtime_margin{
+        margin-top: 30px;
+    }
 </style>
