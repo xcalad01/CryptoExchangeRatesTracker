@@ -257,21 +257,25 @@
       },
 
       save_realtime_response_data_volume(data, init, lastDateVolume){
-        var last_value = this.last_realtime_volume;
-        this.real_time_volume_data.push(...data['data'].map(function (item) {
-          if(item['y']){
-            last_value = item['y'].toFixed(3);
+          if (init){
+              this.real_time_volume_data = data['data'].map(function (item) {
+                  if(item['y']){
+                      last_value = item['y'].toFixed(3);
+                  }
+                  return [item['x'] * 1000, item['y']]
+              });
+              this.volume_chart.series[0].setData(this.real_time_volume_data)
           }
-          return [item['x'] * 1000, item['y']]
-        }));
-
-        if (init){
-
-          this.volume_chart.series[0].setData(this.real_time_volume_data)
-        }
-        else{
-          this.volume_chart.series[0].addPoint(this.real_time_volume_data[this.real_time_volume_data.length - 1], true, true)
-        }
+          else{
+              var last_value = this.last_realtime_volume;
+              this.real_time_volume_data.push(...data['data'].map(function (item) {
+                  if(item['y']){
+                      last_value = item['y'].toFixed(3);
+                  }
+                  return [item['x'] * 1000, item['y']]
+              }));
+              this.volume_chart.series[0].addPoint(this.real_time_volume_data[this.real_time_volume_data.length - 1], true, true)
+          }
 
         this.last_realtime_volume = last_value;
       },
