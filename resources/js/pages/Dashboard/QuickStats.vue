@@ -28,7 +28,8 @@
     export default {
         data (){
             return {
-                axios: axios
+                axios: axios,
+                exchange: null
             }
         },
 
@@ -137,6 +138,7 @@
         },
 
         mounted() {
+            this.exchange = this.$route.name;
             this.create_quick_stats();
         }
     }
