@@ -2,7 +2,7 @@
     <div class="row">
         <div class="cp-col-12 p-lg-4">
             <card class="card_quick_stats" type="chart">
-                <div class="chart-area" id="volume_by_currency_card">
+                <div class="chart-area chart-area_quick_stats" id="volume_by_currency_card">
                     <div id="volume_by_currency">
                         <div ref="chart_volume_by_currency" class="chart"></div>
                     </div>
