@@ -97,8 +97,8 @@ const routes = [
 
             },
             {
-                path: "cex",
-                name: "CEX.IO",
+                path: "CEX.IO",
+                name: "cex",
                 component: Exchange_dashboard,
                 meta: { title: "cex"},
             },
