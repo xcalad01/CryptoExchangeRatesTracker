@@ -34,7 +34,7 @@
         },
 
         methods: {
-            volume_by_currency(){
+            volume_by_currency(data){
                 var chart_data = data.map(function (item) {
                     return {name: item, y: data[item]}
                 });
