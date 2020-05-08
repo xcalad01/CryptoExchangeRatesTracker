@@ -13,7 +13,7 @@
             <div class="col-sm"><p class="title" style="text-align: center">Twitter handle</p><br><p style="text-align: center">{{twitter}}</p></div>
         </div>
         <div class="row">
-            <div class="cp-col-12 p-lg-4">
+            <div class="col-sm">
                 <card class="card_quick_stats" type="chart">
                     <div class="chart-area chart-area_quick_stats" id="volume_by_currency_card">
                         <div id="volume_by_currency">
@@ -22,7 +22,7 @@
                     </div>
                 </card>
             </div>
-            <div class="p-col-12 p-lg-4">
+            <div class="col-sm">
                 <card class="card_quick_stats" type="chart">
                     <div class="chart-area chart-area_quick_stats" id="volume_by_pair_card">
                         <div id="volume_by_pair">
