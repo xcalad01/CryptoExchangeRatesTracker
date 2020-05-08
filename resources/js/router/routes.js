@@ -95,7 +95,13 @@ const routes = [
                 component: Exchange_dashboard,
                 meta: { title: "okex" },
 
-            }
+            },
+            {
+                path: "cex",
+                name: "CEX.IO",
+                component: Exchange_dashboard,
+                meta: { title: "cex"},
+            },
 
         ]
     },
