@@ -1,7 +1,7 @@
 <template>
     <div class="row">
-        <div class="col-lg-4">
-            <card class="quick_stats_chart" type="chart">
+        <div class="cp-col-12 p-lg-4">
+            <card class="quick_stats_chart card_quick_stats" type="chart">
                 <div class="chart-area" id="volume_by_currency_card">
                     <div id="volume_by_currency">
                         <div ref="chart_volume_by_currency" class="chart"></div>
@@ -9,8 +9,8 @@
                 </div>
             </card>
         </div>
-        <div class="col-lg-4">
-            <card class="quick_stats_chart" type="chart">
+        <div class="p-col-12 p-lg-4">
+            <card class="quick_stats_chart card_quick_stats" type="chart">
                 <div class="chart-area" id="volume_by_pair_card">
                     <div id="volume_by_pair">
                         <div ref="chart_volume_by_pair" class="chart"></div>
@@ -74,7 +74,40 @@
                     series: [{
                         name: 'Brands',
                         colorByPoint: true,
-                        data: chart_data
+                        data: {
+                            chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false,
+                                type: 'pie'
+                            },
+                            title: {
+                                text: 'Browser market shares in January, 2018'
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            },
+                            accessibility: {
+                                point: {
+                                    valueSuffix: '%'
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: true,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: 'Brands',
+                                colorByPoint: true,
+                                data: chart_data
+                            }]
+                        }
                     }]
                 };
 
@@ -87,6 +120,7 @@
                 var chart_data = Object.keys(data).map(function (item) {
                     return {name: item, y: data[item]}
                 });
+
                 const card = document.getElementById('volume_by_pair_card');
                 var options = {
                     chart: {
@@ -122,7 +156,40 @@
                     series: [{
                         name: 'Brands',
                         colorByPoint: true,
-                        data: chart_data
+                        data: {
+                            chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false,
+                                type: 'pie'
+                            },
+                            title: {
+                                text: 'Browser market shares in January, 2018'
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                            },
+                            accessibility: {
+                                point: {
+                                    valueSuffix: '%'
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: true,
+                                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: 'Brands',
+                                colorByPoint: true,
+                                data: chart_data
+                            }]
+                        }
                     }]
                 };
 
@@ -149,7 +216,14 @@
 </script>
 
 <style>
+    .card_quick_stats {
+        background: #1e1e28;
+        box-shadow: none;
+    }
+
     .quick_stats_chart {
         margin-top: 20px;
+        max-width: 100%;
+        max-height: 100%;
     }
 </style>
