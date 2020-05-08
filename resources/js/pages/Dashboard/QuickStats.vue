@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="cp-col-12 p-lg-4">
-            <card class="quick_stats_chart card_quick_stats" type="chart">
+            <card class="card_quick_stats" type="chart">
                 <div class="chart-area" id="volume_by_currency_card">
                     <div id="volume_by_currency">
                         <div ref="chart_volume_by_currency" class="chart"></div>
@@ -10,7 +10,7 @@
             </card>
         </div>
         <div class="p-col-12 p-lg-4">
-            <card class="quick_stats_chart card_quick_stats" type="chart">
+            <card class="card_quick_stats" type="chart">
                 <div class="chart-area" id="volume_by_pair_card">
                     <div id="volume_by_pair">
                         <div ref="chart_volume_by_pair" class="chart"></div>
@@ -35,7 +35,6 @@
 
         methods: {
             volume_by_currency(data){
-                console.log(data);
                 var chart_data = Object.keys(data).map(function (item) {
                     return {name: item, y: data[item]}
                 });
@@ -115,8 +114,6 @@
             },
 
             volume_by_pair(data){
-                console.log(data);
-
                 var chart_data = Object.keys(data).map(function (item) {
                     return {name: item, y: data[item]}
                 });
@@ -221,9 +218,4 @@
         box-shadow: none;
     }
 
-    .quick_stats_chart {
-        margin-top: 20px;
-        max-width: 100%;
-        max-height: 100%;
-    }
 </style>
