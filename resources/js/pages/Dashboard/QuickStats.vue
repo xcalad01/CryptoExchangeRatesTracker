@@ -36,7 +36,7 @@
         methods: {
             volume_by_currency(data){
                 console.log(data);
-                var chart_data = data.map(function (item) {
+                var chart_data = Object.keys(data).map(function (item) {
                     return {name: item, y: data[item]}
                 });
                 const card = document.getElementById('volume_by_currency_card');
@@ -83,7 +83,8 @@
 
             volume_by_pair(data){
                 console.log(data);
-                var chart_data = data.map(function (item) {
+
+                var chart_data = Object.keys(data).map(function (item) {
                     return {name: item, y: data[item]}
                 });
                 const card = document.getElementById('volume_by_pair_card');
