@@ -23,11 +23,12 @@
 
 <script>
     import Highcharts from "highcharts";
+    import {axios} from "../../plugins/axios";
 
     export default {
         data (){
             return {
-
+                axios: axios
             }
         },
 
