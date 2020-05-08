@@ -143,7 +143,7 @@
         const card = document.getElementById('realtime_value_cart');
 
         if (this.realtime_chart){
-            this.realtime_chart.series[0].setData([]);
+            this.real_time_volume_data = null;
         }
 
         var options = {
@@ -191,7 +191,7 @@
         const card = document.getElementById('realtime_value_cart');
 
           if (this.volume_chart){
-              this.volume_chart.series[0].setData([]);
+              this.real_time_data = null;
           }
 
         var options = {
@@ -264,6 +264,7 @@
         }));
 
         if (init){
+
           this.volume_chart.series[0].setData(this.real_time_volume_data)
         }
         else{
