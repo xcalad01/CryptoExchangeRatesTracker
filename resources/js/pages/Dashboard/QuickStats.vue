@@ -11,7 +11,7 @@
         </div>
         <div class="p-col-12 p-lg-4">
             <card class="card_quick_stats" type="chart">
-                <div class="chart-area" id="volume_by_pair_card">
+                <div class="chart-area chart-area_quick_stats" id="volume_by_pair_card">
                     <div id="volume_by_pair">
                         <div ref="chart_volume_by_pair" class="chart"></div>
                     </div>
@@ -152,6 +152,11 @@
     .card_quick_stats {
         background: #1e1e28;
         box-shadow: none;
+    }
+
+    .chart-area_quick_stats {
+        height: 100% !important;
+        width: 100% !important;
     }
 
 </style>
