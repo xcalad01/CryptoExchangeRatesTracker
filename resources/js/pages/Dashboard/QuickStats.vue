@@ -39,6 +39,8 @@
                     return {name: item, y: data[item]}
                 });
                 const card = document.getElementById('volume_by_currency_card');
+
+                console.log(chart_data);
                 var options = {
                     chart: {
                         renderTo: this.$refs.chart_volume_by_currency,
