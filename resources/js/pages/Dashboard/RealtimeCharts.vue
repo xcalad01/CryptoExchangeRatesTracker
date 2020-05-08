@@ -142,6 +142,10 @@
       create_update_realtime_value(){
         const card = document.getElementById('realtime_value_cart');
 
+        if (this.realtime_chart){
+            this.realtime_chart.series[0].setData([]);
+        }
+
         var options = {
           chart: {
             renderTo: this.$refs.chart_realtime,
@@ -185,6 +189,10 @@
 
       create_update_realtime_volume(){
         const card = document.getElementById('realtime_value_cart');
+
+          if (this.volume_chart){
+              this.volume_chart.series[0].setData([]);
+          }
 
         var options = {
           chart: {
