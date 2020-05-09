@@ -7,9 +7,9 @@
             <div class="col-sm"><p class="title" style="text-align: center">Accepted Payment Methods</p><br><p style="text-align: center">{{payment_methods}}</p></div>
         </div>
         <div class="row quick_stats_margin">
-            <div class="col-sm"><p class="title" style="text-align: center">Url</p><br><a v-bind:href="url" style="text-align: center">{{url}}</a></div>
-            <div class="col-sm"><p class="title" style="text-align: center">Facebook</p><br><a v-bind:href="facebook" style="text-align: center">{{facebook}}</a></div>
-            <div class="col-sm"><p class="title" style="text-align: center">Redit</p><br><a v-bind:href="reddit" style="text-align: center">{{reddit}}</a></div>
+            <div class="col-sm"><p class="title" style="text-align: center">Url</p><br><a v-bind:href="url" class="allign_links">{{url}}</a></div>
+            <div class="col-sm"><p class="title" style="text-align: center">Facebook</p><br><a v-bind:href="facebook" class="allign_links">{{facebook}}</a></div>
+            <div class="col-sm"><p class="title" style="text-align: center">Redit</p><br><a v-bind:href="reddit" class="allign_links">{{reddit}}</a></div>
             <div class="col-sm"><p class="title" style="text-align: center">Twitter handle</p><br><p style="text-align: center">{{twitter}}</p></div>
         </div>
         <div class="row">
@@ -197,4 +197,10 @@
         width: 100% !important;
     }
 
+    .allign_links {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
 </style>
