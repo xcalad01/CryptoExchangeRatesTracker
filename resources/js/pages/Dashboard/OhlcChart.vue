@@ -171,6 +171,8 @@
         this.all_available = data['data'];
         this.from_available = Object.keys(this.all_available);
         this.to_available = this.all_available[this.from_available[0]];
+        this.post.from = this.from_available[0];
+        this.post.to = this.to_available[0];
         this.ohlc_chart(true);
       },
 
