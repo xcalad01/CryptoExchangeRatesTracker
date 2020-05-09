@@ -163,4 +163,4 @@ RUN mkdir /var/log/bakalarka
 # Set default work directory
 WORKDIR /var/www
 
-CMD ["/bin/sh", "startup.sh"]
+#CMD ["/bin/sh", "startup.sh"]
