@@ -121,16 +121,37 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
 ;fi
 
 
-# Install npm
-RUN apt-get -y install git-core curl build-essential openssl libssl-dev \
- && git clone https://github.com/nodejs/node.git \
- && cd node \
- && ./configure \
- && make \
- && sudo make install
+############################################################################
+## Node / NVM:
+############################################################################
+#
+# Check if NVM needs to be installed
+ARG NODE_VERSION=node
+ENV NODE_VERSION ${NODE_VERSION}
+ARG INSTALL_NODE=false
+ARG INSTALL_NPM_VUE_CLI=false
+ARG NPM_REGISTRY
+ENV NPM_REGISTRY ${NPM_REGISTRY}
+ENV NVM_DIR /home/bakalarka/.nvm
+ARG NVM_NODEJS_ORG_MIRROR
+ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 
-
-RUN npm install -g @vue/cli
+RUN if [ ${INSTALL_NODE} = true ]; then \
+    # Install nvm (A Node Version Manager)
+    mkdir -p $NVM_DIR && \
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash \
+        && . $NVM_DIR/nvm.sh \
+        && nvm install ${NODE_VERSION} \
+        && nvm use ${NODE_VERSION} \
+        && nvm alias ${NODE_VERSION} \
+        && if [ ${NPM_REGISTRY} ]; then \
+        npm config set registry ${NPM_REGISTRY} \
+        ;fi \
+        && if [ ${INSTALL_NPM_VUE_CLI} = true ]; then \
+        npm install -g @vue/cli \
+        ;fi \
+        && ln -s `npm bin --global` /home/laradock/.node-bin \
+;fi
 
 # Clean up
 RUN apt-get clean && \
