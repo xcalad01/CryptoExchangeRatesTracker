@@ -334,6 +334,17 @@
 
           this.from_volume_available = Object.keys(this.all_available);
           this.to_volume_available = this.all_available[this.from_volume_available[0]];
+
+          this.post.value.from = this.from_value_available[0];
+          this.post.volume.from = this.from_volume_available[0];
+          this.old_to_value = this.to_value_available[0];
+          this.old_to_volume = this.to_volume_available[0];
+
+          this.old_to_value = this.post.value.to;
+          this.old_to_volume = this.post.volume.to;
+
+          this.create_update_realtime_value();
+          this.create_update_realtime_volume();
       },
 
       init_available(){
@@ -419,20 +430,9 @@
     },
 
     mounted() {
-        const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin", "binance", "hitbtc"];
       this.exchange = this.$route.name;
-      this.post.value.from = 'btc';
-      this.post.volume.from = 'btc';
-      this.post.value.to = usd_exchanges.includes(this.exchange) ? 'usd' : 'usdt';
-      this.post.volume.to = usd_exchanges.includes(this.exchange) ? 'usd' : 'usdt';
-      this.old_to_value = this.post.value.to;
-      this.old_to_volume = this.post.volume.to;
-
-      this.init_available();
-
       global_component_instance = this;
-      this.create_update_realtime_value();
-      this.create_update_realtime_volume();
+      this.init_available();
     },
 
     watch: {

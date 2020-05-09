@@ -163,6 +163,10 @@
           this.all_available = data['data'];
           this.from_available = Object.keys(this.all_available);
           this.to_available = this.all_available[this.from_available[0]];
+          this.post.from = this.from_available[0];
+          this.post.to = this.to_available[0];
+          this.old_to = this.post.to;
+          this.value_chart(true);
       },
 
       init_available(){
@@ -196,15 +200,9 @@
     },
 
     mounted() {
-        const usd_exchanges = ["kraken", "gdax", "bitfinex", "gemini", "bitstamp", "bitbay", "okcoin", "binance", "hitbtc"];
       this.exchange = this.$route.name;
-      this.post.from = 'btc';
-      this.post.to = usd_exchanges.includes(this.exchange) ? 'usd' : 'usdt';
-      this.old_to = this.post.to;
-
       this.init_available();
 
-      this.value_chart(true);
     }
   }
 </script>
