@@ -241,6 +241,7 @@
       },
 
       save_realtime_response_data_value(data, init, date){
+          this.realtime_chart.hideLoading();
         if (init){
           this.real_time_data = data['data'].map(function (item) {
             return [item[0] * 1000, item[1]]
@@ -260,6 +261,7 @@
       },
 
       save_realtime_response_data_volume(data, init, lastDateVolume){
+          this.volume_chart.hideLoading();
           if (init){
               this.real_time_volume_data = data['data'].map(function (item) {
                   if(item['y']){
@@ -298,6 +300,7 @@
             var end = this.lastDateValue;
         }
 
+        this.realtime_chart.showLoading();
         let value_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/value/" + start + "/" + end + "/" + this.exchange + "/" + "1m" + "/" + this.post.value.from + "/" + this.post.value.to;
         axios.get(value_uri).then(response => (global_component_instance.save_realtime_response_data_value(response.data, init, this.lastDateValue)));
         this.lastDateValue += 60;
@@ -317,6 +320,8 @@
         else{
           volume_uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/volume" + "/" + (this.lastDateVolume-60) + "/" + (this.lastDateVolume) + "/" + this.exchange + "/" + "1m" + "/" + this.post.volume.from + "/" + this.post.volume.to;
         }
+
+        this.volume_chart.showLoading();
         axios.get(volume_uri).then(response => (global_component_instance.save_realtime_response_data_volume(response.data, init, this.lastDateVolume)));
         this.lastDateVolume += 60;
       },
