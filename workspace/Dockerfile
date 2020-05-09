@@ -171,4 +171,4 @@ RUN service cron start
 
 # Just temporary solution
 # TODO: FIX THIS !!!
-RUN chmod -R 777 storage
+RUN chmod -R 777 /var/www/storage
