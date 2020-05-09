@@ -337,8 +337,8 @@
 
           this.post.value.from = this.from_value_available[0];
           this.post.volume.from = this.from_volume_available[0];
-          this.old_to_value = this.to_value_available[0];
-          this.old_to_volume = this.to_volume_available[0];
+          this.post.value.to = this.to_value_available[0];
+          this.post.volume.to = this.to_volume_available[0];
 
           this.old_to_value = this.post.value.to;
           this.old_to_volume = this.post.volume.to;
