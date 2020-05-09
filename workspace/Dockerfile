@@ -169,6 +169,9 @@ RUN nohup php -S 0.0.0.0:8000 -t public/ > /var/log/bakalarka/server.log &
 # Start cron service
 RUN service cron start
 
+
+RUN npm run watch
+
 # Just temporary solution
 # TODO: FIX THIS !!!
 RUN chmod -R 777 /var/www/storage
