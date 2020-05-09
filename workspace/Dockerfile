@@ -120,6 +120,16 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
     apt-get install -yqq php-redis \
 ;fi
 
+
+# Install npm
+RUN apt-get install git-core curl build-essential openssl libssl-dev \
+ && git clone https://github.com/nodejs/node.git \
+ && cd node \
+ && ./configure \
+ && make \
+ && sudo make install
+
+
 RUN npm install -g @vue/cli
 
 # Clean up
