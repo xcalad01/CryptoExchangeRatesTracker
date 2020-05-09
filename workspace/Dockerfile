@@ -158,13 +158,9 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     rm /var/log/lastlog /var/log/faillog
 
+RUN mkdir /var/log/bakalarka
+
 # Set default work directory
 WORKDIR /var/www
 
-RUN mkdir /var/log/bakalarka
-
-# Start API
-RUN nohup php -S 0.0.0.0:8000 -t public/ > /var/log/bakalarka/server.log &
-
-# Start cron service
-RUN service cron start
+CMD ["/bin/sh", "startup.sh"]
