@@ -7,9 +7,9 @@
             <div class="col-sm"><p class="title" style="text-align: center">Accepted Payment Methods</p><br><p style="text-align: center">{{payment_methods}}</p></div>
         </div>
         <div class="row quick_stats_margin">
-            <div class="col-sm"><p class="title" style="text-align: center">Url</p><br><p style="text-align: center">{{url}}</p></div>
-            <div class="col-sm"><p class="title" style="text-align: center">Facebook</p><br><p style="text-align: center">{{facebook}}</p></div>
-            <div class="col-sm"><p class="title" style="text-align: center">Redit</p><br><p style="text-align: center">{{reddit}}</p></div>
+            <div class="col-sm"><p class="title" style="text-align: center">Url</p><br><a v-bind:href="url" style="text-align: center">{{url}}</a></div>
+            <div class="col-sm"><p class="title" style="text-align: center">Facebook</p><br><a v-bind:href="facebook" style="text-align: center">{{facebook}}</a></div>
+            <div class="col-sm"><p class="title" style="text-align: center">Redit</p><br><a v-bind:href="reddit" style="text-align: center">{{reddit}}</a></div>
             <div class="col-sm"><p class="title" style="text-align: center">Twitter handle</p><br><p style="text-align: center">{{twitter}}</p></div>
         </div>
         <div class="row">
