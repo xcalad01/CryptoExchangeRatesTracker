@@ -150,7 +150,7 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         && if [ ${INSTALL_NPM_VUE_CLI} = true ]; then \
         npm install -g @vue/cli \
         ;fi \
-        && ln -s `npm bin --global` /home/laradock/.node-bin \
+        && ln -s `npm bin --global` /home/bakalarka/.node-bin \
 ;fi
 
 # Clean up
