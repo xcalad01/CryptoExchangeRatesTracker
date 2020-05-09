@@ -137,14 +137,14 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         && ln -s `npm bin --global` /home/bakalarka/.node-bin \
 ;fi
 
-###########################################################################
-# Datadog tracing:
-###########################################################################
-ARG INSTALL_DATADOG_TRACING=false
-
-RUN if [ ${INSTALL_DATADOG_TRACING} = true ]; then \
-    dpkg -i datadog-php-tracer.deb \
-;fi
+############################################################################
+## Datadog tracing:
+############################################################################
+#ARG INSTALL_DATADOG_TRACING=false
+#
+#RUN if [ ${INSTALL_DATADOG_TRACING} = true ]; then \
+#    dpkg -i datadog-php-tracer.deb \
+#;fi
 
 # Clean up
 RUN apt-get clean && \
