@@ -156,4 +156,7 @@ RUN mkdir /var/log/bakalarka
 # Set default work directory
 WORKDIR /var/www
 
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 ENTRYPOINT /entrypoint.sh
