@@ -143,7 +143,7 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
 ARG INSTALL_DATADOG_TRACING=false
 
 RUN if [ ${INSTALL_DATADOG_TRACING} = true ]; then \
-    apk add datadog-php-tracer.apk --allow-untrusted \
+    dpkg -i datadog-php-tracer.deb \
 ;fi
 
 # Clean up
