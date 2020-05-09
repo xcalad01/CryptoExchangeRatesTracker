@@ -87,12 +87,10 @@ RUN echo "" >> ~/.bashrc && \
     echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
 
-# Check if global install need to be ran
 ARG COMPOSER_GLOBAL_INSTALL=false
 ENV COMPOSER_GLOBAL_INSTALL ${COMPOSER_GLOBAL_INSTALL}
 
 RUN if [ ${COMPOSER_GLOBAL_INSTALL} = true ]; then \
-    # run the install
     composer global install \
 ;fi
 
@@ -109,18 +107,6 @@ COPY ./crontab /etc/cron.d
 RUN chmod -R 644 /etc/cron.d
 
 
-###########################################################################
-# PHP REDIS EXTENSION
-###########################################################################
-
-ARG INSTALL_PHPREDIS=false
-
-RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
-    apt-get update -yqq && \
-    apt-get install -yqq php-redis \
-;fi
-
-
 ############################################################################
 ## Node / NVM:
 ############################################################################
@@ -133,8 +119,6 @@ ARG INSTALL_NPM_VUE_CLI=false
 ARG NPM_REGISTRY
 ENV NPM_REGISTRY ${NPM_REGISTRY}
 ENV NVM_DIR /home/bakalarka/.nvm
-ARG NVM_NODEJS_ORG_MIRROR
-ENV NVM_NODEJS_ORG_MIRROR ${NVM_NODEJS_ORG_MIRROR}
 
 RUN if [ ${INSTALL_NODE} = true ]; then \
     # Install nvm (A Node Version Manager)
@@ -151,6 +135,15 @@ RUN if [ ${INSTALL_NODE} = true ]; then \
         npm install -g @vue/cli \
         ;fi \
         && ln -s `npm bin --global` /home/bakalarka/.node-bin \
+;fi
+
+###########################################################################
+# Datadog tracing:
+###########################################################################
+ARG INSTALL_DATADOG_TRACING=false
+
+RUN if [ ${INSTALL_DATADOG_TRACING} = true ]; then \
+    apk add datadog-php-tracer.apk --allow-untrusted \
 ;fi
 
 # Clean up
