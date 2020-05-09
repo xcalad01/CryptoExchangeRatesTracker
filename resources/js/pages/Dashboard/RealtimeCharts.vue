@@ -362,8 +362,8 @@
           }
         });
         this.realtime_chart.series[0].setData(new_data);
-        this.real_time_data= new_data;
-        this.last_realtime_value = (new_data.slice(-1)[0]['y']).toFixed(3);
+        this.real_time_data = new_data;
+        this.last_realtime_value = (this.last_realtime_value / old_fiat * new_fiat).toFixed(3);
       },
 
       finish_change_to_volume(data){
