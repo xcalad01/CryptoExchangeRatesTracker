@@ -1,7 +1,7 @@
 # Crypto Exchange Rates Tracker
 
 ## API DOC
-https://app.swaggerhub.com/apis/xcalad01/Bakalarka/0.1
+https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1
 
 ## How to run
 cd ~/bakalarka
