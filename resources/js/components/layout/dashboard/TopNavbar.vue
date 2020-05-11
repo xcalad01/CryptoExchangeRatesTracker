@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-absolute" style="position: absolute;left: 35%;"
+  <nav class="navbar navbar-expand-lg navbar-absolute" style="position: absolute"
        :class="{'bg-white': showMenu, 'navbar-transparent': !showMenu, 'navbar-wrapper': true}">
-    <a v-bind:href="this.exchange_links[this.$route.meta['title']]" style="font-size: 250%; padding-right: 2%; color: #f1f1e6">{{routeName}}</a>
+    <a v-bind:href="this.exchange_links[this.$route.meta['title']]" style="font-size: 250%; padding-right: 2%; color: #f1f1e6; margin-left: 40%;">{{routeName}}</a>
 
     <a v-if="isasset" v-bind:href="this.crypto_links[this.$route.name]"><cryptoicon v-bind:symbol="asset" size="50"/></a>
       <a v-else v-bind:href="this.exchange_links[this.$route.meta['title']]"><i v-bind:class="icon_class"></i></a>
