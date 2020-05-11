@@ -55,7 +55,7 @@
                         />
                         <span v-else class="text_area">{{currency_day_price}}</span>
                     </div>
-                    <span>{{date}}</span>
+                    <span class="date">{{date}}</span>
                 </div>
             </div>
             <div v-else>
@@ -308,5 +308,17 @@
     .converter_input_text {
         font-size: 15px;
         text-align: center;
+    }
+
+    .date {
+        float: right;
+        margin-left: 20px;
+        text-align: center;
+        display: flex;
+        font-size: 100%;
+        color: white;
+        position: relative;
+        vertical-align: bottom;
+        top: 40px;
     }
 </style>
