@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-absolute" style="justify-content: center"
+  <nav class="navbar navbar-expand-lg navbar-absolute" style="position: absolute;left: 35%;"
        :class="{'bg-white': showMenu, 'navbar-transparent': !showMenu, 'navbar-wrapper': true}">
     <a v-bind:href="this.exchange_links[this.$route.meta['title']]" style="font-size: 250%; padding-right: 2%; color: #f1f1e6">{{routeName}}</a>
 
