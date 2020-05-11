@@ -26,6 +26,8 @@ class CoinbasePro extends Base
     protected $exchange_id = "gdax";
 
     private function send_get(){
+        print_r("Sending get to coinbase_pro API");
+
         $results = array();
 
         $this->set_user_agent("get");
@@ -69,21 +71,28 @@ class CoinbasePro extends Base
             sleep(1);
         }
 
+        print_r("API resutls: \n");
+        print_r($results);
+
         return $results;
     }
 
     private function send_post($payload){
+        print_r("Sending API results to DB\n");
         $this->set_curl_post();
         $this->set_curl_url('http://127.0.0.1:8000/api/crypto/historical');
 
         foreach ($payload as $item) {
             $payload = json_encode($item);
-            $this->do_send_post($payload);
+            print_r($this->do_send_post($payload)."\n");
         }
         $this->close_curl_conn();
+        print_r("All sended");
     }
 
     public  function run_task(){
+        print_r("OHLC querying started\n");
+
        $this->date = date('Y-m-d\TH:i',strtotime('-1 minute',strtotime(date('Y-m-d H:i'))));
        $this->timestamp = strtotime($this->date);
 
@@ -92,6 +101,7 @@ class CoinbasePro extends Base
             $this->send_post($payload);
         }
 
+        print_r("OHLC querying ended\n");
     }
 
 }

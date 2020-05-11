@@ -30,6 +30,8 @@ class Kraken extends Base
     private $timestamp = null;
 
     private function send_get(){
+        print_r("Sending get to kraken API");
+
         $results = array();
         foreach ($this->config as $item){
             if (strpos($item, '-') !== false) {
@@ -70,25 +72,37 @@ class Kraken extends Base
                 )
             ));
         }
+
+        print_r("API resutls: \n");
+        print_r($results);
+
         return $results;
     }
 
     private function send_post($payload){
+        print_r("Sending API results to DB\n");
+
         $this->set_curl_post();
         $this->set_curl_url('http://127.0.0.1:8000/api/crypto/historical');
 
         foreach ($payload as $item) {
             $payload = json_encode($item);
-            $this->do_send_post($payload);
+            print_r($this->do_send_post($payload)."\n");
         }
         $this->close_curl_conn();
+
+        print_r("All sended");
     }
 
     public function run_task(){
+        print_r("OHLC querying started\n");
+
         $this->timestamp = strtotime(date('Y-m-d H:i')) - 61;
         $payload = $this->send_get();
         if (!empty($payload)){
             $this->send_post($payload);
         }
+
+        print_r("OHLC querying ended\n");
     }
 }

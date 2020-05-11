@@ -35,10 +35,6 @@ class HitBtc extends Base
     private $start_timestamp;
     private $exchange_id = "hitbtc";
 
-    private $init_db_start_timestamp = "1356998400";
-    private $init_db_stop_timestamp = "1585990500";
-
-
 
     private function make_url_symbols(){
         $result = null;
@@ -63,6 +59,8 @@ class HitBtc extends Base
     }
 
     private function send_get(){
+        print_r("Sending get to hitbtc API\n");
+
         $results = array();
         $url_symbols = $this->make_url_symbols();
         $url = "https://api.hitbtc.com/api/2/public/candles?period=M1&from={$this->start_timestamp}&till={$this->end_timestamp}&symbols={$url_symbols}";
@@ -108,23 +106,32 @@ class HitBtc extends Base
             }
         }
 
+        print_r("API resutls: \n");
+        print_r($results);
+
         return $results;
     }
 
     private function send_post($payload){
+        print_r("Sending API results to DB");
+
         $this->set_curl_post();
         $this->set_curl_url('http://127.0.0.1:8000/api/crypto/historical');
 
         foreach ($payload as $item) {
             $payload = json_encode($item);
-            $this->do_send_post($payload);
+            print_r($this->do_send_post($payload)."\n");
         }
         $this->close_curl_conn();
+
+        print_r("All sended");
     }
 
 
 
     public function run_task(){
+        print_r("OHLC querying started\n");
+
         $this->start_timestamp = strtotime(date('Y-m-d H:i')) - 60;
         $this->end_timestamp = strtotime(date('Y-m-d H:i'));
 
@@ -132,5 +139,7 @@ class HitBtc extends Base
         if (!empty($payload)){
             $this->send_post($payload);
         }
+
+        print_r("OHLC querying ended\n");
     }
 }
