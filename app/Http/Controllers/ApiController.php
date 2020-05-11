@@ -87,26 +87,29 @@ class ApiController extends Controller
 
     public function create_exchange(Request $request) {
         try {
-            $exchange = Exchange::where('Exchange_id', $request['Exchange_id'])->first();
+            $exchange = Exchange::find($request['Exchange_id']);
             if ($exchange){
-                Exchange::where('Exchange_id', $request['Exchange_id'])->update(array(
-                    "Url"=>$request['Name'],
-                    "Image"=>$request['Url'],
-                    "Year"=>$request['Year_established'],
-                    "Country"=>$request['Country'],
-                    "Centralized"=>$request['Centralized'],
-                    "Accepted_payment_methods"=>$request['Accepted_payment_methods'],
-                    "Facebook"=>$request['Facebook_url'],
-                    "Reddit"=>$request['Reddit_url'],
-                    "Twitter"=>$request['Twitter']
-                ));
+
+                $exchange->Url = $request['Url'];
+                $exchange->Image = $request['Image'];
+                $exchange->Year = $request['Year_established'];
+                $exchange->Country = $request['Country'];
+                $exchange->Centralized = $request['Centralized'];
+                $exchange->Accepted_payment_methods = $request['Accepted_payment_methods'];
+                $exchange->Facebook = $request['Facebook_url'];
+                $exchange->Reddit = $request['Reddit_url'];
+                $exchange->Twitter = $request['Twitter'];
+
+                $exchange->save();
+
                 $this->statsd->statsd->increment("db.connections", 1, array("function"=>"update_exchange"));
                 return response()->json([
                     "message" => "Exchange record updated"
                 ], 200);
             }
-            else{
+            else {
                 $exchange = new Exchange;
+
                 $exchange->Exchange_id = $request['Exchange_id'];
                 $exchange->Name = $request['Name'];
                 $exchange->Url = $request['Url'];
@@ -118,8 +121,10 @@ class ApiController extends Controller
                 $exchange->Facebook = $request['Facebook_url'];
                 $exchange->Reddit = $request['Reddit_url'];
                 $exchange->Twitter = $request['Twitter'];
+
                 $exchange->save();
-                $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_exchange"));
+
+                $this->statsd->statsd->increment("db.connections", 1, array("function" => "create_exchange"));
                 return response()->json([
                     "message" => "Exchange record created"
                 ], 200);
@@ -130,6 +135,7 @@ class ApiController extends Controller
                 "message" => $e->getMessage()
             ], 501);
         }
+
     }
 
     private function create_available($data){
@@ -451,7 +457,11 @@ class ApiController extends Controller
             $result = $this->value_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
         else{
+            print_r($coin_info);
+            print_r($historical_available);
+            print_r($exchange);
             $result = $this->value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
+            print_r($result);
         }
 
         foreach ($result as $data){
@@ -877,7 +887,7 @@ class ApiController extends Controller
         foreach ($to_coins as $t_c){
             $volume_for_coin = DB::select(DB::raw("
                 SELECT
-                    SUM(\"Volume\") AS \"SUM\"
+                    SUM(\"Volume\" * (\"Open\" + \"High\" + \"Low\") / 3) AS \"SUM\"
                 FROM
                     historical_available
                     JOIN crypto_historical ON historical_available.id = crypto_historical.id
@@ -902,7 +912,7 @@ class ApiController extends Controller
     private function exchange_volume_pair($exchange_id, $coin_values_usd){
         $coin_pairs_value = DB::select(DB::raw("
             SELECT
-                SUM(\"Volume\") AS \"SUM\",
+                SUM(\"Volume\" * (\"Open\" + \"High\" + \"Low\") / 3) AS \"SUM\",
                 \"From\",
                 \"To\"
             FROM
@@ -1087,6 +1097,27 @@ class ApiController extends Controller
 
     private function value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
+        print_r("
+            WITH offset_value(offset_val) as (
+	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
+            )
+            SELECT
+                AVG((\"Open\" + \"Close\" + \"High\") / 3) AS \"value\",
+	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + \"ov\".offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
+            FROM
+                \"offset_value\" AS \"ov\",
+	            \"crypto_historical\" AS \"ch\"
+	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
+            WHERE
+	            \"ha\".\"Exchange_id\" = '{$exchange}'
+                AND \"ha\".\"From\" = '{$historical_available->From}'
+                AND \"ha\".\"To\" = '{$historical_available->To}'
+                AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
+            GROUP BY
+	            \"interval_alias\"
+	        ORDER BY
+	            \"interval_alias\"
+        ");
         return DB::select(DB::raw("
             WITH offset_value(offset_val) as (
 	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
