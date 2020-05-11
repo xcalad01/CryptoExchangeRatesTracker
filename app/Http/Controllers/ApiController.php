@@ -1123,7 +1123,7 @@ class ApiController extends Controller
 	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
             )
             SELECT
-                AVG(\"Volume\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Volume\",
+                AVG(\"Volume\" * (\"Open\" + \"High\" + \"Low\") / 3 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Volume\",
 	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
                 offset_value,
@@ -1155,7 +1155,7 @@ class ApiController extends Controller
 	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
             )
             SELECT
-                AVG(\"Volume\") AS \"Volume\",
+                AVG(\"Volume\" * (\"Open\" + \"High\" + \"Low\") / 3) AS \"Volume\",
 	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
             FROM
                 offset_value,
