@@ -88,6 +88,7 @@ class AddFiat extends Base
 
         try {
             while ($timestamp < 1588550400) {
+                $this->new_curl_instance();
                 $date = date("Y-m-d", $timestamp);
                 print_r($date."\n");
                 $url = "https://api.exchangeratesapi.io/{$date}?&base=USD";
