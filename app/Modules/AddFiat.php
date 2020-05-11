@@ -63,7 +63,7 @@ class AddFiat extends Base
                 "Value"=>$rates['rates'][strtoupper($item[0])],
                 "Key"=>$date
             ));
-            $this->do_send_post($payload);
+            print_r($this->do_send_post($payload));
         }
 
         $this->close_curl_conn();
@@ -77,7 +77,7 @@ class AddFiat extends Base
     }
 
     public function run_init_db_task(){
-        $timestamp = 1356998400;
+        $timestamp = 1433635200;
         $endpointParts = parse_url("http://127.0.0.1:8000/api/fiat");
         $socket = fsockopen($endpointParts['host'], $endpointParts['port']);
 
@@ -89,21 +89,11 @@ class AddFiat extends Base
                 print_r($url."\n");
                 $this->set_curl_url($url);
                 $data = $this->do_send_get();
+
                 print_r($data);
-                foreach ($this->config as $item){
-                    try {
-                        $payload = json_encode(array(
-                            "Id"=>$item[0],
-                            "Name"=>$item[1],
-                            "Value"=>$data['rates'][strtoupper($item[0])],
-                            "Key"=>$timestamp
-                        ));
-                        $this->fire_and_forget_post($socket, "http://127.0.0.1:8000/api/fiat", $payload);
-                    }
-                    catch (ErrorException $e){
-                        continue;
-                    }
-                }
+
+                print_r($this->send_post($data, $date));
+
                 print_r("\n");
 
                 $timestamp += 86400;
