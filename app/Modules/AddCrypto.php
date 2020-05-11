@@ -25,7 +25,7 @@ class AddCrypto extends Base
         array("Qtum","qtum"),
         array("Bitcoin Gold","btg"),
         array("0x","zrx"),
-        array("Tether", "usdt")
+        array("Tether", "usdt"),
     );
 
     protected $url = "http://127.0.0.1:8000/api/crypto";
@@ -37,7 +37,7 @@ class AddCrypto extends Base
         foreach ($this->config as $item){
             $payload = json_encode(array(
                 "Name"=>$item[0],
-                "Id"=>$item[1]
+                "Id"=>$item[1],
             ));
             $this->do_send_post($payload);
         }
