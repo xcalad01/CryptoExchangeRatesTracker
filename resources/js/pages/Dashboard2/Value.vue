@@ -53,8 +53,10 @@
                             :size="30"
                             color="#ffffff"
                         />
-                        <span v-else class="text_area">{{currency_day_price}}</span>
-                        <span v-else class=>{{date}}</span>
+                        <div v-else>
+                            <span class="text_area">{{currency_day_price}}</span>
+                            <span>{{date}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -137,14 +139,28 @@
 
 
     methods: {
+        formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        },
+
       asset_value(init){
         if (init){
-          this.date = new Date().setHours(0,0,0,0);
+          this.date = this.formatDate(new Date());
           this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
           this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000
         }
         else{
-          this.date = this.post.start;
+          this.date = this.formatDate(new Date(this.post.start));
           this.post.start = Date.parse(this.post.start) / 1000;
           this.post.end = this.post.start + 86400;
         }
