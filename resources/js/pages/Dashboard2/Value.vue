@@ -53,11 +53,9 @@
                             :size="30"
                             color="#ffffff"
                         />
-                        <div v-else>
-                            <span class="text_area">{{currency_day_price}}</span>
-                            <span>{{date}}</span>
-                        </div>
+                        <span v-else class="text_area">{{currency_day_price}}</span>
                     </div>
+                    <span>{{date}}</span>
                 </div>
             </div>
             <div v-else>
