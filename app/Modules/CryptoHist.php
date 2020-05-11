@@ -34,6 +34,7 @@ class CryptoHist extends Base
             $exchange_id_crypto_watch = $array[0];
             $exchange_id_db = $array[1];
 
+            print_r("Sending get for: {$exchange_id_db}");
             $url = sprintf($this->url_base, $exchange_id_crypto_watch, $item[1], $item[2], $timestamp, $timestamp);
             $this->set_curl_url($url);
             $data = $this->do_send_get();
@@ -49,20 +50,24 @@ class CryptoHist extends Base
             }
 
             $this->statsd->statsd->gauge('cryptowatch_remaining', $data['allowance']['remaining'], 1);
-	    echo "Added";
-	}
+	    }
 
+        print_r("Results: \n");
+        print_r($results);
         return $results;
 
     }
 
     private function run(){
+        print_r("OHLC data cryptowatch querying");
         $timestamp = strtotime(date('Y-m-d H:i'));
         $this->set_url_base("https://api.cryptowat.ch/markets/%s/%s%s/ohlc?periods=60&after=%s&before=%s");
         $exchange_rates_results = $this->send_get($timestamp);
         if (!empty($exchange_rates_results)){
             $this->send_post($exchange_rates_results);
         }
+
+        print_r("Finished successfuly");
     }
 
     public function run_task(){
