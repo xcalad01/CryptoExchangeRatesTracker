@@ -356,6 +356,7 @@
           this.to_value_available = this.all_available[this.post.value.from];
           this.old_to_value = this.post.value.to;
           this.post.value.to = this.to_value_available[0];
+          this.old_to_value = this.post.value.to;
           this.lastDateValue = null;
           this.clear_value_realtime_timeouts_intervals();
           this.create_update_realtime_value();
@@ -365,6 +366,7 @@
           this.to_volume_available = this.all_available[this.post.volume.from];
           this.old_to_volume = this.post.volume.to;
           this.post.volume.to = this.to_volume_available[0];
+          this.old_to_volume = this.post.volume.to;
           this.lastDateVolume = null;
           this.clear_volume_realtime_timeouts_intervals();
           this.create_update_realtime_volume();
