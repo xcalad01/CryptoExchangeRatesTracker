@@ -54,6 +54,7 @@
                             color="#ffffff"
                         />
                         <span v-else class="text_area">{{currency_day_price}}</span>
+                        <span v-else class=>{{date}}</span>
                     </div>
                 </div>
             </div>
@@ -108,7 +109,8 @@
           render_value: true,
           left_value_converter: null,
           right_value_converter: null,
-          fresh_day_price: null
+          fresh_day_price: null,
+          date: null
 
       }
     },
@@ -137,10 +139,12 @@
     methods: {
       asset_value(init){
         if (init){
+          this.date = new Date().setHours(0,0,0,0);
           this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
           this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000
         }
         else{
+          this.date = this.post.start;
           this.post.start = Date.parse(this.post.start) / 1000;
           this.post.end = this.post.start + 86400;
         }
