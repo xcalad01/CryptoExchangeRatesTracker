@@ -66,7 +66,6 @@ class HitBtc extends Base
         $url = "https://api.hitbtc.com/api/2/public/candles?period=M1&from={$this->start_timestamp}&till={$this->end_timestamp}&symbols={$url_symbols}";
         $this->set_curl_url($url);
         $data = $this->do_send_get();
-        print_r($data);
         foreach ($this->config as $key){
             if (strpos($key, '-') !== false) {
                 $from = substr($key,0, strpos($key, '-'));
