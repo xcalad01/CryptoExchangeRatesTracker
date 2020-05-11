@@ -150,7 +150,7 @@
 
       update_chart(data){
         this.chart_data = data['data'].map(function (item) {
-          return [(item[0] + 2 * 3600) * 1000, item[1]]
+          return [(item[0]) * 1000, item[1]]
         });
 
         if (this.chart != null){
