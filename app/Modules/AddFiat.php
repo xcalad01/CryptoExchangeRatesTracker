@@ -57,13 +57,18 @@ class AddFiat extends Base
         $this->set_curl_url($this->url);
 
         foreach ($this->config as $item){
-            $payload = json_encode(array(
-                "Id"=>$item[0],
-                "Name"=>$item[1],
-                "Value"=>$rates['rates'][strtoupper($item[0])],
-                "Key"=>$date
-            ));
-            print_r($this->do_send_post($payload));
+            try {
+                $payload = json_encode(array(
+                    "Id"=>$item[0],
+                    "Name"=>$item[1],
+                    "Value"=>$rates['rates'][strtoupper($item[0])],
+                    "Key"=>$date
+                ));
+                print_r($this->do_send_post($payload));
+            }
+            catch (\Exception $e){
+                print_r($e->getMessage());
+            }
         }
 
         $this->close_curl_conn();
