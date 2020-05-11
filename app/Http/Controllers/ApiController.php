@@ -457,11 +457,7 @@ class ApiController extends Controller
             $result = $this->value_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
         else{
-            print_r($coin_info);
-            print_r($historical_available);
-            print_r($exchange);
             $result = $this->value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
-            print_r($result);
         }
 
         foreach ($result as $data){
@@ -1097,27 +1093,6 @@ class ApiController extends Controller
 
     private function value_no_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
     {
-        print_r("
-            WITH offset_value(offset_val) as (
-	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
-            )
-            SELECT
-                AVG((\"Open\" + \"Close\" + \"High\") / 3) AS \"value\",
-	            to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + \"ov\".offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
-            FROM
-                \"offset_value\" AS \"ov\",
-	            \"crypto_historical\" AS \"ch\"
-	                JOIN \"historical_available\" AS \"ha\" ON \"ch\".\"id\" = \"ha\".\"id\"
-            WHERE
-	            \"ha\".\"Exchange_id\" = '{$exchange}'
-                AND \"ha\".\"From\" = '{$historical_available->From}'
-                AND \"ha\".\"To\" = '{$historical_available->To}'
-                AND \"ch\".\"Timestamp\" BETWEEN {$start} AND {$end}
-            GROUP BY
-	            \"interval_alias\"
-	        ORDER BY
-	            \"interval_alias\"
-        ");
         return DB::select(DB::raw("
             WITH offset_value(offset_val) as (
 	        values('{$start}' - floor((extract('epoch' FROM to_timestamp('{$start}')) / {$range})) * {$range})
