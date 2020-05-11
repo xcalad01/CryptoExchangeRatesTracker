@@ -191,7 +191,7 @@
         margin-top: 30px;
     }
     .card_quick_stats {
-        background: #1e1e28;
+        background: #1e1e2e;
         box-shadow: none;
     }
 
