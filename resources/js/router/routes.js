@@ -243,7 +243,7 @@ const routes = [
             },
             {
                 path: "zrx",
-                name: "xrz",
+                name: "zrx",
                 component: Assets_dashboard,
                 meta: { title: "0x" },
 
