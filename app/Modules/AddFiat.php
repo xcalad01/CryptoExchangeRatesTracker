@@ -77,28 +77,26 @@ class AddFiat extends Base
     }
 
     public function run_init_db_task(){
+        $timestamp = 1356998400;
         $endpointParts = parse_url("http://127.0.0.1:8000/api/fiat");
         $socket = fsockopen($endpointParts['host'], $endpointParts['port']);
 
-        $min_timestamp = DB::table("crypto_historical")->select(DB::raw('min("Timestamp")'))->get();
-
-        if ($min_timestamp){
-            $min_timestamp = $min_timestamp[0]->min;
-            $min_timestamp = date("Y-m-d", $min_timestamp);
-            $today = date("Y-m-d");
-
-            $url = "https://api.exchangeratesapi.io/history?start_at={$min_timestamp}&end_at={$today}&base=USD";
-            $this->set_curl_url($url);
-            $data = $this->do_send_get();
-
-            foreach ($data['rates'] as $key => $rates){
+        try {
+            while ($timestamp < 1588550400) {
+                $date = date("Y-m-d", $timestamp);
+                print_r($date."\n");
+                $url = "https://api.exchangeratesapi.io/{$date}?&base=USD";
+                print_r($url."\n");
+                $this->set_curl_url($url);
+                $data = $this->do_send_get();
+                print_r($data);
                 foreach ($this->config as $item){
                     try {
                         $payload = json_encode(array(
                             "Id"=>$item[0],
                             "Name"=>$item[1],
-                            "Value"=>$rates[strtoupper($item[0])],
-                            "Key"=>$key
+                            "Value"=>$data['rates'][strtoupper($item[0])],
+                            "Key"=>$timestamp
                         ));
                         $this->fire_and_forget_post($socket, "http://127.0.0.1:8000/api/fiat", $payload);
                     }
@@ -106,12 +104,13 @@ class AddFiat extends Base
                         continue;
                     }
                 }
+                print_r("\n");
+
+                $timestamp += 86400;
             }
-            return 0;
         }
-
-        print_r("Something went worng.");
-        return -1;
-
+        catch (\Exception $e){
+            print_r($e->getMessage());
+        }
     }
 }

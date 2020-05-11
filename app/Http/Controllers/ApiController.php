@@ -338,7 +338,7 @@ class ApiController extends Controller
         $fiat_hist = Fiat_historical::where(["Date" => $this->get_timestamp($item["Key"]), "Fiat_id" => $item['Id']])->first();
         if ($fiat_hist){
             $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_special_day: {$this->get_timestamp($item["Key"])}"));
-            $date = $this->get_today_timestamp("16:05");
+            return -1;
         }
         else{
             $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_normal_day: {$this->get_timestamp($item["Key"])}"));
@@ -357,7 +357,11 @@ class ApiController extends Controller
 
     public function create_fiat(Request $request){
 	    try {
-            $this->insert_fiat($request);
+	        if($this->insert_fiat($request) == -1){
+                return response()->json([
+                    "message" => "Duplicate not saving"
+                ], 200);
+            }
         }
         catch (QueryException $e){
 
