@@ -1182,7 +1182,7 @@ class ApiController extends Controller
             ),
             main_table AS (
 	            SELECT
-		        SUM(\"ch\".\"Volume\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Volume_Exchange\",
+		        SUM(\"ch\".\"Volume\") AS \"Volume_Exchange\",
 		        AVG((\"ch\".\"Open\" + \"ch\".\"Close\" + \"ch\".\"High\") / 3 / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\") AS \"Price\",
 		        to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range} + \"ov\".offset_val) AT TIME ZONE 'UTC' AS \"interval_alias\"
 	        FROM
