@@ -1,9 +1,10 @@
 .navbar {
   padding: 10px 30px 10px 15%;
-  width: 100%;
+  width: 50%;
   z-index: 1050;
   background: $navbar-color;
   align-items: center;
+  margin-left: 23%;
 
   .photo {
     display: inline-block;
