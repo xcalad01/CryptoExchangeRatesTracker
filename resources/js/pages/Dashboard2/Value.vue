@@ -250,8 +250,9 @@
     mounted() {
       this.asset = this.$route.name;
       this.post.to = 'usd';
+      this.post.converter_to = 'usd';
       this.old_to = this.post.to;
-      this.old_to_converter = this.post.to;
+      this.old_to_converter = this.post.converter_to;
       this.title = this.$route.meta['title'];
 
       this.init_available();
