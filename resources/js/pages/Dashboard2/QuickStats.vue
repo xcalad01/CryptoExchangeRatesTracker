@@ -170,6 +170,18 @@
                 }
             },
 
+            init_available(){
+                let uri = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/all_supported";
+                this.axios.get(uri).then(response => (this.finish_init_avail(response.data)));
+            },
+
+            finish_init_avail(data){
+                var formatted = data['data'].map(function (item) {
+                    return {value: item, text: item.toUpperCase()}
+                });
+                this.to_available = formatted;
+            },
+
 
         },
 
