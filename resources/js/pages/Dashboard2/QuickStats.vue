@@ -4,7 +4,7 @@
             <div class="p-col-12 p-lg-4">
                 <div class="card">
                     <span class="title"> Price </span>
-                    <span class="detail"> Latest 1m <br /> Volume Weighted Average Price (VWAP)</span>
+                    <span class="detail"> Latest <br /> Volume Weighted Average Price (VWAP)</span>
                     <span class="span_value"> {{currency_day_price}} </span>
                 </div>
             </div>
