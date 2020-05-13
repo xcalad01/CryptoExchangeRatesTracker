@@ -215,7 +215,7 @@
             var new_fiat = data['data']['fiat'];
             var old_fiat = data['data']['old_fiat'];
 
-            this.right_value_converter = this.day_price / old_fiat * new_fiat;
+            this.right_value_converter = this.right_value_converter / old_fiat * new_fiat;
         },
 
         onChangeToConverter(){
