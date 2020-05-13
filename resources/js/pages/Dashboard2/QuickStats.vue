@@ -100,18 +100,18 @@
         },
 
         methods: {
-            day_price_value(){
-                this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
-                this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000;
-
-                let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
-
-                this.axios.get(url).then(response => (this.update_value(response.data)));
-            },
-
-            update_value(data){
-                this.day_price = data['data'][0][1].toFixed(3);
-            },
+            // day_price_value(){
+            //     this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
+            //     this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000;
+            //
+            //     let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
+            //
+            //     this.axios.get(url).then(response => (this.update_value(response.data)));
+            // },
+            //
+            // update_value(data){
+            //     this.day_price = data['data'][0][1].toFixed(3);
+            // },
 
             low_high_24h(){
                 this.post.end = (Date.now() / 1000).toFixed(0);
@@ -127,6 +127,7 @@
                     return item[1];
                 });
 
+                this.day_price = values[values.length - 1];
                 this.h24_min = Math.min(...values).toFixed(3);
                 this.h24_max = Math.max(...values).toFixed(3);
             },
@@ -167,7 +168,6 @@
 
             this.supply();
             this.all_time_values();
-            this.day_price_value();
             this.low_high_24h();
         }
     }
