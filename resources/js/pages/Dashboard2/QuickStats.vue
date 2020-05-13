@@ -19,7 +19,7 @@
 
             <div class="p-col-12 p-lg-4">
                 <div class="card">
-                    <span class="title"> Circulatting <br /> / Total Supply </span>
+                    <span class="title"> Circulatting / <br />  Total Supply </span>
                     <span class="detail"> Publicly available and circulating in the market </span>
                     <span class="span_value"> {{circulating_supply}} / <br /> {{total_supply}} </span>
                 </div>
