@@ -89,7 +89,7 @@ function query_internal_api(){
     $end = $start + 86400;
 
 
-    $url = "http://167.86.75.179:8001/api/crypto/historical/asset/value/btc/usd/{$start}/{$end}";
+    $url = "http://167.86.75.179:8001/api/crypto/historical/asset/value/btc/usd/{$start}/{$end}/1m/";
     print_r($url);
 
     curl_setopt_array($curl, array(
@@ -106,7 +106,8 @@ function query_internal_api(){
 
     curl_close($curl);
     echo $response, "\n";
-    return floatval(json_decode($response, true)['data'][0][1]);
+    $data = json_decode($response, true)['data'];
+    return floatval(end($data)[1]);
 }
 
 
