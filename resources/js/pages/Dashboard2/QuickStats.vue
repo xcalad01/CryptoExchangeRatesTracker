@@ -158,11 +158,11 @@
                 var new_fiat = data['data']['fiat'];
                 var old_fiat = data['data']['old_fiat'];
 
-                this.day_price = (this.day_price / old_fiat * new_fiat);
-                this.h24_min = (this.h24_min / old_fiat * new_fiat);
-                this.h24_max = (this.h24_max / old_fiat * new_fiat);
-                this.all_time_min = (this.all_time_min / old_fiat * new_fiat);
-                this.all_time_max = (this.all_time_max / old_fiat * new_fiat);
+                this.day_price = (this.day_price / old_fiat * new_fiat).toFixed(3);
+                this.h24_min = (this.h24_min / old_fiat * new_fiat).toFixed(3);
+                this.h24_max = (this.h24_max / old_fiat * new_fiat).toFixed(3);
+                this.all_time_min = (this.all_time_min / old_fiat * new_fiat).toFixed(3);
+                this.all_time_max = (this.all_time_max / old_fiat * new_fiat).toFixed(3);
                 this.loading_day_price = false;
             },
 
