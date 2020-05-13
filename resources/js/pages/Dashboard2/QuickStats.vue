@@ -4,7 +4,7 @@
             <div class="p-col-12 p-lg-4">
                 <div class="card">
                     <span class="title"> Price </span>
-                    <span class="detail"> 24h Average <br /> Volume Weighted Price (AVWP)</span>
+                    <span class="detail"> Latest 1m <br /> Volume Weighted Price (AVWP)</span>
                     <span class="span_value"> {{currency_day_price}} </span>
                 </div>
             </div>
@@ -100,19 +100,6 @@
         },
 
         methods: {
-            // day_price_value(){
-            //     this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
-            //     this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000;
-            //
-            //     let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
-            //
-            //     this.axios.get(url).then(response => (this.update_value(response.data)));
-            // },
-            //
-            // update_value(data){
-            //     this.day_price = data['data'][0][1].toFixed(3);
-            // },
-
             low_high_24h(){
                 this.post.end = (Date.now() / 1000).toFixed(0);
                 this.post.start = this.post.end - 86400;
