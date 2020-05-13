@@ -190,6 +190,7 @@
             this.post.to = 'usd';
             this.old_to = this.post.to;
 
+            this.init_available();
             this.supply();
             this.all_time_values();
             this.low_high_24h();
@@ -246,7 +247,7 @@
         float: right !important;
         position: absolute;
         margin-bottom: 10px;
-        margin-top: 37px;
+        margin-top: 45px;
         top: 10px;
         right: 10px;
     }
