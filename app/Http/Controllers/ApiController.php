@@ -1219,16 +1219,12 @@ class ApiController extends Controller
         sum_table_volume_price AS (
             SELECT
                 SUM(\"Volume_Exchange\" * \"Price\") AS \"Price\",
-                \"st\".\"interval_alias\"
+                \"mt\".\"interval_alias\"
             FROM
-                main_table AS \"mt\",
-                sum_table AS \"st\"
-            WHERE
-                \"mt\".\"interval_alias\" = \"st\".\"interval_alias\" AND
-                \"Volume_Sum\" != 0
+                main_table AS \"mt\"
             GROUP BY
-                \"st\".\"interval_alias\"
-            ORDER BY \"st\".\"interval_alias\";
+                \"mt\".\"interval_alias\"
+            ORDER BY \"mt\".\"interval_alias\";
         )
 
         SELECT
