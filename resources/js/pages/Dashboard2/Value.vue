@@ -76,7 +76,7 @@
                     <div class="col-sm" style="display:grid;justify-content: center">
                         <div class="form-group">
                             <label class="label">Convert to:</label><br>
-                            <select class="select-css" v-model=post.converter_to @change="onChangeTo()">
+                            <select class="select-css" v-model=post.converter_to @change="onChangeToConverter()">
                                 <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
                             </select>
                         </div>
@@ -219,7 +219,7 @@
             var new_fiat = data['data']['fiat'];
             var old_fiat = data['data']['old_fiat'];
 
-            this.right_value_converter = this.day_price / old_fiat * new_fiat
+            this.right_value_converter = this.day_price / old_fiat * new_fiat;
         },
 
         onChangeToConverter(){
