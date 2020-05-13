@@ -18,7 +18,7 @@
                 <div class="card">
                     <span class="title"> 24h Low / High </span>
                     <span class="detail"> 24h VWAP <br /> Low / High Price </span>
-                    <span class="span_value"> $ {{currency_h24_min}} / $ {{currency_h24_max}} </span>
+                    <span class="span_value"> {{currency_h24_min}} / {{currency_h24_max}} </span>
                 </div>
             </div>
 
@@ -34,7 +34,7 @@
                 <div class="card">
                     <span class="title"> All Time Low </span>
                     <span class="detail"> All time lowest price </span>
-                    <span class="span_value"> $ {{currency_all_time_min}} </span>
+                    <span class="span_value"> {{currency_all_time_min}} </span>
                     <span v-if="all_time_min_perc < 0" class="percentage_red"> {{all_time_min_perc}} % </span>
                     <span v-if="all_time_min_perc >= 0" class="percentage_green"> {{all_time_min_perc}} % </span>
 
@@ -45,7 +45,7 @@
                 <div class="card">
                     <span class="title"> All Time High </span>
                     <span class="detail"> All time highest price </span>
-                    <span class="span_value"> $ {{currency_all_time_max}} </span>
+                    <span class="span_value"> {{currency_all_time_max}} </span>
                     <span v-if="all_time_max_perc < 0" class="percentage_red"> {{all_time_max_perc}} % </span>
                     <span v-if="all_time_max_perc >= 0" class="percentage_green"> {{all_time_max_perc}} % </span>
                 </div>
@@ -106,7 +106,7 @@
                 return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.h24_max;
             },
 
-            currency_currency_all_time_min(){
+            currency_all_time_min(){
                 if (this.all_time_min == null){
                     return null;
                 }
@@ -114,7 +114,7 @@
                 return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.all_time_min;
             },
 
-            currency_currency_all_time_max(){
+            currency_all_time_max(){
                 if (this.all_time_max == null){
                     return null;
                 }
