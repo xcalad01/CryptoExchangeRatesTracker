@@ -1,14 +1,16 @@
 <template>
     <div>
         <div class="row">
+            <select class="select-css convert_to" v-model=post.to @change="onChangeTo()">
+                <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+            </select>
+        </div>
+        <div class="row">
             <div class="p-col-12 p-lg-4">
                 <div class="card">
                     <span class="title"> Price </span>
                     <span class="detail"> Latest <br /> Volume Weighted Average Price (VWAP)</span>
                     <span class="span_value"> {{currency_day_price}} </span>
-                    <select class="select-css convert_to" v-model=post.to @change="onChangeTo()">
-                        <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
-                    </select>
                 </div>
             </div>
 
@@ -156,7 +158,11 @@
                 var new_fiat = data['data']['fiat'];
                 var old_fiat = data['data']['old_fiat'];
 
-                this.day_price = (this.day_price / old_fiat * new_fiat).toFixed(3);
+                this.day_price = (this.day_price / old_fiat * new_fiat);
+                this.h24_min = (this.h24_min / old_fiat * new_fiat);
+                this.h24_max = (this.h24_max / old_fiat * new_fiat);
+                this.all_time_min = (this.all_time_min / old_fiat * new_fiat);
+                this.all_time_max = (this.all_time_max / old_fiat * new_fiat);
                 this.loading_day_price = false;
             },
 
@@ -241,7 +247,7 @@
     }
 
     .convert_to {
-        width: 17%;
+        width: 6%;
         float: right !important;
         position: absolute;
         margin-bottom: 10px;
