@@ -60,7 +60,7 @@
             </div>
             <div v-else>
                 <div class="row">
-                    <span class="converter_title"> {{asset.toUpperCase()}} vs. USD converter</span>
+                    <span class="converter_title"> {{asset.toUpperCase()}} vs. Fiat converter</span>
                 </div>
                 <div class="row converter_inputs">
                     <div class="col-sm">
@@ -137,10 +137,6 @@
     watch: {
         left_value_converter: function () {
             this.right_value_converter = this.left_value_converter * this.fresh_day_price;
-        },
-
-        right_value_converter: function () {
-            this.left_value_converter = this.right_value_converter / this.fresh_day_price;
         }
     },
 
