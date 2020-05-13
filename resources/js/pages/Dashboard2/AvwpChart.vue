@@ -103,8 +103,8 @@
     methods: {
       query_awvp_chart_data(init) {
         if (init) {
-          this.post.start = new Date().setHours(0, 0, 0, 0) / 1000;
-          this.post.end = new Date().setHours(0, 0, 0, 0) / 1000 + 86400;
+            this.post.start = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000) / 1000;
+            this.post.end = (new Date().setHours(0,0,0,0) + new Date().getTimezoneOffset() * - 1 * 60 * 1000 + 86400000) / 1000
           this.post.range = '1h';
         } else {
           this.post.start = Date.parse(this.post.start) / 1000;
