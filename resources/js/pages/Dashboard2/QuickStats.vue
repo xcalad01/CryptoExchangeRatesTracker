@@ -6,6 +6,9 @@
                     <span class="title"> Price </span>
                     <span class="detail"> Latest <br /> Volume Weighted Average Price (VWAP)</span>
                     <span class="span_value"> {{currency_day_price}} </span>
+                    <select class="select-css convert_to" v-model=post.to @change="onChangeTo()">
+                        <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+                    </select>
                 </div>
             </div>
 
@@ -69,7 +72,10 @@
                 circulating_supply: null,
 
                 all_time_min: null,
-                all_time_max: null
+                all_time_max: null,
+
+                old_to:null,
+                to_available: null
             }
         },
 
@@ -144,7 +150,25 @@
             finish_all_time_values(data){
                 this.all_time_min = data['data']['min'];
                 this.all_time_max = data['data']['max'];
-            }
+            },
+
+            finish_change_to(data){
+                var new_fiat = data['data']['fiat'];
+                var old_fiat = data['data']['old_fiat'];
+
+                this.day_price = (this.day_price / old_fiat * new_fiat).toFixed(3);
+                this.loading_day_price = false;
+            },
+
+            onChangeTo(){
+                if (!this.post.start){
+                    this.loading_day_price = true;
+                    var now = new Date().setSeconds(0, 0) / 1000;
+                    var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
+                    this.old_to = this.post.to;
+                    this.axios.get(url).then(response => (this.finish_change_to(response.data)));
+                }
+            },
 
 
         },
@@ -152,6 +176,7 @@
         mounted() {
             this.asset = this.$route.name;
             this.post.to = 'usd';
+            this.old_to = this.post.to;
 
             this.supply();
             this.all_time_values();
@@ -202,5 +227,15 @@
         padding-bottom: 7px;
         padding-left: 14px;
         margin-top: 37px;
+    }
+
+    .convert_to {
+        width: 15%;
+        float: right !important;
+        position: absolute;
+        margin-bottom: 10px;
+        margin-top: 37px;
+        top: 10px;
+        right: 10px;
     }
 </style>
