@@ -1207,7 +1207,7 @@ class ApiController extends Controller
                 \"interval_alias\",
                 \"Exchange_id\"
         ),
-        sum_table AS (
+        sum_table_volume AS (
 	        SELECT
                 \"interval_alias\",
                 SUM(\"Volume_Exchange\") AS \"Volume_Sum\"
@@ -1215,15 +1215,29 @@ class ApiController extends Controller
 		        main_table
             GROUP BY
                 \"interval_alias\"
+        ),
+        sum_table_volume_price AS (
+            SELECT
+                SUM(\"Volume_Exchange\" * \"Price\") AS \"Price\",
+                \"st\".\"interval_alias\"
+            FROM
+                main_table AS \"mt\",
+                sum_table AS \"st\"
+            WHERE
+                \"mt\".\"interval_alias\" = \"st\".\"interval_alias\" AND
+                \"Volume_Sum\" != 0
+            GROUP BY
+                \"st\".\"interval_alias\"
+            ORDER BY \"st\".\"interval_alias\";
         )
+
         SELECT
-            SUM(\"Volume_Exchange\" / \"Volume_Sum\" * \"Price\"),
+            \"Price\" \ \"Volume_Sum\" as \"sum\",
             \"st\".\"interval_alias\"
         FROM
-            main_table AS \"mt\",
-            sum_table AS \"st\"
+            sum_table_volume_price,
+            sum_table_volume
         WHERE
-            \"mt\".\"interval_alias\" = \"st\".\"interval_alias\" AND
             \"Volume_Sum\" != 0
         GROUP BY
             \"st\".\"interval_alias\"
