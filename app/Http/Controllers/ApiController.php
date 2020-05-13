@@ -1236,7 +1236,8 @@ class ApiController extends Controller
         WHERE
             \"stv\".\"Volume_Sum\" != 0 AND
             \"stv\".\"interval_alias\" = \"stvp\".\"interval_alias\"
-
+        ORDER BY
+            \"stv\".\"interval_alias\"
         "));
 
     }
