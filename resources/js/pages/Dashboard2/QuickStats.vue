@@ -4,7 +4,7 @@
             <div class="p-col-12 p-lg-4">
                 <div class="card">
                     <span class="title"> Price </span>
-                    <span class="detail"> Latest 1m <br /> Volume Weighted Price (AVWP)</span>
+                    <span class="detail"> Latest 1m <br /> Volume Weighted Average Price (VWAP)</span>
                     <span class="span_value"> {{currency_day_price}} </span>
                 </div>
             </div>
@@ -12,7 +12,7 @@
             <div class="p-col-12 p-lg-4">
                 <div class="card">
                     <span class="title"> 24h Low / High </span>
-                    <span class="detail"> 24h AVWP <br /> Low / High Price </span>
+                    <span class="detail"> 24h VWAP <br /> Low / High Price </span>
                     <span class="span_value"> $ {{h24_min}} / $ {{h24_max}} </span>
                 </div>
             </div>

@@ -14,7 +14,7 @@
             </div>
             <div v-if="render_value">
                 <div class="row">
-                    <span class="converter_title"> Average Weighted Volume Price </span>
+                    <span class="converter_title"> Volume Weighted Average Price </span>
                 </div>
                 <div class="row value_options_row">
                     <div class="col-lg-8 ml-auto mr-auto">
