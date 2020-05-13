@@ -1224,7 +1224,7 @@ class ApiController extends Controller
                 main_table AS \"mt\"
             GROUP BY
                 \"mt\".\"interval_alias\"
-            ORDER BY \"mt\".\"interval_alias\";
+            ORDER BY \"mt\".\"interval_alias\"
         )
 
         SELECT
