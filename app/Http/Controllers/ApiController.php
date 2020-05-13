@@ -1234,7 +1234,7 @@ class ApiController extends Controller
             sum_table_volume_price as \"stvp\",
             sum_table_volume as \"stv\"
         WHERE
-            \"stvp\".\"Volume_Sum\" != 0
+            \"stv\".\"Volume_Sum\" != 0
         GROUP BY
             \"stv\".\"interval_alias\"
         ORDER BY \"stv\".\"interval_alias\";
