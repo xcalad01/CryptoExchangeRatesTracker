@@ -1217,7 +1217,7 @@ class ApiController extends Controller
                 \"interval_alias\"
         )
         SELECT
-            SUM(\"Volume_Exchange\" / \"Volume_Sum\" * \"Price\"),
+            SUM(\"Volume_Exchange\" * \"Price\") / \"Volume_Sum\",
             \"st\".\"interval_alias\"
         FROM
             main_table AS \"mt\",
