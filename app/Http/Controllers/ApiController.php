@@ -1228,7 +1228,7 @@ class ApiController extends Controller
         )
 
         SELECT
-            \"stvp\".\"Price\" \ \"stv\".\"Volume_Sum\" as \"sum\",
+            \"stvp\".\"Price\" / \"stv\".\"Volume_Sum\" as \"sum\",
             \"stv\".\"interval_alias\"
         FROM
             sum_table_volume_price as \"stvp\",
