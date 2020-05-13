@@ -1232,16 +1232,16 @@ class ApiController extends Controller
         )
 
         SELECT
-            \"Price\" \ \"Volume_Sum\" as \"sum\",
-            \"st\".\"interval_alias\"
+            \"stvp\".\"Price\" \ \"stv\".\"Volume_Sum\" as \"sum\",
+            \"stv\".\"interval_alias\"
         FROM
-            sum_table_volume_price,
-            sum_table_volume
+            sum_table_volume_price as \"stvp\",
+            sum_table_volume as \"stv\"
         WHERE
-            \"Volume_Sum\" != 0
+            \"stvp\".\"Volume_Sum\" != 0
         GROUP BY
-            \"st\".\"interval_alias\"
-        ORDER BY \"st\".\"interval_alias\";
+            \"stv\".\"interval_alias\"
+        ORDER BY \"stv\".\"interval_alias\";
 
         "));
 
