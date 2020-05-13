@@ -63,14 +63,22 @@
                     <span class="converter_title"> {{asset.toUpperCase()}} vs. USD converter</span>
                 </div>
                 <div class="row converter_inputs">
-                    <div class="col-md-6 pr-md-1">
+                    <div class="col-sm">
                         <div class="form-group">
                             <input v-model="left_value_converter" aria-describedby="addon-right addon-left" v-bind:placeholder=asset.toUpperCase() class="form-control converter_input_text" type="number">
                         </div>
                     </div>
-                    <div class="col-md-6 pr-md-1">
+                    <div class="col-sm">
                         <div class="form-group">
                             <input v-model="right_value_converter" aria-describedby="addon-right addon-left" placeholder="USD" class="form-control converter_input_text" type="number">
+                        </div>
+                    </div>
+                    <div class="col-sm" style="display:grid;justify-content: center">
+                        <div class="form-group">
+                            <label class="label">Convert to:</label><br>
+                            <select class="select-css" v-model=post.converter_to @change="onChangeTo()">
+                                <option v-for="item in to_available" :value="item.value">{{item.text}}</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -110,7 +118,8 @@
           left_value_converter: null,
           right_value_converter: null,
           fresh_day_price: null,
-          date: null
+          date: null,
+          old_to_converter: null
 
       }
     },
@@ -206,6 +215,22 @@
         }
       },
 
+        finish_change_to_converter(data){
+            var new_fiat = data['data']['fiat'];
+            var old_fiat = data['data']['old_fiat'];
+
+            this.right_value_converter = this.day_price / old_fiat * new_fiat
+        },
+
+        onChangeToConverter(){
+            var now = new Date().setSeconds(0, 0) / 1000;
+            var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.converter_to + "/" + this.old_to_converter;
+            this.old_to_converter = this.post.converter_to;
+            if (this.left_value_converter){
+                this.axios.get(url).then(response => (this.finish_change_to_converter(response.data)));
+            }
+        },
+
       finish_init_avail(data){
         var formatted = data['data'].map(function (item) {
           return {value: item, text: item.toUpperCase()}
@@ -226,6 +251,7 @@
       this.asset = this.$route.name;
       this.post.to = 'usd';
       this.old_to = this.post.to;
+      this.old_to_converter = this.post.to;
       this.title = this.$route.meta['title'];
 
       this.init_available();
