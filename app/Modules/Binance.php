@@ -4,8 +4,16 @@ namespace App\Modules;
 
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class Binance
+ * @package App\Modules
+ */
 class Binance extends Base
 {
+    /**
+     * Config of binance market pairs
+     * @var array
+     */
     protected $config = array(
         'BTCEUR',
         'TRXBTC',
@@ -33,6 +41,10 @@ class Binance extends Base
 
     private $timestamp = null;
 
+    /**
+     * Sends get request to binance API for OHLC data
+     * @return array
+     */
     private function send_get(){
         print_r("Sending get to binance API");
 
@@ -83,6 +95,10 @@ class Binance extends Base
         return $results;
     }
 
+    /**
+     * Sends post request to internal API to store the data
+     * @param $payload
+     */
     private function send_post($payload){
         print_r("Sending API results to DB \n");
         $this->set_curl_post();
@@ -97,6 +113,9 @@ class Binance extends Base
         print_r("All sended");
     }
 
+    /**
+     * Runs get OHLC task on binance API
+     */
     public function run_task(){
        print_r("OHLC querying started\n");
         $this->timestamp = strtotime(date('Y-m-d H:i'));

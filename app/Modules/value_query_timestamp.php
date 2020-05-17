@@ -4,8 +4,6 @@ namespace App\Modules;
 
 require __DIR__ . "/Stats.php";
 
-$statsd = new Stats();
-
 $config = array(
     "binance" => array(
         'BTCEUR',
@@ -137,7 +135,9 @@ foreach ($config as $exchange => $coins){
         ));
 
         $start = round(microtime(true) * 1000);
+        print_r($start . "\n");
         json_decode(curl_exec($ch), true);
-        $statsd->statsd->histogram("db_benchmark_crypto_historical", round(microtime(true) * 1000) - $start,1, array("function"=>$argv[1]));
+        print_r(round(microtime(true) * 1000) - $start);
+        print_r("\n");
     }
 }

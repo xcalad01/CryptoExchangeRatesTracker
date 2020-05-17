@@ -6,8 +6,16 @@ use ErrorException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class AddFiat
+ * @package App\Modules
+ */
 class AddFiat extends Base
 {
+    /**
+     * Config of Fiat ids and Names
+     * @var array
+     */
     protected $config = array(
         array("usd", "American dollar"),
         array("eur", "Euro"),
@@ -44,14 +52,26 @@ class AddFiat extends Base
         array("zar","South African ran"),
     );
 
+    /**
+     * Internal API endpoint for storing fiat data
+     * @var string
+     */
     protected $url = 'http://127.0.0.1:8000/api/fiat';
 
+    /**
+     * Sends get request to foreign exchange rates API for fiat data
+     * @return mixed
+     */
     private function send_get(){
-	$this->set_curl_url("https://api.exchangeratesapi.io/latest?base=USD");
-	return $this->do_send_get();
-
+	    $this->set_curl_url("https://api.exchangeratesapi.io/latest?base=USD");
+	    return $this->do_send_get();
     }
 
+    /**
+     * Sends post request to internal API to store the fiat data
+     * @param $rates
+     * @param $date
+     */
     private function send_post($rates, $date){
         $this->set_curl_post();
         $this->set_curl_url($this->url);
@@ -64,6 +84,8 @@ class AddFiat extends Base
                     "Value"=>$rates['rates'][strtoupper($item[0])],
                     "Key"=>$date
                 ));
+                print_r($payload);
+
                 print_r($this->do_send_post($payload)."\n");
             }
             catch (\Exception $e){
@@ -74,20 +96,25 @@ class AddFiat extends Base
         $this->close_curl_conn();
     }
 
+    /**
+     * Run add/update fiat task
+     */
     public function run_task(){
-	$data = $this->send_get();
+	    $data = $this->send_get();
         if ($data){
             $this->send_post($data, $data["date"]);
         }
     }
 
+    /**
+     * Inits db with fiat data step-by-step from {$timestamp} to {$end_timestamp}
+     */
     public function run_init_db_task(){
-        $timestamp = 1433635200;
-        $endpointParts = parse_url("http://127.0.0.1:8000/api/fiat");
-        $socket = fsockopen($endpointParts['host'], $endpointParts['port']);
+        $timestamp = 1433635200; // start timestamp
+        $end_timestamp = 1588550400;
 
         try {
-            while ($timestamp < 1588550400) {
+            while ($timestamp < $end_timestamp) {
                 $this->new_curl_instance();
                 $date = date("Y-m-d", $timestamp);
                 print_r($date."\n");

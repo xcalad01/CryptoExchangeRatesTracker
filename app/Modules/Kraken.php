@@ -3,10 +3,16 @@
 
 namespace App\Modules;
 
-
+/**
+ * Class Kraken
+ * @package App\Modules
+ */
 class Kraken extends Base
 {
-
+    /**
+     * Config of custom Kraken market pairs
+     * @var array
+     */
     protected $config = array(
         'BTCEUR',
         'ETHUSD',
@@ -29,6 +35,10 @@ class Kraken extends Base
 
     private $timestamp = null;
 
+    /**
+     * Sends get request to Kraken API for OHLC and volume data
+     * @return array|void
+     */
     private function send_get(){
         print_r("Sending get to kraken API");
 
@@ -79,6 +89,10 @@ class Kraken extends Base
         return $results;
     }
 
+    /**
+     * Sends post request to internal API to store the data
+     * @param $payload
+     */
     private function send_post($payload){
         print_r("Sending API results to DB\n");
 
@@ -94,6 +108,9 @@ class Kraken extends Base
         print_r("All sended");
     }
 
+    /**
+     * Run get OHLC data task
+     */
     public function run_task(){
         print_r("OHLC querying started\n");
 

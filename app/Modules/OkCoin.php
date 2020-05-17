@@ -3,9 +3,16 @@
 
 namespace App\Modules;
 
-
+/**
+ * Class OkCoin
+ * @package App\Modules
+ */
 class OkCoin extends Base
 {
+    /**
+     * Config of custom market pairs on Okcoing exchange
+     * @var array
+     */
     private $config = array(
         "BTC-USD",
         "TRX-USD",
@@ -21,6 +28,10 @@ class OkCoin extends Base
     private $exchange_id = "okcoin";
     private $timestamp;
 
+    /**
+     * Sends get request to OkCoin API
+     * @return array
+     */
     private function send_get(){
         print_r("Sending get to kraken API\n");
 
@@ -63,6 +74,10 @@ class OkCoin extends Base
         return $results;
     }
 
+    /**
+     * Sends post request to internal API to save the data
+     * @param $payload
+     */
     private function send_post($payload){
         print_r("Sending API results to DB");
 
@@ -78,6 +93,9 @@ class OkCoin extends Base
         print_r("All sended");
     }
 
+    /**
+     * Run get OHLC data task
+     */
     public function run_task(){
         print_r("OHLC querying started\n");
 

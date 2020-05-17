@@ -3,9 +3,16 @@
 
 namespace App\Modules;
 
-
+/**
+ * Class CoinbasePro
+ * @package App\Modules
+ */
 class CoinbasePro extends Base
 {
+    /**
+     * Config of CoinbasePro custom market pairs ids
+     * @var array
+     */
     private $config = array(
         'BTC-USD',
         'ETH-USD',
@@ -25,6 +32,10 @@ class CoinbasePro extends Base
     protected $date = null;
     protected $exchange_id = "gdax";
 
+    /**
+     * Sends get request to CoinBasePro API for OHLC data
+     * @return array
+     */
     private function send_get(){
         print_r("Sending get to coinbase_pro API");
 
@@ -77,6 +88,10 @@ class CoinbasePro extends Base
         return $results;
     }
 
+    /**
+     * Sends post request to internal API to store the data
+     * @param $payload
+     */
     private function send_post($payload){
         print_r("Sending API results to DB\n");
         $this->set_curl_post();
@@ -90,6 +105,9 @@ class CoinbasePro extends Base
         print_r("All sended");
     }
 
+    /**
+     * Runs get ohlc data task
+     */
     public  function run_task(){
         print_r("OHLC querying started\n");
 

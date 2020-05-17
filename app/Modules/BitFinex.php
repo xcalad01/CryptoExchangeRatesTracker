@@ -10,8 +10,16 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Pool;
 
+/**
+ * Class BitFinex
+ * @package App\Modules
+ */
 class BitFinex extends Base
 {
+    /**
+     * Config of bitfinex custom market pairs ids
+     * @var array
+     */
     protected $config = array(
         'tBTCUSD',
         'tETHUSD',
@@ -34,6 +42,10 @@ class BitFinex extends Base
 
     private $timestamp = null;
 
+    /**
+     * Sends get request to bitfinex API to get the OHLC data
+     * @return array
+     */
     private function send_get(){
         print_r("Sending get to bitfinex API");
 
@@ -70,6 +82,10 @@ class BitFinex extends Base
         return $results;
     }
 
+    /**
+     * Sends post request to internal API to store the data
+     * @param $payload
+     */
     private function send_post($payload){
         print_r("Sending API results to DB\n");
         $this->set_curl_post();
@@ -84,6 +100,9 @@ class BitFinex extends Base
         print_r("All sended");
     }
 
+    /**
+     * Runs get OHLC data task
+     */
     public function run_task(){
         print_r("OHLC querying started\n");
         $this->timestamp = strtotime(date('Y-m-d H:i')) - 60;

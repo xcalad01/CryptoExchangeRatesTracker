@@ -2,8 +2,16 @@
 
 namespace App\Modules;
 
+/**
+ * Class AddCrypto
+ * @package App\Modules
+ */
 class AddCrypto extends Base
 {
+    /**
+     * Config of crypto names and ids
+     * @var array
+     */
     protected $config = array(
         array("Bitcoin","btc"),
         array("Tron","trx"),
@@ -28,8 +36,15 @@ class AddCrypto extends Base
         array("Tether", "usdt"),
     );
 
+    /**
+     * Internal API endpoint for adding crypto
+     * @var string
+     */
     protected $url = "http://127.0.0.1:8000/api/crypto";
 
+    /**
+     * Send post request to internal API
+     */
     private function send_post(){
         $this->set_curl_post();
         $this->set_curl_url($this->url);
@@ -45,6 +60,9 @@ class AddCrypto extends Base
         $this->close_curl_conn();
     }
 
+    /**
+     * Run add crypto task
+     */
     public function run_task(){
         $this->send_post();
     }

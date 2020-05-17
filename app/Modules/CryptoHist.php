@@ -4,8 +4,16 @@
 namespace App\Modules;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class CryptoHist
+ * @package App\Modules
+ */
 class CryptoHist extends Base
 {
+    /**
+     * Config of thress of exchange_ids and market pairs ids
+     * @var array
+     */
     protected $config = array(
     array('gemini', 'btc', 'usd'),
     array('bitstamp', 'btc', 'usd'),
@@ -16,6 +24,10 @@ class CryptoHist extends Base
     array('okex', 'btc', 'usdt'),
     );
 
+    /**
+     * Sends post request to internal API to store the data
+     * @param $payload
+     */
     private function send_post($payload){
         $this->set_curl_post();
         $this->set_curl_url('http://127.0.0.1:8000/api/crypto/historical');
@@ -27,6 +39,11 @@ class CryptoHist extends Base
         $this->close_curl_conn();
     }
 
+    /**
+     * Sends get request to Cryptowatch API for OHLC data
+     * @param $timestamp
+     * @return array
+     */
     private function send_get($timestamp){
         $results = array();
         foreach ($this->config as $item){
@@ -59,6 +76,9 @@ class CryptoHist extends Base
 
     }
 
+    /**
+     * First get data than store data
+     */
     private function run(){
         print_r("OHLC data cryptowatch querying\n");
         $timestamp = strtotime(date('Y-m-d H:i'));
@@ -71,6 +91,9 @@ class CryptoHist extends Base
         print_r("Finished successfuly\n");
     }
 
+    /**
+     * Run get ohlc data task
+     */
     public function run_task(){
         $this->run();
     }

@@ -2,8 +2,16 @@
 
 namespace App\Modules;
 
+/**
+ * Class AddExchange
+ * @package App\Modules
+ */
 class AddExchange extends Base
 {
+    /**
+     * Config of exchange ids and payment methods
+     * @var array
+     */
     protected $config = array(
         "exchanges" => [
             ['gemini', 'Wire Transfer ACH BTC ETH'],
@@ -22,6 +30,10 @@ class AddExchange extends Base
         ]
     );
 
+    /**
+     * Sends get request to coingecko API for acquire info about specific exchange
+     * @return array
+     */
     private function send_get(){
         $this->set_url_base("https://api.coingecko.com/api/v3/exchanges/%s");
         $result = array();
@@ -36,6 +48,10 @@ class AddExchange extends Base
         return $result;
     }
 
+    /**
+     * Sends post request to internal API to store the exchange info
+     * @param $payload
+     */
     private function send_post($payload){
         $this->set_curl_post();
         $this->set_curl_url('http://127.0.0.1:8000/api/exchange');
@@ -61,6 +77,9 @@ class AddExchange extends Base
         $this->close_curl_conn();
     }
 
+    /**
+     * First get info than store to DB
+     */
     private function run(){
         $result = $this->send_get();
         if ($result){
@@ -68,6 +87,9 @@ class AddExchange extends Base
         }
     }
 
+    /**
+     * Run add exchange task
+     */
     public function run_task(){
         $this->run();
     }

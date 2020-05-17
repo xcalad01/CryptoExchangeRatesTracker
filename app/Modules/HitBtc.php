@@ -3,10 +3,16 @@
 
 namespace App\Modules;
 
-
+/**
+ * Class HitBtc
+ * @package App\Modules
+ */
 class HitBtc extends Base
 {
-
+    /**
+     * Config of custom hitbtc market pairs
+     * @var array
+     */
     private $config = array (
         "BTCUSD",
         "TRXUSD",
@@ -35,7 +41,10 @@ class HitBtc extends Base
     private $start_timestamp;
     private $exchange_id = "hitbtc";
 
-
+    /**
+     * Creates string of url symbols divided by ','
+     * @return false|string|null
+     */
     private function make_url_symbols(){
         $result = null;
         foreach ($this->config as $item){
@@ -58,6 +67,10 @@ class HitBtc extends Base
         return $result;
     }
 
+    /**
+     * Sends get request to HitBtc API for OHLC data
+     * @return array
+     */
     private function send_get(){
         print_r("Sending get to hitbtc API\n");
 
@@ -111,6 +124,10 @@ class HitBtc extends Base
         return $results;
     }
 
+    /**
+     * Sends post request to internal API to store the data
+     * @param $payload
+     */
     private function send_post($payload){
         print_r("Sending API results to DB");
 
@@ -127,7 +144,9 @@ class HitBtc extends Base
     }
 
 
-
+    /**
+     * Run get ohlc data task
+     */
     public function run_task(){
         print_r("OHLC querying started\n");
 

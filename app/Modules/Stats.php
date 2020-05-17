@@ -8,10 +8,17 @@ use DataDog\DogStatsd;
 
 class Stats
 {
-
+    /**
+     * Datadog statsd handler
+     * @var DogStatsd
+     */
     public $statsd;
 
-
+    /**
+     * Config of host and port
+     * TODO: make env variables for this !
+     * @var array
+     */
     private $config = array(
         "host" => "167.86.75.179",
         "port" => 8125
