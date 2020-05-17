@@ -338,7 +338,7 @@ class ApiController extends Controller
         $fiat_hist = Fiat_historical::where(["Date" => $this->get_timestamp($item["Key"]), "Fiat_id" => $item['Id']])->first();
         if ($fiat_hist){
             $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_special_day: {$this->get_timestamp($item["Key"])}"));
-            return $fiat_hist;
+            $date = $this->get_today_timestamp("16:05");
         }
         else{
             $this->statsd->statsd->increment("db.connections", 1, array("function"=>"create_update_fiat_normal_day: {$this->get_timestamp($item["Key"])}"));
@@ -368,10 +368,6 @@ class ApiController extends Controller
                 "message" => $e->getMessage()
             ], 501);
         }
-
-        return response()->json([
-            "message" => "FiatCommand added"
-        ], 200);
     }
 
     private function check_exchange($exchange){
