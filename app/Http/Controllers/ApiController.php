@@ -350,8 +350,6 @@ class ApiController extends Controller
         $fiat_hist->Value_USD = $item['Value'];
         $fiat_hist->Date = $date;
 
-
-        $fiat->save();
         $fiat_hist->save();
         return "Added";
     }
