@@ -16,7 +16,24 @@ service cron start
 
 chmod -R 777 storage
 
-### Datadog tracing
+## Datadog tracing
 https://docs.datadoghq.com/tracing/setup/php/
 
+## Init DB:
 
+php artisan migrate
+
+## Init Data
+You can use tmux sessions as adding 8+ years of data is pretty long running process.
+
+### Init db crypto
+
+tmux new -s init_db_crypto_task
+
+php app/Modules/init_db_crypto_task.php
+
+### Init db fiat
+
+tmux new -s init_db_fiat_task
+
+php app/Modules/init_db_fiat_task.php
