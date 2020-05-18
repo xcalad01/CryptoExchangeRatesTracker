@@ -509,7 +509,6 @@ class ApiController extends Controller
             $result = $this->ohlc_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
 
-        print_r($result);
         $values = array();
         foreach ($result as $data){
             array_push($values, array(
