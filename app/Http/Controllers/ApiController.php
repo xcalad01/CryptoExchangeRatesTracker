@@ -502,12 +502,14 @@ class ApiController extends Controller
         }
 
         if ($coin_info->Type == "fiat"){
+            $this->ohlc_fiat_time_range_query_eloquent($range, $exchange, $historical_available, $to, $start, $end); # TMP: benchmark purposes
             $result = $this->ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
         else{
             $result = $this->ohlc_no_fiat_time_range_query($range, $exchange, $historical_available, $to, $start, $end);
         }
 
+        print_r($result);
         $values = array();
         foreach ($result as $data){
             array_push($values, array(
@@ -989,6 +991,35 @@ class ApiController extends Controller
             LIMIT 1;
 
         "));
+    }
+
+    private function ohlc_fiat_time_range_query_eloquent($range, $exchange, $historical_available, $to, int $start, int $end)
+    {
+        return DB::table('historical_available as ha')
+            ->select(DB::raw("
+                 (array_agg(\"ch\".\"Open\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ORDER BY \"ch\".\"Timestamp\" ASC)) [1] AS \"Open\",
+                 MAX(\"ch\".\"High\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" )  AS \"High\",
+                 MIN(\"ch\".\"Low\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ) AS \"Low\",
+                 (array_agg(\"ch\".\"Close\" / \"fh1\".\"Value_USD\" * \"fh2\".\"Value_USD\" ORDER BY \"Timestamp\" DESC)) [1] AS \"Close\",
+                 to_timestamp(floor((extract('epoch' FROM to_timestamp(\"ch\".\"Timestamp\")) / {$range})) * {$range}) AT TIME ZONE 'UTC' AS \"interval_alias\"
+            "))
+            ->join('crypto_historical as ch', 'ha.id', '=', 'ch.id')
+            ->join('fiat_historicals as fh1', 'ha.To', '=', 'fh1.Fiat_id')
+//            ->join('fiat_historicals as fh2', 'usd', '=', 'fh2.Fiat_id')
+            ->join('fiat_historicals as fh2', function($join) {
+                $join->where('fh2.Fiat_id', '=', 'usd');
+            })
+            ->where([
+                ['ha.Exchange_id', '=', DB::raw("'{$exchange}'")],
+                ['ha.From', '=', DB::raw("'{$historical_available->From}'")],
+                ['ha.To', '=', DB::raw("'{$historical_available->To}'")],
+            ])
+            ->whereBetween('ch.Timestamp', [$start, $end])
+            ->whereBetween('fh1.Date', [DB::raw("\"ch\".\"Timestamp\" - 86400"), DB::raw("\"ch\".\"Timestamp\"")])
+            ->whereBetween('fh2.Date', [DB::raw("\"ch\".\"Timestamp\" - 86400"), DB::raw("\"ch\".\"Timestamp\"")])
+            ->groupBy('interval_alias')
+            ->orderBy('interval_alias')
+            ->get();
     }
 
     private function ohlc_fiat_time_range_query($range, $exchange, $historical_available, $to, int $start, int $end)
