@@ -1,4 +1,6 @@
 <?php
+# 22:25
+
 
 $timestamp = 1483228800;
 $crypto = array("btc", "eth", "bch", "ltc");
