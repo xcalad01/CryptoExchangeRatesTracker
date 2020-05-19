@@ -32,8 +32,7 @@ while ($timestamp < 1577836800) # 3 years
 
         curl_close($curl);
 
-        $data = json_decode($response, true)['data'];
-        print_r($data);
+        print_r(json_decode($response, true)['data']);
     }
     catch (\Exception $e){
         print_r($e->getMessage());
