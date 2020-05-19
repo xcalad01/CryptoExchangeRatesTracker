@@ -1,7 +1,7 @@
 <?php
 
 $timestamp = 1483228800;
-$crypto = array("btc", "eth", "bch", "ltc")
+$crypto = array("btc", "eth", "bch", "ltc");
 $currencies = array("usd", "eur", "jpy", "czk", "huf", "gbp");
 
 while ($timestamp < 1577836800) # 3 years
