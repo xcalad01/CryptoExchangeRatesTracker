@@ -1,9 +1,10 @@
 <?php
 
-$timestamp = 1388534400;
+$timestamp = 1483228800;
+$crypto = array("btc", "eth", "bch", "ltc")
 $currencies = array("usd", "eur", "jpy", "czk", "huf", "gbp");
 
-while ($timestamp < 1483228800) # 3 years
+while ($timestamp < 1577836800) # 3 years
 {
     try {
         $curl = curl_init();
@@ -12,9 +13,10 @@ while ($timestamp < 1483228800) # 3 years
         $start = $timestamp;
         $end = $start + 86400;
         $timestamp = $end;
+        $from = array_rand($crypto, 1);
+        $to = array_rand($currencies, 1);
 
-
-        $url = "http://167.86.75.179:8001/api/crypto/historical/asset/value/btc/usd/{$start}/{$end}";
+        $url = "http://167.86.75.179:8001/api/crypto/historical/asset/value/{$from}/{$to}/{$start}/{$end}";
 
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,
