@@ -13,8 +13,11 @@ while ($timestamp < 1577836800) # 3 years
         $start = $timestamp;
         $end = $start + 86400;
         $timestamp = $end;
-        $from = array_rand($crypto, 1)[0];
-        $to = array_rand($currencies, 1)[0];
+        $from = array_rand($crypto, 1);
+        $to = array_rand($currencies, 1);
+
+        $from = $crypto[$from];
+        $to = $currencies[$to];
 
         $url = "http://167.86.75.179:8001/api/crypto/historical/asset/value/{$from}/{$to}/{$start}/{$end}";
 
