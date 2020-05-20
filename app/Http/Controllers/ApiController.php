@@ -705,14 +705,14 @@ class ApiController extends Controller
             $this->check_coin($crypto_id);
             $convert_to_info = $this->check_coin($convert_to_id);
 
-            if (($end - $start) <= 86400 ){ # TODO: remove, this is temporary
-                $this->check_availability_of_asset_data($crypto_id, $start, $end);
-            }
-            if ($dry){
-                return response()->json([
-                    "data" => "Dry completed"
-                ], 200);
-            }
+//            if (($end - $start) <= 86400 ){ # TODO: remove, this is temporary
+//                $this->check_availability_of_asset_data($crypto_id, $start, $end);
+//            }
+//            if ($dry){
+//                return response()->json([
+//                    "data" => "Dry completed"
+//                ], 200);
+//            }
 
             if ($range){
                 if (!key_exists($range, $this->time_range_config)){
@@ -841,35 +841,36 @@ class ApiController extends Controller
     }
 
     public function exchange_stats(Request $request, $exchange_id){
-        $to_coins = DB::select(DB::raw("
-            SELECT DISTINCT \"To\" from historical_available where \"Exchange_id\" = '{$exchange_id}';
-        "));
-
-        $coin_values_usd = array();
-        foreach ($to_coins as $t_c){
-            $info = $this->check_coin($t_c->To);
-            if ($info->Type == 'fiat'){
-                $coin_value_usd = $this->last_fiat_value($t_c->To);
-                $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->Value_USD;
-            }
-            else{
-                $now =strtotime('now');
-                $start = strtotime("today", $now);
-                $end = strtotime("tomorrow", $start) - 1;
-                $coin_value_usd = $this->value_crypto_asset_fiat($end - $start, $t_c->To, 'usd', $start, $end);
-                $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->sum;
-            }
-        }
-
-        $volume_by_currency = $this->exchange_volume_by_currency($exchange_id, $to_coins, $coin_values_usd);
-        $volume_per_pair = $this->exchange_volume_pair($exchange_id, $coin_values_usd);
+//        $to_coins = DB::select(DB::raw("
+//            SELECT DISTINCT \"To\" from historical_available where \"Exchange_id\" = '{$exchange_id}';
+//        "));
+//
+//        $coin_values_usd = array();
+//        foreach ($to_coins as $t_c){
+//            $info = $this->check_coin($t_c->To);
+//            if ($info->Type == 'fiat'){
+//                $coin_value_usd = $this->last_fiat_value($t_c->To);
+//                $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->Value_USD;
+//            }
+//            else{
+//                $now =strtotime('now');
+//                $start = strtotime("today", $now);
+//                $end = strtotime("tomorrow", $start) - 1;
+//                $coin_value_usd = $this->value_crypto_asset_fiat($end - $start, $t_c->To, 'usd', $start, $end);
+//                $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->sum;
+//            }
+//        }
+//
+//        $volume_by_currency = $this->exchange_volume_by_currency($exchange_id, $to_coins, $coin_values_usd);
+//        $volume_per_pair = $this->exchange_volume_pair($exchange_id, $coin_values_usd);
+        $this->exchange_additional_info_eloquent($exchange_id);
         $additional_info = $this->exchange_additional_info($exchange_id);
 
 
         return response()->json([
             "data" => array(
-                "volume_by_currency" => $volume_by_currency,
-                "volume_by_pair" => $volume_per_pair,
+                "volume_by_currency" => array(),
+                "volume_by_pair" => array(),
                 "additional" => $additional_info[0]
             )
         ], 200);
@@ -934,6 +935,10 @@ class ApiController extends Controller
         return $result;
     }
 
+
+    private function exchange_additional_info_eloquent($exchange_id){
+        return DB::table('exchanges')->select('*')->where([['Exchange_id', '=', $exchange_id]]);
+    }
 
     private function exchange_additional_info($exchange_id){
         return DB::select(DB::raw("
