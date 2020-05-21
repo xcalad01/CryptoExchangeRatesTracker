@@ -449,6 +449,11 @@ class ApiController extends Controller
                     throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
                 }
             }
+            else{
+                if ($to != $historical_available->from){
+                    throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
+                }
+            }
             $start = intval($start);
         }
         catch (\Exception $e){
