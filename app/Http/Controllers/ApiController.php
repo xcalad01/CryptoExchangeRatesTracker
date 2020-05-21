@@ -445,7 +445,7 @@ class ApiController extends Controller
 
             $historical_available = $this->get_historical_available($exchange, $from);
             if ($this->check_coin($historical_available->To)->Type == 'fiat'){
-                if (!(in_array($to, $this->hist_available_fiat_coins))){
+                if ($this->check_coin($to)->Type != 'fiat'){
                     throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
                 }
             }
