@@ -450,7 +450,7 @@ class ApiController extends Controller
                 }
             }
             else{
-                if ($to != $historical_available->from){
+                if ($to != $historical_available->From){
                     throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
                 }
             }
