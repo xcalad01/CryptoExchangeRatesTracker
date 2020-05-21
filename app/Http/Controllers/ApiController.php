@@ -32,6 +32,8 @@ class ApiController extends Controller
 
     private $coin_gecko_client;
 
+    private $hist_available_fiat_coins;
+
     public function __construct()
     {
         $this->statsd = new Stats();
@@ -74,6 +76,8 @@ class ApiController extends Controller
         $this->coin_cap_candles_curl = curl_init();
 
         $this->coin_gecko_client = new CoinGeckoClient();
+
+        $this->hist_available_fiat_coins = array("usd", "eur");
     }
 
     /**
@@ -426,6 +430,7 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
+            $this->check_coin($from);
             $coin_info = $this->check_coin($to);
 
             if ($range and !key_exists($range, $this->time_range_config)){
@@ -439,7 +444,11 @@ class ApiController extends Controller
 	        }
 
             $historical_available = $this->get_historical_available($exchange, $from);
-
+            if ($coin_info->Type == 'fiat'){
+                if (!(in_array($to, $this->hist_available_fiat_coins))){
+                    throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
+                }
+            }
             $start = intval($start);
         }
         catch (\Exception $e){
