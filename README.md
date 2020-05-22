@@ -37,3 +37,5 @@ You can use tmux sessions as adding 8+ years of data is pretty long running proc
 * tmux new -s init_db_fiat_task
 
 * php app/Modules/init_db_fiat_task.php
+
+## Important ENV. Variables
