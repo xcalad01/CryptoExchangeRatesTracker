@@ -3,37 +3,37 @@
 ## API DOC
 https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1
 
-## How to run
-cd ~/bakalarka
+## Running 
+> 👉 Note: Docker and Docker-compose need to be installed
 
-docker-compose up -d nginx
+* docker-compose up
 
-docker exec -it bakalarka_workspace_1 bash
+* docker exec -it bakalarka_workspace_1 bash
 
-nohup php -S 0.0.0.0:8000 -t public/ > /var/log/bakalarka/server.log &
+* nohup php -S 0.0.0.0:8000 -t public/ > /var/log/bakalarka/server.log &
 
-service cron start
+* service cron start
 
-chmod -R 777 storage
+* chmod -R 777 storage
 
 ## Datadog tracing
 https://docs.datadoghq.com/tracing/setup/php/
 
 ## Init DB:
 
-php artisan migrate
+* php artisan migrate
 
-## Init Data
+### Init Data
 You can use tmux sessions as adding 8+ years of data is pretty long running process.
 
-### Init db crypto
+#### Init db crypto
 
-tmux new -s init_db_crypto_task
+* tmux new -s init_db_crypto_task
 
-php app/Modules/init_db_crypto_task.php
+* php app/Modules/init_db_crypto_task.php
 
-### Init db fiat
+#### Init db fiat
 
-tmux new -s init_db_fiat_task
+* tmux new -s init_db_fiat_task
 
-php app/Modules/init_db_fiat_task.php
+* php app/Modules/init_db_fiat_task.php
