@@ -38,9 +38,9 @@ function query_coin_market_cap(){
 }
 
 
-function query_coinbase(){
-
-}
+//function query_coinbase(){
+//
+//}
 
 function query_coin_gecko(){
     $url = 'https://api.coingecko.com/api/v3/exchange_rates';
@@ -134,7 +134,7 @@ print_r("\n");
 
 $statsd->statsd->gauge('avwp_price_check', 100 - $percents / 3, 1);
 
-$file_handle = fopen('/var/log/bakalarka/avwp_price.csv', 'a');
+$file_handle = fopen('/tests/avwp_price.csv', 'a');
 fputcsv($file_handle, array($timestamp, $internal_price, $coin_market_price, $coin_gecko_price, $coin_cap_price, 100 - $percents / 3)); # $line is an array of string values here
 
 fclose($file_handle);
