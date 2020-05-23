@@ -38,4 +38,9 @@ You can use tmux sessions as adding 8+ years of data is pretty long running proc
 
 * php app/Modules/init_db_fiat_task.php
 
+## Test API
+> 👉 Note: phpunit is required to be installed
+* from root folder -> ./vendor/bin/phpunit
+
+
 ## Important ENV. Variables
