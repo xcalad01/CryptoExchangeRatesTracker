@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *
+ * OkCoin.php
+ *
+ * OkCoin Api
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
 
 namespace App\Modules;
 

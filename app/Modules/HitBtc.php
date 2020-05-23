@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *
+ * HitBtc.php
+ *
+ * HitBtc Api
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
 
 namespace App\Modules;
 

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *
+ * Kraken.php
+ *
+ * Kraken Api
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
 
 namespace App\Modules;
 

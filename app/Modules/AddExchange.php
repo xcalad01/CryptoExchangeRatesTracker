@@ -1,5 +1,14 @@
 <?php
 
+/**
+ *
+ * AddExchanges.php
+ *
+ * Add exchanges
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 namespace App\Modules;
 
 /**

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ *
+ * Stats.php
+ *
+ * Datadog statsd
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 namespace App\Modules;
 
 require __DIR__ . "/php-datadogstatsd/src/DogStatsd.php";

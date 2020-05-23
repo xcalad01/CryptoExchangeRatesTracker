@@ -1,8 +1,16 @@
 <?php
 
+/**
+ *
+ * CryptoHist.php
+ *
+ * Crypto historical
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 
 namespace App\Modules;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class CryptoHist

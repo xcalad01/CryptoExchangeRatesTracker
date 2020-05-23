@@ -1,5 +1,14 @@
 <?php
 
+/**
+ *
+ * AddFiat.php
+ *
+ * Add fiats
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 
 namespace App\Modules;
 use ErrorException;

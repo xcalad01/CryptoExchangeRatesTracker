@@ -1,5 +1,14 @@
 <?php
 
+/**
+ *
+ * AddCrypto.php
+ *
+ * Add crypto
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 namespace App\Modules;
 
 /**

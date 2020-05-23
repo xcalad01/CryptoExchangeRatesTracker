@@ -1,8 +1,15 @@
 <?php
 
-namespace App\Modules;
+/**
+ *
+ * Binance.php
+ *
+ * Binance API
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
 
-use Illuminate\Support\Facades\Log;
+namespace App\Modules;
 
 /**
  * Class Binance

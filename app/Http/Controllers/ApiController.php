@@ -1,5 +1,14 @@
 <?php
 
+/**
+ *
+ * ApiController.php
+ *
+ * Api controller
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 namespace App\Http\Controllers;
 require __DIR__ . "/../../Modules/Stats.php";
 

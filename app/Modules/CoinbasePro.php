@@ -1,5 +1,14 @@
 <?php
 
+/**
+ *
+ * CoinbasePro.php
+ *
+ * CoinbasePro (gdax) API
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 
 namespace App\Modules;
 
