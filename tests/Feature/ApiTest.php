@@ -1,5 +1,14 @@
 <?php
 
+/**
+ *
+ * ApiTest.php
+ *
+ * Test API
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
