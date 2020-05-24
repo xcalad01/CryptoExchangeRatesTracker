@@ -77,11 +77,10 @@
     </div>
 </template>
 
-<script>
+<script src="public/humanize.min.js">
   import Highcharts from "highcharts";
   import {axios} from "../../plugins/axios";
   import getSymbolFromCurrency from "currency-symbol-map";
-  import Humanize from "public/humanize.min.jss";
 
   var global_component_instance = null;
 
