@@ -205,8 +205,7 @@
       onChangeTo(){
         if (!this.post.start){
           this.loading_day_price = true;
-          var now = new Date().setSeconds(0, 0) / 1000;
-          var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + now + "/" + this.post.to + "/" + this.old_to;
+          var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + this.post.start + "/" + this.post.to + "/" + this.old_to;
           this.old_to = this.post.to;
           this.axios.get(url).then(response => (this.finish_change_to(response.data)));
         }
