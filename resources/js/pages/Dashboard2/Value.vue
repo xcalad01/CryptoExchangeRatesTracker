@@ -95,6 +95,7 @@
   import VueSelect from 'vue-select';
   import 'vue-select/dist/vue-select.css';
   import { HalfCircleSpinner } from 'epic-spinners';
+  import Humanize from 'humanize-plus';
 
   export default {
     components: {
@@ -130,7 +131,7 @@
           return null;
         }
 
-        return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.day_price;
+        return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + Humanize.formatNumber(this.day_price, 4);
       }
     },
 
