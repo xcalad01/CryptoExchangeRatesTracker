@@ -131,6 +131,8 @@
           return "No data";
         }
 
+        console.log("DAY PRICE");
+        console.log(this.day_price);
         return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + Humanize.formatNumber(this.day_price, 4);
       }
     },
