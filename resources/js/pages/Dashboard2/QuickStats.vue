@@ -59,6 +59,7 @@
 <script>
     import getSymbolFromCurrency from "currency-symbol-map";
     import { axios } from '../../plugins/axios';
+    import Humanize from 'humanize-plus';
 
     export default {
         data () {
@@ -87,7 +88,7 @@
                     return null;
                 }
 
-                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.day_price;
+                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + Humanize.formatNumber(this.day_price, 5);
             },
 
             currency_h24_min(){
@@ -95,7 +96,7 @@
                     return null;
                 }
 
-                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.h24_min;
+                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " +  Humanize.formatNumber(this.h24_min, 5);
             },
 
             currency_h24_max(){
@@ -103,7 +104,7 @@
                     return null;
                 }
 
-                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.h24_max;
+                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + Humanize.formatNumber(this.h24_max, 5);
             },
 
             currency_all_time_min(){
@@ -111,7 +112,7 @@
                     return null;
                 }
 
-                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.all_time_min;
+                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + Humanize.formatNumber(this.all_time_min, 5);
             },
 
             currency_all_time_max(){
@@ -119,7 +120,7 @@
                     return null;
                 }
 
-                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + this.all_time_max;
+                return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + Humanize.formatNumber(this.all_time_max, 5);
             },
 
             all_time_min_perc(){
@@ -165,9 +166,9 @@
             },
 
             update_supply(data){
-                this.total_supply = data['data']['total_supply'];
+                this.total_supply = Humanize.formatNumber(data['data']['total_supply']);
                 if (data['data']['circulating_supply'] !== null){
-                    this.circulating_supply = data['data']['circulating_supply'];
+                    this.circulating_supply = Humanize.formatNumber(data['data']['circulating_supply']);
                 }
                 else{
                     this.circulating_supply = "XXX"
