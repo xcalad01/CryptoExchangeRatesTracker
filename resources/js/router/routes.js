@@ -258,6 +258,31 @@ const routes = [
 
         ]
     },
+    {
+        path: "/info",
+        name: "Info",
+        meta: {title: "Info"},
+        children: [
+            {
+                path: "api_doc",
+                name: "api_doc",
+                beforeEnter(to, from, next) {
+                    // Put the full page url including the protocol http(s) below
+                    window.location = "https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1"
+                },
+                meta: { title: "Api" },
+            },
+            {
+                path: "github",
+                name: "github",
+                beforeEnter(to, from, next) {
+                    // Put the full page url including the protocol http(s) below
+                    window.location = "https://github.com/xcalad01/CryptoExchangeRatesTracker"
+                },
+                meta: { title: "Github" },
+            },
+        ]
+    },
     { path: "*", component: NotFound, hidden: true },
 ];
 
