@@ -81,6 +81,7 @@
   import Highcharts from "highcharts";
   import {axios} from "../../plugins/axios";
   import getSymbolFromCurrency from "currency-symbol-map";
+  import Humanize from "humanize.min.js";
 
   var global_component_instance = null;
 
@@ -244,16 +245,16 @@
           this.realtime_chart.hideLoading();
         if (init){
           this.real_time_data = data['data'].map(function (item) {
-            return [item[0] * 1000, item[1]]
+            return [item[0] * 1000, Humanize.formatNumber(item[1], 3)]
           });
-          this.last_realtime_value = (this.real_time_data[this.real_time_data.length - 1][1]).toFixed(3);
+          this.last_realtime_value = (this.real_time_data[this.real_time_data.length - 1][1]);
           this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
-          this.real_time_data.push([date * 1000, data['data'][0][1]]);
+          this.real_time_data.push([date * 1000, Humanize.formatNumber(data['data'][0][1], 3)]);
           this.realtime_chart.series[0].addPoint(this.real_time_data[this.real_time_data.length - 1]);
           if (data['data']){
-            this.last_realtime_value = data['data'][0][1].toFixed(3);
+            this.last_realtime_value = Humanize.formatNumber(data['data'][0][1], 3);
           }
 
           this.real_time_value_interval = 60;
@@ -265,9 +266,9 @@
           if (init){
               this.real_time_volume_data = data['data'].map(function (item) {
                   if(item['y']){
-                      last_value = item['y'].toFixed(3);
+                      last_value = Humanize.formatNumber(item['y'], 3);
                   }
-                  return [item['x'] * 1000, item['y']]
+                  return [item['x'] * 1000, Humanize.formatNumber(item['y'], 3)]
               });
               this.volume_chart.series[0].setData(this.real_time_volume_data)
           }
@@ -275,9 +276,9 @@
               var last_value = this.last_realtime_volume;
               this.real_time_volume_data.push(...data['data'].map(function (item) {
                   if(item['y']){
-                      last_value = item['y'].toFixed(3);
+                      last_value = Humanize.formatNumber(item['y']);
                   }
-                  return [item['x'] * 1000, item['y']]
+                  return [item['x'] * 1000, Humanize.formatNumber(item['y'], 3)]
               }));
               this.volume_chart.series[0].addPoint(this.real_time_volume_data[this.real_time_volume_data.length - 1], true, true)
           }
