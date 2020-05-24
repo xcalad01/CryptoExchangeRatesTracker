@@ -251,7 +251,7 @@
           this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
-          this.real_time_data.push([date * 1000, data['data'][0][1].toFixed(3)]);
+          this.real_time_data.push([date * 1000, data['data'][0][1]]);
           this.realtime_chart.series[0].addPoint(this.real_time_data[this.real_time_data.length - 1]);
           if (data['data']){
             this.last_realtime_value = Humanize.formatNumber(data['data'][0][1], 3);
@@ -268,7 +268,7 @@
                   if(item['y']){
                       last_value = Humanize.formatNumber(item['y'], 3);
                   }
-                  return [item['x'] * 1000, item['y'].toFixed(3)]
+                  return [item['x'] * 1000, item['y']]
               });
               this.volume_chart.series[0].setData(this.real_time_volume_data)
           }
@@ -278,7 +278,7 @@
                   if(item['y']){
                       last_value = Humanize.formatNumber(item['y']);
                   }
-                  return [item['x'] * 1000, item['y'].toFixed(3)]
+                  return [item['x'] * 1000, item['y']]
               }));
               this.volume_chart.series[0].addPoint(this.real_time_volume_data[this.real_time_volume_data.length - 1], true, true)
           }
