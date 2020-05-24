@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 
 /*
@@ -12,7 +11,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -33,6 +31,7 @@ Route::get('exchange/stats/{exchange_id}', 'ApiController@exchange_stats');
  * Fiat
  */
 Route::get('fiat/historical/{timestamp}/{fiat}/{old_fiat?}', 'ApiController@fiat_historical');
+Route::get('fiat/historical_v2/{timestamp}/{fiats}', 'ApiController@fiat_historical_v2');
 Route::get('fiat/all_supported', 'ApiController@list_all_fiat');
 
 

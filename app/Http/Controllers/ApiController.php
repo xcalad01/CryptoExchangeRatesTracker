@@ -442,6 +442,10 @@ class ApiController extends Controller
             $this->check_coin($from);
             $coin_info = $this->check_coin($to);
 
+            if ($start > $end){
+                throw new \Exception('Start > End');
+            }
+
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
             }
@@ -500,7 +504,12 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
+            $this->check_coin($from);
             $coin_info = $this->check_coin($to);
+
+            if ($start > $end){
+                throw new \Exception('Start > End');
+            }
 
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
@@ -513,6 +522,16 @@ class ApiController extends Controller
             }
 
             $historical_available = $this->get_historical_available($exchange, $from);
+            if ($this->check_coin($historical_available->To)->Type == 'fiat'){
+                if ($this->check_coin($to)->Type != 'fiat'){
+                    throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
+                }
+            }
+            else {
+                if ($to != $historical_available->To) {
+                    throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
+                }
+            }
 
 
             $start = intval($start);
@@ -592,7 +611,12 @@ class ApiController extends Controller
         try {
             $this->check_exchange($exchange);
 
+            $this->check_coin($from);
             $coin_info = $this->check_coin($to);
+
+            if ($start > $end){
+                throw new \Exception('Start > End');
+            }
 
             if ($range and !key_exists($range, $this->time_range_config)){
                 throw new \Exception('Time range not supported');
@@ -604,7 +628,16 @@ class ApiController extends Controller
             }
 
             $historical_available = $this->get_historical_available($exchange, $from);
-
+            if ($this->check_coin($historical_available->To)->Type == 'fiat'){
+                if ($this->check_coin($to)->Type != 'fiat'){
+                    throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
+                }
+            }
+            else{
+                if ($to != $historical_available->To){
+                    throw new \Exception("Exchange {$exchange} does not suppoert {$from}/{$to} exchange pair");
+                }
+            }
         }
         catch (\Exception $e){
             return response()->json([
@@ -656,6 +689,28 @@ class ApiController extends Controller
         ], 200);
 
 
+    }
+
+    public function fiat_historical_v2(Request $request, $timestamp, $fiats){
+        $result = array();
+        try{
+            foreach (explode(',', $fiats) as $fiat){
+                $this->check_coin($fiat);
+                $f = $this->get_fiat_historical($fiat, $timestamp);
+                array_push($result, array(
+                    $fiat => $f->Value_USD
+                ));
+
+            }
+            return response()->json([
+                "data" => $result
+            ], 404);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
     }
 
     private function coin_cap_candles($exchange, $from, $to, $start, $end){
@@ -736,6 +791,10 @@ class ApiController extends Controller
 //                    "data" => "Dry completed"
 //                ], 200);
 //            }
+
+            if ($start > $end){
+                throw new \Exception('Start > End');
+            }
 
             if ($range){
                 if (!key_exists($range, $this->time_range_config)){
@@ -864,39 +923,47 @@ class ApiController extends Controller
     }
 
     public function exchange_stats(Request $request, $exchange_id){
-        $to_coins = DB::select(DB::raw("
+        try {
+            $this->check_exchange($exchange_id);
+            $to_coins = DB::select(DB::raw("
             SELECT DISTINCT \"To\" from historical_available where \"Exchange_id\" = '{$exchange_id}';
         "));
 
-        $coin_values_usd = array();
-        foreach ($to_coins as $t_c){
-            $info = $this->check_coin($t_c->To);
-            if ($info->Type == 'fiat'){
-                $coin_value_usd = $this->last_fiat_value($t_c->To);
-                $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->Value_USD;
+            $coin_values_usd = array();
+            foreach ($to_coins as $t_c){
+                $info = $this->check_coin($t_c->To);
+                if ($info->Type == 'fiat'){
+                    $coin_value_usd = $this->last_fiat_value($t_c->To);
+                    $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->Value_USD;
+                }
+                else{
+                    $now =strtotime('now');
+                    $start = strtotime("today", $now);
+                    $end = strtotime("tomorrow", $start) - 1;
+                    $coin_value_usd = $this->value_crypto_asset_fiat($end - $start, $t_c->To, 'usd', $start, $end);
+                    $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->sum;
+                }
             }
-            else{
-                $now =strtotime('now');
-                $start = strtotime("today", $now);
-                $end = strtotime("tomorrow", $start) - 1;
-                $coin_value_usd = $this->value_crypto_asset_fiat($end - $start, $t_c->To, 'usd', $start, $end);
-                $coin_values_usd[$t_c->To] = 1 / $coin_value_usd[0]->sum;
-            }
-        }
 
-        $volume_by_currency = $this->exchange_volume_by_currency($exchange_id, $to_coins, $coin_values_usd);
-        $volume_per_pair = $this->exchange_volume_pair($exchange_id, $coin_values_usd);
+            $volume_by_currency = $this->exchange_volume_by_currency($exchange_id, $to_coins, $coin_values_usd);
+            $volume_per_pair = $this->exchange_volume_pair($exchange_id, $coin_values_usd);
 //        $this->exchange_additional_info_eloquent($exchange_id); # Just for benchmark purposes
-        $additional_info = $this->exchange_additional_info($exchange_id);
+            $additional_info = $this->exchange_additional_info($exchange_id);
 
 
-        return response()->json([
-            "data" => array(
-                "volume_by_currency" => $volume_by_currency,
-                "volume_by_pair" =>  $volume_per_pair,
-                "additional" => $additional_info[0]
-            )
-        ], 200);
+            return response()->json([
+                "data" => array(
+                    "volume_by_currency" => $volume_by_currency,
+                    "volume_by_pair" =>  $volume_per_pair,
+                    "additional" => $additional_info[0]
+                )
+            ], 200);
+        }
+        catch (\Exception $e){
+            return response()->json([
+                "message" => $e->getMessage()
+            ], 404);
+        }
     }
 
     private function exchange_volume_by_currency($exchange_id, $to_coins, $coin_values_usd){
