@@ -131,8 +131,6 @@
           return "No data";
         }
 
-        console.log("DAY PRICE");
-        console.log(this.day_price);
         return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + Humanize.formatNumber(this.day_price, 4);
       }
     },
@@ -182,7 +180,7 @@
             this.day_price = data['data'][0][1].toFixed(3);
         }
         else{
-            this.day_price = "No data available :("
+            this.day_price = null;
         }
         this.loading_day_price = false;
         if (init){
