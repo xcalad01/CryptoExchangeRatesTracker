@@ -127,8 +127,8 @@
 
     computed: {
       currency_day_price(){
-        if (this.day_price == null){
-          return null;
+        if (!this.day_price){
+          return "No data";
         }
 
         return getSymbolFromCurrency(this.post.to.toUpperCase()) + " " + Humanize.formatNumber(this.day_price, 4);
