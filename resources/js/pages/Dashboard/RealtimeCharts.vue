@@ -384,7 +384,7 @@
         });
         this.realtime_chart.series[0].setData(new_data);
         this.real_time_data = new_data;
-        this.last_realtime_value = Humanize.formatNumber(this.real_time_data[this.real_time_data.length - 1], 3);
+        this.last_realtime_value = Humanize.formatNumber(this.real_time_data[this.real_time_data.length - 1][1], 3);
       },
 
       finish_change_to_volume(data){
@@ -398,7 +398,7 @@
         });
         this.volume_chart.series[0].setData(new_data);
         this.real_time_volume_data = new_data;
-        this.last_realtime_volume = Humanize.formatNumber(this.real_time_volume_data[this.real_time_volume_data.length - 1], 3);
+        this.last_realtime_volume = Humanize.formatNumber(this.real_time_volume_data[this.real_time_volume_data.length - 1][1], 3);
         // this.last_realtime_volume = (this.last_realtime_volume / old_fiat * new_fiat).toFixed(3);
 
       },
