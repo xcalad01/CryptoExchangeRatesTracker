@@ -1,5 +1,14 @@
 <?php
 
+/**
+ *
+ * init_db_crypto_task.php
+ *
+ * Init db with crypto data
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ */
+
 namespace App\Modules;
 
 

@@ -226,4 +226,18 @@ class ApiTest extends TestCase
         $response = $this->get('/api/fiat/all_supported');
         $response->assertStatus(200);
     }
+
+    /**
+     * Test fiat historical v2 endpoint
+     *
+     * @return void
+     */
+    public function test_fiat_historical_v2(){
+        $response = $this->get('/api/fiat/historical_v2/1377836800/usd,eur');
+        $response->assertStatus(200);
+
+        $response = $this->get('/api/fiat/historical_v2/1377836800/usd,eur,x');
+        $response->assertStatus(404);
+        $response->assertExactJson(array("message" => "Coin x is not supported"));
+    }
 }
