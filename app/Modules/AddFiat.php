@@ -119,8 +119,11 @@ class AddFiat extends Base
      * Inits db with fiat data step-by-step from {$timestamp} to {$end_timestamp}
      */
     public function run_init_db_task(){
-        $timestamp = 1433635200; // start timestamp
-        $end_timestamp = 1588550400;
+        $timestamp = getenv('FIAT_START'); // start timestamp
+        $end_timestamp = getenv('FIAT_END');
+
+        print_r($timestamp);
+        print_r($end_timestamp);
 
         try {
             while ($timestamp < $end_timestamp) {

@@ -20,8 +20,6 @@ use App\Exchange;
 use App\Historical_available;
 use App\CryptoHistorical;
 use App\Cryptocurrencies;
-use App\Crypto_exchange_pair;
-use App\Crypto_fiat_exchange_pair;
 use App\Fiat;
 use App\Fiat_historical;
 use App\Modules\Stats;
@@ -346,6 +344,7 @@ class ApiController extends Controller
             $fiat = new Fiat;
             $fiat->Fiat_id = $item["Id"];
             $fiat->Name = $item["Name"];
+            $fiat->save();
         }
 
         $fiat_hist = Fiat_historical::where(["Date" => $this->get_timestamp($item["Key"]), "Fiat_id" => $item['Id']])->first();
@@ -783,14 +782,14 @@ class ApiController extends Controller
             $this->check_coin($crypto_id);
             $convert_to_info = $this->check_coin($convert_to_id);
 
-//            if (($end - $start) <= 86400 ){ # TODO: remove, this is temporary
-//                $this->check_availability_of_asset_data($crypto_id, $start, $end);
-//            }
-//            if ($dry){
-//                return response()->json([
-//                    "data" => "Dry completed"
-//                ], 200);
-//            }
+            if (($end - $start) <= 86400 ){
+                $this->check_availability_of_asset_data($crypto_id, $start, $end);
+            }
+            if ($dry){
+                return response()->json([
+                    "data" => "Dry completed"
+                ], 200);
+            }
 
             if ($start > $end){
                 throw new \Exception('Start > End');

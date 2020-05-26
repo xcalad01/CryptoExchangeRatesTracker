@@ -24,17 +24,16 @@ class Stats
     public $statsd;
 
     /**
-     * Config of host and port
-     * TODO: make env variables for this !
-     * @var array
+     * Datadog host
+     * @var array|false|string
      */
-    private $config = array(
-        "host" => "167.86.75.179",
-        "port" => 8125
-    );
-
+    private $datadog_host;
 
     public function __construct() {
-        $this->statsd = new DogStatsd($this->config);
+        $this->datadog_host = getenv('DD_AGENT_HOST');
+        $this->statsd = new DogStatsd(array(
+            "host" => $this->datadog_host,
+            "port" => 8125
+        ));
     }
 }

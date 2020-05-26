@@ -2,6 +2,7 @@ version: '3'
 
 services:
   workspace:
+    container_name: "workspace"
     build:
       context: ./workspace
       args:
@@ -12,6 +13,8 @@ services:
         - NODE_VERSION=${WORKSPACE_NODE_VERSION}
         - TZ=${WORKSPACE_TIMEZONE}
         - INSTALL_DATADOG_TRACING=${INSTALL_DATADOG_TRACING}
+        - FIAT_START=${FIAT_START}
+        - FIAT_END=${FIAT_END}
         - http_proxy
         - https_proxy
         - no_proxy
@@ -35,6 +38,7 @@ services:
       - DD_TRACE_DEBUG=${DD_TRACE_DEBUG}
 
   php-fpm:
+    container_name: "php_fpm"
     build:
       context: ./php-fpm
       args:
@@ -58,6 +62,7 @@ services:
       - workspace
 
   nginx:
+    container_name: "nginx"
     build:
       context: ./nginx
       args:
@@ -78,11 +83,12 @@ services:
       - php-fpm
 
   db:
+    container_name: "postgres"
     image: "postgres:latest"
     restart: unless-stopped
     tty: true
     ports:
-    - "5432:5432"
+    - "${DB_PORT}:5432"
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
