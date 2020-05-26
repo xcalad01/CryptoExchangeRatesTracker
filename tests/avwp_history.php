@@ -121,7 +121,6 @@ foreach ($response as $cgp){
 
 $file_handle = fopen('tests/avwp_history.csv', 'a');
 $counter = 0;
-$diff = 0;
 foreach ($dates as $date){
     $timestamp = strtotime($date);
     $internal_price = query_internal($date)[0][1];
@@ -130,17 +129,16 @@ foreach ($dates as $date){
 
     if ($internal_price){
         if($coin_base){
-            $diff += abs($internal_price - $coin_base);
+            $coin_base_diff = abs($internal_price - $coin_base) / ($internal_price + $coin_base) * 100;
         }
         else{
             continue;
         }
 
         if ($coin_gecko_price){
-            $diff += abs($internal_price - $coin_gecko_price);
+            $coin_gecko_diff = abs($internal_price - $coin_gecko_price) / ($internal_price + $coin_gecko_price) * 100;
         }
         else{
-            $diff -= abs($internal_price - $coin_base);
             continue;
         }
     }
@@ -149,8 +147,6 @@ foreach ($dates as $date){
     }
 
     $counter += 2;
-    fputcsv($file_handle, array($date, $internal_price, $coin_gecko_price, $coin_base)); # $line is an array of string values here
+    fputcsv($file_handle, array($date, $internal_price, $coin_gecko_price, $coin_gecko_diff, $coin_base, $coin_base_diff)); # $line is an array of string values here
     print_r(array($date, $internal_price, $coin_gecko_price, $coin_base));
 }
-
-print_r($diff / $counter);

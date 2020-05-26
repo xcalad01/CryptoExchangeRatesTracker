@@ -2,21 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="334bcfdc-ab3d-416f-8bc7-94b0522c9510" name="Default Changelist" comment="Classes added">
+<<<<<<< Updated upstream
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/bakalarka.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bakalarka.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Historical_five_min.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/CryptoHistorical.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Modules/AddExchange.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/AddExchange.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Modules/CryptoHist.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/CryptoHist.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Modules/add_cryptos.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/add_cryptos.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Modules/add_exchanges.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/add_exchanges.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_04_200515_create_historical_five_mins_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_09_113603_create_crypto_exchange_pairs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_09_113603_create_crypto_exchange_pairs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_09_150435_create_fiats_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_09_150435_create_fiats_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_09_150837_create_crypto_fiat_exchange_pairs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_09_150837_create_crypto_fiat_exchange_pairs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_17_200130_create_fiat_historicals_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_17_200130_create_fiat_historicals_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Console/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Modules/init_db_crypto_task.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Modules/init_db_crypto_task.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phpunit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/phpunit.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Feature/ApiTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Feature/ApiTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/avwp_avg_perc_data.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/avwp_avg_perc_data.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/avwp_history.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/avwp_history.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/avwp_history.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/avwp_history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/dollar_diffs.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tests/dollar_diffs.csv" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,29 +52,29 @@
     <expand>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="bakalarka@167.86.75.179" type="feb32156:DbDataSourceImpl" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="bakalarka@167.86.75.179" type="feb32156:DbDataSourceImpl" />
         <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="bakalarka@167.86.75.179" type="feb32156:DbDataSourceImpl" />
         <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="bakalarka: database" type="162271b6:PgImplModel$Database" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="bakalarka@167.86.75.179" type="feb32156:DbDataSourceImpl" />
         <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="bakalarka: database" type="162271b6:PgImplModel$Database" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="bakalarka@167.86.75.179" type="feb32156:DbDataSourceImpl" />
         <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="bakalarka: database" type="162271b6:PgImplModel$Database" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
@@ -73,7 +82,7 @@
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="bakalarka@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="bakalarka@167.86.75.179" type="feb32156:DbDataSourceImpl" />
         <item name="databases" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="bakalarka: database" type="162271b6:PgImplModel$Database" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
@@ -87,12 +96,21 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="package.json" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.4">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
@@ -183,6 +201,17 @@
       <path value="$PROJECT_DIR$/vendor/league/flysystem" />
       <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
       <path value="" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/dbal" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/cache" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/vendor/predis/predis" />
+      <path value="$PROJECT_DIR$/vendor/mtrajano/laravel-swagger" />
+      <path value="$PROJECT_DIR$/vendor/codenix-sv/coingecko-api" />
     </include_path>
   </component>
   <component name="ProjectId" id="1XJH6UMzAWOq3BgKAHgzT0VhODw" />
@@ -196,13 +225,24 @@
     <property name="DatabaseDriversLRU" value="postgresql" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/workspace" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="debugger.dataViews" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/js" />
+      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$/resources/js/components/charts" />
       <recent name="$PROJECT_DIR$/app/Modules" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/workspace" />
+      <recent name="$PROJECT_DIR$/nginx" />
+      <recent name="$PROJECT_DIR$/php-fpm" />
+      <recent name="$PROJECT_DIR$/node_modules" />
+      <recent name="$PROJECT_DIR$/resources/sass" />
     </key>
   </component>
   <component name="RunManager" selected="PHP Script.debug">
@@ -218,7 +258,7 @@
       </CommandLine>
       <method v="2" />
     </configuration>
-    <configuration name="debug" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/artisan" scriptParameters="crypto:hist">
+    <configuration name="debug" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="app/db_benchmark/value_query_timestamp.php">
       <CommandLine>
         <PhpTestInterpreterSettings>
           <option name="interpreterName" value="PHP 7.4" />
@@ -251,12 +291,7 @@
       <list>
         <serviceView>
           <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:bakalarka@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </treeState>
         </serviceView>
@@ -284,6 +319,31 @@
       <workItem from="1581964941754" duration="8053000" />
       <workItem from="1582378405855" duration="12032000" />
       <workItem from="1582968780976" duration="8428000" />
+      <workItem from="1585822906775" duration="2053000" />
+      <workItem from="1585900466013" duration="1444000" />
+      <workItem from="1585931297161" duration="62474000" />
+      <workItem from="1586165067870" duration="29727000" />
+      <workItem from="1586346562151" duration="362000" />
+      <workItem from="1586419393638" duration="33790000" />
+      <workItem from="1586633600180" duration="10981000" />
+      <workItem from="1586874628199" duration="13927000" />
+      <workItem from="1587033849256" duration="292000" />
+      <workItem from="1587217991397" duration="8784000" />
+      <workItem from="1587242802656" duration="1059000" />
+      <workItem from="1587297581405" duration="2297000" />
+      <workItem from="1587394964632" duration="12706000" />
+      <workItem from="1587491483860" duration="75483000" />
+      <workItem from="1587986237322" duration="17821000" />
+      <workItem from="1588269910986" duration="7187000" />
+      <workItem from="1588342652388" duration="962000" />
+      <workItem from="1588600472106" duration="17985000" />
+      <workItem from="1588697960061" duration="10311000" />
+      <workItem from="1588772619134" duration="57319000" />
+      <workItem from="1589037363136" duration="31054000" />
+      <workItem from="1589383468804" duration="11153000" />
+      <workItem from="1589537325105" duration="339000" />
+      <workItem from="1589550907848" duration="26479000" />
+      <workItem from="1589984424915" duration="24015000" />
     </task>
     <task id="LOCAL-00001" summary="Classes added">
       <created>1581796447766</created>
@@ -292,7 +352,14 @@
       <option name="project" value="LOCAL" />
       <updated>1581796447766</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refactoring">
+      <created>1588360310806</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1588360310806</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -300,17 +367,17 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Classes added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Classes added" />
+    <MESSAGE value="Refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactoring" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="309" y="112" key="#CLI_Interpreters" timestamp="1581794200337">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="309" y="112" key="#CLI_Interpreters/0.0.1440.900@0.0.1440.900" timestamp="1581794200337" />
     <state x="320" y="115" key="#Inspections" timestamp="1582403999978">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="115" key="#Inspections/0.0.1440.900@0.0.1440.900" timestamp="1582403999978" />
+<<<<<<< Updated upstream
+    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582981298594">
+=======
     <state x="396" y="35" key="#PHP" timestamp="1581794202792">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -319,58 +386,84 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="429" y="145" key="#Unnamed/0.0.1440.900@0.0.1440.900" timestamp="1581794145869" />
-    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582981298594">
+    <state x="609" y="120" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589140286277">
+>>>>>>> Stashed changes
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1582981298594" />
-    <state x="444" y="260" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582383046276">
+    <state x="609" y="120" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1589140286277" />
+    <state x="444" y="260" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1589895649261">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="444" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1582383046276" />
+    <state x="444" y="260" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1440.900@0.0.1440.900" timestamp="1589895649261" />
     <state x="216" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1582981504283">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="216" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1440.900@0.0.1440.900" timestamp="1582981504283" />
-    <state x="458" y="212" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1581766139568">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="458" y="212" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1440.900@0.0.1440.900" timestamp="1581766139568" />
-    <state x="429" y="145" key="#debug" timestamp="1581794205509">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="429" y="145" key="#debug/0.0.1440.900@0.0.1440.900" timestamp="1581794205509" />
-    <state x="429" y="178" key="#docker-compose.dev.yml:_Compose_Deployment" timestamp="1581863280318">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="429" y="178" key="#docker-compose.dev.yml:_Compose_Deployment/0.0.1440.900@0.0.1440.900" timestamp="1581863280318" />
+<<<<<<< Updated upstream
     <state x="314" y="52" key="CommitChangelistDialog2" timestamp="1582981604669">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="314" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1582981604669" />
+    <state width="1398" height="303" key="GridCell.Tab.0.bottom" timestamp="1582981310896">
+      <screen x="0" y="0" width="1440" height="900" />
+=======
+    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1589040787318">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="458" y="204" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1440.900@0.0.1440.900" timestamp="1589040787318" />
+    <state x="458" y="212" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1587238080506">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="458" y="212" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1440.900@0.0.1440.900" timestamp="1587238080506" />
+    <state x="0" y="0" width="476" height="900" key="#com.jetbrains.php.refactoring.extractMethod.PhpExtractMethodDialog#method1" timestamp="1589744186040">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="0" y="0" width="476" height="900" key="#com.jetbrains.php.refactoring.extractMethod.PhpExtractMethodDialog#method1/0.0.1440.900@0.0.1440.900" timestamp="1589744186040" />
+    <state x="429" y="145" key="#debug" timestamp="1589020015445">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="429" y="145" key="#debug/0.0.1440.900@0.0.1440.900" timestamp="1589020015445" />
+    <state x="429" y="178" key="#docker-compose.dev.yml:_Compose_Deployment" timestamp="1581863280318">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="429" y="178" key="#docker-compose.dev.yml:_Compose_Deployment/0.0.1440.900@0.0.1440.900" timestamp="1581863280318" />
+    <state x="314" y="52" key="CommitChangelistDialog2" timestamp="1588360310404">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="314" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1588360310404" />
     <state x="144" y="78" key="DiffContextDialog" timestamp="1581796413551">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="144" y="78" key="DiffContextDialog/0.0.1440.900@0.0.1440.900" timestamp="1581796413551" />
-    <state width="1398" height="303" key="GridCell.Tab.0.bottom" timestamp="1582981310896">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="273" y="56" key="FileDocumentManager.FileCacheConflict" timestamp="1589913881867">
+      <screen x="0" y="23" width="1440" height="877" />
+>>>>>>> Stashed changes
     </state>
-    <state width="1398" height="303" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1582981310896" />
+    <state x="273" y="56" key="FileDocumentManager.FileCacheConflict/0.23.1440.877@0.23.1440.877" timestamp="1589913881867" />
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1586346387760">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1586167864180" />
     <state width="1398" height="303" key="GridCell.Tab.0.bottom/0.23.1440.823@0.23.1440.823" timestamp="1582410768080" />
-    <state width="1398" height="303" key="GridCell.Tab.0.center" timestamp="1582981310895">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1586346387760" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1586346387759">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="303" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1582981310895" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1586167864179" />
     <state width="1398" height="303" key="GridCell.Tab.0.center/0.23.1440.823@0.23.1440.823" timestamp="1582410768079" />
-    <state width="1398" height="303" key="GridCell.Tab.0.left" timestamp="1582981310894">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1586346387759" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1586346387756">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="303" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1582981310894" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1586167864178" />
     <state width="1398" height="303" key="GridCell.Tab.0.left/0.23.1440.823@0.23.1440.823" timestamp="1582410768079" />
-    <state width="1398" height="303" key="GridCell.Tab.0.right" timestamp="1582981310896">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1586346387756" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1586346387760">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state width="1398" height="303" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1582981310896" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1586167864179" />
     <state width="1398" height="303" key="GridCell.Tab.0.right/0.23.1440.823@0.23.1440.823" timestamp="1582410768079" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1586346387760" />
     <state width="1398" height="303" key="GridCell.Tab.1.bottom" timestamp="1582981311138">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -395,70 +488,73 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="234" height="457" key="HiddenNamespacesPopup/0.0.1440.900@0.0.1440.900" timestamp="1582970512135" />
-    <state x="472" y="273" key="NewPhpClassDialog" timestamp="1581767779215">
+<<<<<<< Updated upstream
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1582981611710">
+=======
+    <state x="472" y="273" key="NewPhpClassDialog" timestamp="1585992375074">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="472" y="273" key="NewPhpClassDialog/0.0.1440.900@0.0.1440.900" timestamp="1581767779215" />
-    <state x="541" y="380" key="NewPhpFileDialog" timestamp="1581083708664">
+    <state x="472" y="273" key="NewPhpClassDialog/0.0.1440.900@0.0.1440.900" timestamp="1585992375074" />
+    <state x="541" y="380" key="NewPhpFileDialog" timestamp="1589918321878">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="541" y="380" key="NewPhpFileDialog/0.0.1440.900@0.0.1440.900" timestamp="1581083708664" />
+    <state x="541" y="380" key="NewPhpFileDialog/0.0.1440.900@0.0.1440.900" timestamp="1589918321878" />
     <state x="229" y="89" key="SettingsEditor" timestamp="1581794627014">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1581794627014" />
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1582981611710">
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2" timestamp="1588360314019">
+>>>>>>> Stashed changes
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1582981611710" />
+    <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1588360314019" />
     <state width="720" height="493" key="XDebugger.FullValuePopup" timestamp="1582981360767">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="720" height="493" key="XDebugger.FullValuePopup/0.0.1440.900@0.0.1440.900" timestamp="1582981360767" />
     <state width="720" height="493" key="XDebugger.FullValuePopup/0.23.1440.823@0.23.1440.823" timestamp="1581975724655" />
-    <state x="399" y="281" key="com.intellij.ide.util.TipDialog" timestamp="1582968781911">
-      <screen x="0" y="23" width="1440" height="823" />
+    <state x="399" y="313" key="com.intellij.ide.util.TipDialog" timestamp="1589984426632">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="399" y="282" key="com.intellij.ide.util.TipDialog/0.0.1440.900@0.0.1440.900" timestamp="1582378405572" />
+    <state x="399" y="313" key="com.intellij.ide.util.TipDialog/0.0.1440.900@0.0.1440.900" timestamp="1589551186237" />
     <state x="399" y="281" key="com.intellij.ide.util.TipDialog/0.23.1440.823@0.23.1440.823" timestamp="1582968781911" />
+<<<<<<< Updated upstream
+    <state x="386" y="85" width="667" height="729" key="find.popup" timestamp="1590520212054">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="386" y="85" width="667" height="729" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1590520212054" />
+=======
+    <state x="399" y="313" key="com.intellij.ide.util.TipDialog/0.23.1440.877@0.23.1440.877" timestamp="1589984426632" />
+    <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1589442587338">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1589442587338" />
     <state x="0" y="0" key="com.jetbrains.php.config.phpInfo.PhpInfo.PhpInfoDialog" timestamp="1581794247409">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="0" y="0" key="com.jetbrains.php.config.phpInfo.PhpInfo.PhpInfoDialog/0.0.1440.900@0.0.1440.900" timestamp="1581794247409" />
-    <state x="386" y="85" width="667" height="729" key="find.popup" timestamp="1582405447783">
+    <state x="386" y="85" width="819" height="729" key="find.popup" timestamp="1589743948762">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="386" y="85" width="667" height="729" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1582405447783" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1581862161185">
+    <state x="386" y="85" width="819" height="729" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1589743948762" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1589895962027">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1581862161185" />
-    <state x="520" y="353" key="svn.passwordDialog" timestamp="1581159055125">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="520" y="353" key="svn.passwordDialog/0.0.1440.900@0.0.1440.900" timestamp="1581159055125" />
-    <state x="503" y="146" key="svn.repositoryBrowser" timestamp="1581158882247">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="503" y="146" key="svn.repositoryBrowser/0.0.1440.900@0.0.1440.900" timestamp="1581158882247" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1589895962027" />
+>>>>>>> Stashed changes
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/app/Modules/Base.php</url>
-          <line>52</line>
+          <line>119</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/app/Modules/AddFiat.php</url>
-          <line>67</line>
+          <line>105</line>
           <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/app/Console/Commands/CryptoCurrentCommand.php</url>
-          <line>42</line>
-          <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Console/Scheduling/Event.php</url>
@@ -467,7 +563,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/app/Modules/CryptoHist.php</url>
-          <line>72</line>
+          <line>105</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
@@ -476,19 +572,18 @@
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/app/Modules/add_exchanges.php</url>
-          <line>4</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/app/Modules/AddExchange.php</url>
-          <line>43</line>
-          <option name="timeStamp" value="34" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/app/Http/Controllers/ApiController.php</url>
-          <line>35</line>
+<<<<<<< Updated upstream
+          <line>33</line>
+=======
+          <line>99</line>
+>>>>>>> Stashed changes
           <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Modules/init_db_crypto_task.php</url>
+          <line>31</line>
+          <option name="timeStamp" value="45" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
