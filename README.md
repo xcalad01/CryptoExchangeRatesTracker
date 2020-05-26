@@ -49,6 +49,3 @@ You can use tmux sessions as adding 8+ years of data is pretty long running proc
 ## Test API
 > 👉 Note: phpunit is required to be installed
 * from root folder -> ./vendor/bin/phpunit
-
-
-## Important ENV. Variables
