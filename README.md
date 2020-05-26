@@ -16,6 +16,8 @@ https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1
 
 * chmod -R 777 storage
 
+* npm run dev
+
 ## Datadog tracing
 https://docs.datadoghq.com/tracing/setup/php/
 
