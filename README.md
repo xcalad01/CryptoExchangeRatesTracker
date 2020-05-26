@@ -8,7 +8,7 @@ https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1
 
 * docker-compose up
 
-* docker exec -it bakalarka_workspace_1 bash
+* docker exec -it workspace
 
 * nohup php -S 0.0.0.0:8000 -t public/ > /var/log/bakalarka/server.log &
 
