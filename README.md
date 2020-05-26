@@ -22,7 +22,7 @@ https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1
 
 * npm run dev
 
-After that, the system starts to collect the data in regular interval
+After that, the system starts to collect the data in regular intervals
 
 ## Datadog tracing
 https://docs.datadoghq.com/tracing/setup/php/
