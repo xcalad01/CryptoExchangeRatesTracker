@@ -88,42 +88,48 @@ class HitBtc extends Base
         $this->set_curl_url($url);
         $data = $this->do_send_get();
         foreach ($this->config as $key){
-            if (strpos($key, '-') !== false) {
-                $from = substr($key,0, strpos($key, '-'));
-                $to = substr($key,strpos($key, '-') + 1, 3);
-                $key = "{$from}{$to}";
+            try{
+                if (strpos($key, '-') !== false) {
+                    $from = substr($key,0, strpos($key, '-'));
+                    $to = substr($key,strpos($key, '-') + 1, 3);
+                    $key = "{$from}{$to}";
 
-            }
-            else if (strpos($key, '/') !== false) {
-                $from = substr($key,0, strpos($key, '/'));
-                $to = substr($key,strpos($key, '/') + 1, 4);
-                $key = "{$from}{$to}";
-            }
-            else{
-                $from = strtolower(substr($key,0, 3));
-                $to = strtolower(substr($key, 3, 3));
-            }
-            $from = strtolower($from);
-            $to = strtolower($to);
-            $key_data = $data[$key];
-            if ($key_data){
-                $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $this->exchange_id, 'from' => $from, 'to' => $to));
+                }
+                else if (strpos($key, '/') !== false) {
+                    $from = substr($key,0, strpos($key, '/'));
+                    $to = substr($key,strpos($key, '/') + 1, 4);
+                    $key = "{$from}{$to}";
+                }
+                else{
+                    $from = strtolower(substr($key,0, 3));
+                    $to = strtolower(substr($key, 3, 3));
+                }
+                $from = strtolower($from);
+                $to = strtolower($to);
+                $key_data = $data[$key];
+                if ($key_data){
+                    $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $this->exchange_id, 'from' => $from, 'to' => $to));
 
-                array_push($results, array(
-                    "Exchange_id" => $this->exchange_id,
-                    "From" => $from,
-                    "To" => $to,
-                    "Timestamp" => $this->start_timestamp,
-                    "Historical" => array(
-                        null,
-                        $key_data[0]['open'],
-                        $key_data[0]['max'],
-                        $key_data[0]['min'],
-                        $key_data[0]['close'],
-                        $key_data[0]['volume']
-                    )
-                ));
+                    array_push($results, array(
+                        "Exchange_id" => $this->exchange_id,
+                        "From" => $from,
+                        "To" => $to,
+                        "Timestamp" => $this->start_timestamp,
+                        "Historical" => array(
+                            null,
+                            $key_data[0]['open'],
+                            $key_data[0]['max'],
+                            $key_data[0]['min'],
+                            $key_data[0]['close'],
+                            $key_data[0]['volume']
+                        )
+                    ));
+                }
             }
+            catch (\Exception $e){
+                print_r($e->getMessage());
+            }
+
         }
 
         print_r("API resutls: \n");
