@@ -210,6 +210,7 @@
       },
 
       onChangeTo(){
+          if (("" + this.post.start).includes("T")){return;}
           this.loading_day_price = true;
           var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + this.post.start + "/" + this.post.to + "/" + this.old_to;
           this.old_to = this.post.to;
