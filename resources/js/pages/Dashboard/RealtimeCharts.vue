@@ -188,8 +188,11 @@
           }]
         };
 
+          if (this.timeout_id_value){
+              this.clear_value_realtime_timeouts_intervals();
+          }
         this.realtime_chart = new Highcharts.Chart(options);
-
+        this.lastDateValue = null;
         this.getNewSeriesValue(true);
 
         this.timeout_id_value = setTimeout(function () {
@@ -238,7 +241,11 @@
           }]
         };
 
+        if (this.timeout_id_volume){
+           this.clear_volume_realtime_timeouts_intervals();
+        }
         this.volume_chart = new Highcharts.Chart(options);
+        this.lastDateVolume = null;
         this.getNewSeriesVolume(true);
 
         this.timeout_id_volume = setTimeout(function () {
@@ -295,9 +302,10 @@
       },
 
       getNewSeriesValue(init){
-        if (this.lastDateValue == null) {
+        if (!this.lastDateValue) {
           this.lastDateValue = new Date().setSeconds(0, 0) / 1000;
         }
+
         if (init){
           var now = new Date() / 1000;
           this.real_time_value_interval = (this.lastDateValue + 60 + 50) - now;
@@ -316,7 +324,7 @@
       },
 
       getNewSeriesVolume(init){
-        if (this.lastDateVolume == null) {
+        if (!this.lastDateVolume) {
           this.lastDateVolume = new Date().setSeconds(0, 0) / 1000;
         }
 
