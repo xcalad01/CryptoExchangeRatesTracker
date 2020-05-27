@@ -119,7 +119,7 @@ foreach ($response as $cgp){
     $coin_gecko_prices[$cgp[0] / 1000] = $cgp[1];
 }
 
-$file_handle = fopen('tests/avwp_history.csv', 'a');
+$file_handle = fopen('tests/Table 6.1.csv', 'a');
 $counter = 0;
 foreach ($dates as $date){
     $timestamp = strtotime($date);

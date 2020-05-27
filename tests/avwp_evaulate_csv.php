@@ -42,7 +42,7 @@ function price_diffs(){
             $dollar_diff_apis = $dollar_diff_apis / 3;
 
 
-            $file_handle = fopen('tests/dollar_diffs.csv', 'a');
+            $file_handle = fopen('tests/Figure 6.3.csv', 'a');
             fputcsv($file_handle, array($dollar_diff, $dollar_diff_apis));
         }
         fclose($handle);
@@ -57,7 +57,7 @@ function price_development(){
             if(in_array(0, $prices_array)){
                 continue;
             }
-            $file_handle = fopen('tests/prices_development.csv', 'a');
+            $file_handle = fopen('tests/Figure 6.1.csv', 'a');
             fputcsv($file_handle, $prices_array);
         }
         fclose($handle);
