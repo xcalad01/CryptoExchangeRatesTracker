@@ -1,3 +1,11 @@
+<!--
+ * Assets_dashboard.vue
+ *
+ * Assets Dashboard
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ -->
+
 <template>
   <div>
       <br>

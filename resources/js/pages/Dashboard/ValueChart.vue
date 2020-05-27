@@ -1,3 +1,11 @@
+<!--
+ * ValueChart.vue
+ *
+ * Value Chart component
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ -->
+
 <template>
   <div>
     <div class="row">

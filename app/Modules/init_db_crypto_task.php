@@ -13,6 +13,10 @@ namespace App\Modules;
 
 
 $curl = curl_init();
+
+/**
+ * Start timestamp
+ */
 $timestamp = 1488153284;
 
 $coins = array(
@@ -41,6 +45,9 @@ $coins = array(
 
 print_r("starting\n");
 
+/**
+ * gradually inits asset data for exchanges where it is suppported and given timestamp
+ */
 try {
     while ($timestamp < 1588550400){
         print_r(date("%Y-%m-%d\n", $timestamp));

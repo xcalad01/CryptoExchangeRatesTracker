@@ -1,3 +1,11 @@
+<!--
+ * Dashboard/QuickStats.vue
+ *
+ * Exchange quick stats component
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ -->
+
 <template>
     <div>
         <div class="row quick_stats_margin">

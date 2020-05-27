@@ -1,3 +1,11 @@
+<!--
+ * Exchange_dashboard.vue
+ *
+ * Exchange Dashboard
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ -->
+
 <template>
   <div>
     <div class="button_row">

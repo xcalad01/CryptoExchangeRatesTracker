@@ -1,3 +1,11 @@
+<!--
+ * Value.vue
+ *
+ * Value and converter component
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ -->
+
 <template>
   <div>
     <div class="row">

@@ -1,3 +1,11 @@
+<!--
+ * AvwpChart.vue
+ *
+ *  Average volume-weighted price chart component
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ -->
+
 <template>
   <div>
     <div class="row">

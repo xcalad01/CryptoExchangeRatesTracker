@@ -1,3 +1,11 @@
+<!--
+ * RealtimeCharts.vue
+ *
+ * Realtime charts component
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ -->
+
 <template>
     <div class="row realtime_margin">
         <div class="col-lg-4">

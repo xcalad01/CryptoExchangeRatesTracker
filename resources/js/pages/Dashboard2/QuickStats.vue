@@ -1,3 +1,11 @@
+<!--
+ * Dashboard2/QuickStats.vue
+ *
+ * Asset quick stats component
+ * @author     Filip Caladi (xcalad01)
+ * @license    MIT
+ -->
+
 <template>
     <div>
         <div class="row">
