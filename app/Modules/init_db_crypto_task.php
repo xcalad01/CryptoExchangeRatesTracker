@@ -17,7 +17,9 @@ $curl = curl_init();
 /**
  * Start timestamp
  */
-$timestamp = 1488153284;
+$timestamp = getenv('INIT_CRYPTO_START');
+
+$end_timestamp = getenv('INIT_CRYPTO_END');
 
 $coins = array(
     "btc",
@@ -49,7 +51,7 @@ print_r("starting\n");
  * gradually inits asset data for exchanges where it is suppported and given timestamp
  */
 try {
-    while ($timestamp < 1588550400){
+    while ($timestamp < $end_timestamp){
         print_r(date("%Y-%m-%d\n", $timestamp));
         $start = $timestamp;
         $end = $start + 86399;
