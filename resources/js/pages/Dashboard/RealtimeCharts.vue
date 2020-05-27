@@ -259,7 +259,7 @@
           this.realtime_chart.series[0].setData(this.real_time_data);
         }
         else{
-          this.real_time_data.push([date * 1000, data['data'][0][1]]);
+          this.real_time_data.push([data['data'][0][0] * 1000, data['data'][0][1]]);
           this.realtime_chart.series[0].addPoint(this.real_time_data[this.real_time_data.length - 1], true, true);
           if (data['data']){
             this.last_realtime_value = Humanize.formatNumber(data['data'][0][1], 3);
