@@ -49,3 +49,15 @@ If no database snapshot is available, you can use tmux sessions as adding 8+ yea
 ## Test API
 > 👉 Note: phpunit is required to be installed
 * from root folder -> ./vendor/bin/phpunit
+
+## Important ENV Variables
+
+* MIX_API_URL => api url
+* MIX_API_PORT => api port
+
+* DB_HOST
+* DB_DATABASE => name of the database
+* DB_USERNAME
+* DB_PASSWORD
+
+
