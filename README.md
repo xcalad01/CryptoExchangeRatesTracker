@@ -12,7 +12,7 @@ https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1
 
 * chmod +x entrypoint.sh && ./entrypoint.sh
 
-After that, the system starts to collect the data in regular intervals, API and UI should be deployed.
+After that, the system will start to collect the data in regular intervals, API and UI should be deployed.
 
 ## Datadog tracing
 https://docs.datadoghq.com/tracing/setup/php/
