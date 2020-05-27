@@ -21,6 +21,9 @@ $timestamp = getenv('INIT_CRYPTO_START');
 
 $end_timestamp = getenv('INIT_CRYPTO_END');
 
+$api_host = getenv('API_HOST');
+$api_port = getenv('API_PORT');
+
 $coins = array(
     "btc",
     "trx",
@@ -45,6 +48,7 @@ $coins = array(
     "usdt",
 );
 
+
 print_r("starting\n");
 
 /**
@@ -56,7 +60,7 @@ try {
         $start = $timestamp;
         $end = $start + 86399;
         foreach ($coins as $coin){
-            $url = "http://167.86.75.179:8001/api/crypto/historical/asset/value/{$coin}/usd/{$start}/{$end}/range/dry";
+            $url = "http://{$api_host}:{$api_port}/api/crypto/historical/asset/value/{$coin}/usd/{$start}/{$end}/1m/dry";
             print_r($url."\n");
             curl_setopt_array($curl, array(
                 CURLOPT_URL => $url,
@@ -69,7 +73,7 @@ try {
                 CURLOPT_CUSTOMREQUEST => "GET",
             ));
 
-            curl_exec($curl);
+            print_r(curl_exec($curl));
 
 
         }

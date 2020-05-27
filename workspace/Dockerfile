@@ -45,6 +45,7 @@ RUN apt-get update && \
         vim \
         nano \
         postgresql-client \
+        tmux \
     && apt-get clean
 
 ARG LARADOCK_PHP_VERSION

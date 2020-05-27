@@ -43,6 +43,8 @@ services:
       - DD_TRACE_DEBUG=${DD_TRACE_DEBUG}
       - FIAT_START=${FIAT_START}
       - FIAT_END=${FIAT_END}
+      - API_HOST=${MIX_API_URL}
+      - API_PORT=${MIX_API_PORT}
 
   php-fpm:
     container_name: "php_fpm"
