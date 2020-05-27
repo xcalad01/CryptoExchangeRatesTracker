@@ -1,3 +1,10 @@
+#
+#  docker-compose.yml
+#
+#  docker-compose architecture inspired by laradock (https://github.com/laradock/laradock)
+#  @author     Filip Caladi (xcalad01)
+#  @license    MIT
+#
 version: '3'
 
 services:
@@ -13,8 +20,6 @@ services:
         - NODE_VERSION=${WORKSPACE_NODE_VERSION}
         - TZ=${WORKSPACE_TIMEZONE}
         - INSTALL_DATADOG_TRACING=${INSTALL_DATADOG_TRACING}
-        - FIAT_START=${FIAT_START}
-        - FIAT_END=${FIAT_END}
         - http_proxy
         - https_proxy
         - no_proxy
@@ -36,6 +41,8 @@ services:
       - DD_TRACE_ANALYTICS_ENABLED=${DD_TRACE_ANALYTICS_ENABLED}
       - DD_TRACE_NO_AUTOLOADER=${DD_TRACE_NO_AUTOLOADER}
       - DD_TRACE_DEBUG=${DD_TRACE_DEBUG}
+      - FIAT_START=${FIAT_START}
+      - FIAT_END=${FIAT_END}
 
   php-fpm:
     container_name: "php_fpm"
