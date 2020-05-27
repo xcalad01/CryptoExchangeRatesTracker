@@ -6,7 +6,7 @@ https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1
 ## Running 
 > 👉 Note: Docker and Docker-compose need to be installed
 
-* docker-compose up
+* docker-compose up -d
 
 * docker exec -it workspace
 
