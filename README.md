@@ -10,19 +10,9 @@ https://app.swaggerhub.com/apis-docs/xcalad01/Bakalarka/0.1
 
 * docker exec -it workspace
 
-* nohup php -S 0.0.0.0:8000 -t public/ > /var/log/bakalarka/server.log &
+* chmod +x entrypoint.sh && ./entrypoint.sh
 
-* php artisan migrate
-
-* ./after_fresh_migration.sh
-
-* service cron start
-
-* chmod -R 777 storage
-
-* npm run dev
-
-After that, the system starts to collect the data in regular intervals
+After that, the system starts to collect the data in regular intervals, API and UI should be deployed.
 
 ## Datadog tracing
 https://docs.datadoghq.com/tracing/setup/php/
