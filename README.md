@@ -19,8 +19,6 @@ https://docs.datadoghq.com/tracing/setup/php/
 
 ## Init DB:
 
-* php artisan migrate
-
 ### Init Data
 If no database snapshot is available, you can use tmux sessions as adding 8+ years of data is pretty long running process.
 
