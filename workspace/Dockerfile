@@ -153,11 +153,10 @@ RUN apt-get clean && \
 
 RUN mkdir /var/log/bakalarka
 
-#ADD entrypoint.sh /entrypoint.sh
-#RUN chmod +x /entrypoint.sh
-#
-#ENTRYPOINT /entrypoint.sh
 
 # Set default work directory
 WORKDIR /var/www
+
+
+
 
