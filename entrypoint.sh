@@ -22,5 +22,5 @@ chmod -R 777 storage
 echo "storage permissions finished"
 
 echo "started npm"
-npm run dev
+npm install && npm run dev
 echo "npm finished"
