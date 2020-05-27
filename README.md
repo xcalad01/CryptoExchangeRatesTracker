@@ -32,7 +32,7 @@ https://docs.datadoghq.com/tracing/setup/php/
 * php artisan migrate
 
 ### Init Data
-You can use tmux sessions as adding 8+ years of data is pretty long running process.
+If no database snapshot is available, you can use tmux sessions as adding 8+ years of data is pretty long running process.
 
 #### Init db crypto
 
