@@ -38,13 +38,22 @@ If no database snapshot is available, you can use tmux sessions as adding 8+ yea
 
 * tmux new -s init_db_crypto_task
 
+* export INIT_CRYPTO_START={start_timestamp}
+
+* export INIT_CRYPTO_END={end_timestamp}
+
 * php app/Modules/init_db_crypto_task.php
 
 #### Init db fiat
+If you did not do it on startup.
 
 * tmux new -s init_db_fiat_task
 
-* php app/Modules/init_db_fiat_task.php
+* export FIAT_START={start_timestamp}
+
+* export FIAT_END={end_timestamp}
+
+* php artisan fiat:init_db
 
 ## Test API
 > 👉 Note: phpunit is required to be installed
