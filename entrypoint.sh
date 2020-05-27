@@ -1,4 +1,8 @@
 #!/bin/bash
+echo "run compose install"
+composer install
+echo "composer innstall finished"
+
 echo "starting API"
 nohup php -S 0.0.0.0:8000 -t public/ > /var/log/bakalarka/server.log &
 echo "API started"
