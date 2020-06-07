@@ -24,8 +24,8 @@ jobs:
 #         uses: shivammathur/setup-php@master
 #         with:
 #           php-version: 7.3
-#       - name: Composer install
-#         run: composer install
+      - name: Composer install
+        run: composer install
       - name: Setup Deployer
         uses: atymic/deployer-php-action@master
         with:
