@@ -28,6 +28,7 @@ jobs:
     - name: Prepare Laravel Application
       run: |
         cp .env.ci .env
+        chmod +x entrypoint.sh && ./entrypoint.sh
         php artisan key:generate
 
     - name: Run Testsuite
