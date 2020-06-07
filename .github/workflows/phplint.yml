@@ -1,8 +1,7 @@
 name: CD-CI
 on:
-  pull_request:  
   push:
-    branches: master
+    branches: '*'
 jobs:
   phplint:
     runs-on: ubuntu-latest
