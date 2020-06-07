@@ -14,7 +14,7 @@ jobs:
     needs: [phplint]
     if: github.ref == 'refs/heads/master'
     steps:
-#       - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 #       - name: Download build assets
 #         uses: actions/download-artifact@v1
 #         with:
