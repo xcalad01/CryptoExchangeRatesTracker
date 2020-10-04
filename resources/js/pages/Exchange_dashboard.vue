@@ -9,17 +9,8 @@
 <template>
   <div>
     <div class="button_row">
-        <div class="btn-group btn-group-toggle float-right">
-            <label id="0" class="btn btn-sm btn-primary btn-simple">
-                <input v-on:click="realtime_click" type="radio" name="options" autocomplete="off"> Realtime </input>
-            </label>
-            <label id="1" class="btn btn-sm btn-primary btn-simple">
-                <input v-on:click="quick_stats_click" type="radio" name="options" autocomplete="off"> Quick Stats & About</input>
-            </label>
-        </div>
     </div>
-    <realtime_charts v-if="render_realtime"></realtime_charts>
-    <quick_stats v-else></quick_stats>
+    <realtime_charts></realtime_charts>
 
       <ohlc_chart></ohlc_chart>
       <value_chart></value_chart>
