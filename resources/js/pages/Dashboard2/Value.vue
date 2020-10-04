@@ -178,6 +178,7 @@
         }
 
         this.loading_day_price = true;
+        this.old_to = this.post.to;
         let url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/crypto/historical/asset/value/" + this.asset + "/" + this.post.to + "/" + this.post.start + "/" + this.post.end;
         this.axios.get(url).then(response => (this.update_value(response.data, init)));
       },
@@ -210,6 +211,7 @@
       },
 
       onChangeTo(){
+          if (("" + this.post.start).includes("T")){return;}
           this.loading_day_price = true;
           var url = "http://" + process.env.MIX_API_URL + ":" + process.env.MIX_API_PORT + "/api/fiat/historical/" + this.post.start + "/" + this.post.to + "/" + this.old_to;
           this.old_to = this.post.to;
@@ -252,7 +254,6 @@
       this.asset = this.$route.name;
       this.post.to = 'usd';
       this.post.converter_to = 'usd';
-      this.old_to = this.post.to;
       this.old_to_converter = this.post.converter_to;
       this.title = this.$route.meta['title'];
 

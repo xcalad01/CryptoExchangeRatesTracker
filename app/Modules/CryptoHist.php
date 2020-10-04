@@ -61,9 +61,12 @@ class CryptoHist extends Base
 
             print_r("Sending get for: {$exchange_id_db}\n");
             $url = sprintf($this->url_base, $exchange_id_crypto_watch, $item[1], $item[2], $timestamp, $timestamp);
-            $this->set_curl_url($url);
-            $this->statsd->statsd->increment('cryptowatch_request', 1);
-            $data = $this->do_send_get();
+	    print_r($url);
+	    $this->set_curl_url($url);
+            #$this->statsd->statsd->increment('cryptowatch_request', 1);
+	    $data = $this->do_send_get();
+	    print_r($data);
+	    $this->statsd->statsd->histogram('cryptowatch_remaining', $data['allowance']['remaining']);
             if ($data['result']['60']){
                 $this->statsd->statsd->increment('hist_five_min_downloaded', 1, array('exchange' => $exchange_id_crypto_watch, 'from' => $item[1], 'to' => $item[2]));
                 array_push($results, array(
@@ -75,7 +78,7 @@ class CryptoHist extends Base
                 ));
             }
 
-            $this->statsd->statsd->increment('cryptowatch_request.finished', 1);
+            #$this->statsd->statsd->increment('cryptowatch_request.finished', 1);
 	    }
 
         print_r("Results: \n");

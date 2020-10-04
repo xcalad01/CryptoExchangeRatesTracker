@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "697e4144498cd9d51d2c6f6b3ae08910",
+    "content-hash": "78946db4d8af4dff7d6cc273f4c47bf3",
     "packages": [
         {
             "name": "codenix-sv/coingecko-api",
@@ -55,6 +55,172 @@
                 "rest"
             ],
             "time": "2020-03-25T09:20:44+00:00"
+        },
+        {
+            "name": "deployer/deployer",
+            "version": "v6.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deployphp/deployer.git",
+                "reference": "4e243a64ed61e779fbb31c5a74e258a8e52fdaff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deployphp/deployer/zipball/4e243a64ed61e779fbb31c5a74e258a8e52fdaff",
+                "reference": "4e243a64ed61e779fbb31c5a74e258a8e52fdaff",
+                "shasum": ""
+            },
+            "require": {
+                "deployer/phar-update": "~2.2",
+                "php": "^7.2",
+                "pimple/pimple": "~3.0",
+                "symfony/console": "~2.7|~3.0|~4.0|~5.0",
+                "symfony/process": "~2.7|~3.0|~4.0|~5.0",
+                "symfony/yaml": "~2.7|~3.0|~4.0|~5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8"
+            },
+            "bin": [
+                "bin/dep"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Deployer\\": "src/"
+                },
+                "files": [
+                    "src/Support/helpers.php",
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Medvedev",
+                    "email": "anton@medv.io"
+                }
+            ],
+            "description": "Deployment Tool",
+            "homepage": "https://deployer.org",
+            "time": "2020-04-25T16:05:31+00:00"
+        },
+        {
+            "name": "deployer/phar-update",
+            "version": "v2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deployphp/phar-update.git",
+                "reference": "9ad07422f2cd43a1382ee8e134bdcd3a374848e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deployphp/phar-update/zipball/9ad07422f2cd43a1382ee8e134bdcd3a374848e3",
+                "reference": "9ad07422f2cd43a1382ee8e134bdcd3a374848e3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "symfony/console": "~2.7|~3.0|~4.0|~5.0"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "1.1.0",
+                "phpunit/phpunit": "3.7.*",
+                "symfony/process": "~2.7|~3.0|~4.0|~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Deployer\\Component\\PharUpdate\\": "src/",
+                    "Deployer\\Component\\PHPUnit\\": "src/PHPUnit/",
+                    "Deployer\\Component\\Version\\": "src/Version/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Herrera",
+                    "email": "kevin@herrera.io",
+                    "homepage": "http://kevin.herrera.io"
+                },
+                {
+                    "name": "Anton Medvedev",
+                    "email": "anton@medv.io",
+                    "homepage": "https://medv.io"
+                }
+            ],
+            "description": "Integrates Phar Update to Symfony Console.",
+            "homepage": "https://github.com/deployphp/phar-update",
+            "keywords": [
+                "console",
+                "phar",
+                "update"
+            ],
+            "time": "2019-12-12T13:45:57+00:00"
+        },
+        {
+            "name": "deployer/recipes",
+            "version": "6.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deployphp/recipes.git",
+                "reference": "84b3229c518c094a950e1fe785b7b8f9598770fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deployphp/recipes/zipball/84b3229c518c094a950e1fe785b7b8f9598770fe",
+                "reference": "84b3229c518c094a950e1fe785b7b8f9598770fe",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~7.0"
+            },
+            "replace": {
+                "deployer/recipes": "self.version"
+            },
+            "require-dev": {
+                "deployer/deployer": "^6.3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Medvedev",
+                    "email": "anton@medv.io"
+                }
+            ],
+            "description": "3rd party deployer recipes",
+            "homepage": "https://github.com/deployphp/recipes",
+            "keywords": [
+                "cachetool",
+                "cloudflare",
+                "deploy",
+                "deployer",
+                "deployment",
+                "hipchat",
+                "newrelic",
+                "rabbit",
+                "recipes",
+                "sentry",
+                "slack",
+                "yarn"
+            ],
+            "abandoned": true,
+            "time": "2019-06-27T06:47:18+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -663,7 +829,6 @@
                 "psr/log": "^1.1"
             },
             "suggest": {
-                "ext-intl": "Required for Internationalized Domain Name (IDN) support",
                 "psr/log": "Required for using the Log middleware"
             },
             "type": "library",
@@ -1918,6 +2083,56 @@
             "time": "2019-12-15T19:35:24+00:00"
         },
         {
+            "name": "pimple/pimple",
+            "version": "v3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silexphp/Pimple.git",
+                "reference": "e55d12f9d6a0e7f9c85992b73df1267f46279930"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/e55d12f9d6a0e7f9c85992b73df1267f46279930",
+                "reference": "e55d12f9d6a0e7f9c85992b73df1267f46279930",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2.5",
+                "psr/container": "^1.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^3.4|^4.4|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Pimple, a simple Dependency Injection Container",
+            "homepage": "https://pimple.symfony.com",
+            "keywords": [
+                "container",
+                "dependency injection"
+            ],
+            "time": "2020-03-03T09:12:48+00:00"
+        },
+        {
             "name": "predis/predis",
             "version": "v1.1.1",
             "source": {
@@ -2234,46 +2449,6 @@
                 "shell"
             ],
             "time": "2019-12-06T14:19:43+00:00"
-        },
-        {
-            "name": "ralouphie/getallheaders",
-            "version": "3.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ralouphie/getallheaders.git",
-                "reference": "120b605dfeb996808c31b6477290a714d356e822"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/120b605dfeb996808c31b6477290a714d356e822",
-                "reference": "120b605dfeb996808c31b6477290a714d356e822",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpunit/phpunit": "^5 || ^6.5"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/getallheaders.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ralph Khattar",
-                    "email": "ralph.khattar@gmail.com"
-                }
-            ],
-            "description": "A polyfill for getallheaders.",
-            "time": "2019-03-08T08:55:37+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -2648,6 +2823,52 @@
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
             "time": "2020-01-25T12:44:29+00:00"
+        },
+        {
+            "name": "symfony/deprecation-contracts",
+            "version": "v2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/deprecation-contracts.git",
+                "reference": "dd99cb3a0aff6cadd2a8d7d7ed72c2161e218337"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/dd99cb3a0aff6cadd2a8d7d7ed72c2161e218337",
+                "reference": "dd99cb3a0aff6cadd2a8d7d7ed72c2161e218337",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "function.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "A generic function and convention to trigger deprecation notices",
+            "homepage": "https://symfony.com",
+            "time": "2020-05-27T08:34:37+00:00"
         },
         {
             "name": "symfony/error-handler",
@@ -3831,6 +4052,69 @@
                 "dump"
             ],
             "time": "2020-01-25T12:44:29+00:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v5.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "ea342353a3ef4f453809acc4ebc55382231d4d23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/ea342353a3ef4f453809acc4ebc55382231d4d23",
+                "reference": "ea342353a3ef4f453809acc4ebc55382231d4d23",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/deprecation-contracts": "^2.1",
+                "symfony/polyfill-ctype": "~1.8"
+            },
+            "conflict": {
+                "symfony/console": "<4.4"
+            },
+            "require-dev": {
+                "symfony/console": "^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/console": "For validating YAML files using the lint command"
+            },
+            "bin": [
+                "Resources/bin/yaml-lint"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2020-05-20T17:43:50+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
